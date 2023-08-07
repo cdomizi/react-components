@@ -1,17 +1,12 @@
-// Project import
-import CustomAppBar from "./components/CustomAppBar";
+import { RouterProvider } from "react-router-dom";
 
-// Mui components
-import { Box, Toolbar, Typography } from "@mui/material";
+// Project import
+import MainRoutes from "./MainRoutes";
 
 const App = () => {
   return (
     <div className="App">
-      <CustomAppBar />
-      <Box mx={3}>
-        <Toolbar />
-        <Typography variant="h2">Home</Typography>
-      </Box>
+      <RouterProvider router={MainRoutes} />
     </div>
   );
 };

@@ -1,10 +1,17 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
-const CustomAppBar = () => (
+const TopBar = () => (
   <>
     <AppBar>
       <Toolbar>
-        <Typography>myApp</Typography>
+        <Box>
+          <Button sx={{ color: "primary.contrastText" }} href="/">
+            Home
+          </Button>
+          <Button sx={{ color: "primary.contrastText" }} href="/login">
+            Login
+          </Button>
+        </Box>
         <Button
           variant="contained"
           sx={{
@@ -24,4 +31,4 @@ const CustomAppBar = () => (
   </>
 );
 
-export default CustomAppBar;
+export default TopBar;
