@@ -14,9 +14,10 @@ import {
 interface formInputs {
   username: string;
   password: string;
+  confirmPassword: string;
 }
 
-const Login = () => {
+const Register = () => {
   const {
     control,
     handleSubmit,
@@ -24,7 +25,7 @@ const Login = () => {
     formState: { errors, isSubmitSuccessful },
     watch,
   } = useForm<formInputs>({
-    defaultValues: { username: "", password: "" },
+    defaultValues: { username: "", password: "", confirmPassword: "" },
   });
 
   const onSubmit: SubmitHandler<formInputs> = (formData) => {
@@ -38,7 +39,7 @@ const Login = () => {
 
   return (
     <Box mx={3} width="22rem">
-      <Typography variant="h2">Login</Typography>
+      <Typography variant="h2">Register</Typography>
       <Stack
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -78,16 +79,39 @@ const Login = () => {
             />
           )}
         />
+        <Controller
+          control={control}
+          rules={{
+            required: "Please confirm the password",
+            validate: (val: string) =>
+              val === watch("password") || "The two password do not match",
+          }}
+          name="confirmPassword"
+          render={({ field }) => (
+            <TextField
+              {...field}
+              required
+              id="confirmPassword"
+              label="Confirm Password"
+              error={!!errors?.confirmPassword}
+              helperText={
+                errors?.confirmPassword && errors?.confirmPassword?.message
+              }
+              type="password"
+              margin="normal"
+            />
+          )}
+        />
         <Button type="submit" variant="contained">
           Submit
         </Button>
       </Stack>
-      <Divider sx={{ my: 4 }}>Don't have an account?</Divider>
-      <Button type="button" variant="outlined" href="register" fullWidth>
-        Create an account
+      <Divider sx={{ my: 4 }}>Already have an account?</Divider>
+      <Button type="button" variant="outlined" href="login" fullWidth>
+        Log in
       </Button>
     </Box>
   );
 };
 
-export default Login;
+export default Register;

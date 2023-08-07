@@ -1,19 +1,22 @@
-import { AppBar, Box, Button, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 
 const TopBar = () => (
   <>
     <AppBar>
       <Toolbar>
         <Box>
-          <Button sx={{ color: "primary.contrastText" }} href="/">
-            Home
-          </Button>
-          <Button sx={{ color: "primary.contrastText" }} href="/login">
-            Login
-          </Button>
+          <Typography
+            component="a"
+            href="/"
+            variant="h6"
+            sx={{ color: "inherit", textDecoration: "none" }}
+          >
+            myApp
+          </Typography>
         </Box>
         <Button
           variant="contained"
+          href="login"
           sx={{
             ml: "auto",
             color: "primary.main",
