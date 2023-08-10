@@ -29,6 +29,9 @@ const TopBar = () => (
         >
           Login
         </Button>
+        <Button href="profile" sx={{ color: "primary.contrastText" }}>
+          Hi, User
+        </Button>
       </Toolbar>
     </AppBar>
   </>
