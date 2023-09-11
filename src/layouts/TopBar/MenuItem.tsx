@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
 
-import { Typography } from "@mui/material";
+import { Button } from "@mui/material";
 
 interface MenuItemProps {
   title: string;
@@ -8,23 +8,23 @@ interface MenuItemProps {
 }
 
 const MenuItem = ({ title, url }: MenuItemProps) => {
-  const navigate = useNavigate();
-
-  return (
-    <Typography
-      onClick={() => navigate(url)}
-      noWrap
-      component="a"
-      sx={{
+  const CustomNavLink = () => (
+    <NavLink
+      to={url}
+      style={({ isActive }) => ({
         color: "inherit",
         textDecoration: "none",
-        mr: 4,
-        cursor: "pointer",
-      }}
+        ...(isActive && {
+          borderBottom: "3px solid white",
+          borderRadius: 0,
+        }),
+      })}
     >
-      {title.toUpperCase()}
-    </Typography>
+      <Button sx={{ color: "inherit" }}>{title.toUpperCase()}</Button>
+    </NavLink>
   );
+
+  return <CustomNavLink />;
 };
 
 export default MenuItem;

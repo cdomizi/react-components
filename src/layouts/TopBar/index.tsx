@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import MenuItem from "./MenuItem";
 
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Stack, Toolbar, Typography } from "@mui/material";
 
-const menuItems = [{ id: "forms", title: "forms", url: "/forms" }];
+const menuItems = [
+  { id: "forms", title: "forms", url: "/forms" },
+  { id: "fetch", title: "fetch", url: "/fetch" },
+];
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -26,11 +29,11 @@ const TopBar = () => {
               myApp
             </Typography>
           </Box>
-          <Box ml="auto">
+          <Stack direction="row" spacing={2} ml="auto">
             {menuItems.map((item) => (
               <MenuItem key={item.id} title={item.title} url={item.url} />
             ))}
-          </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
     </>

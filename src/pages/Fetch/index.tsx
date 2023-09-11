@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 
-const Forms = () => {
+const Fetch = () => {
   return (
     <Box mx={3}>
-      <Typography variant="h2">Forms</Typography>
+      <Typography variant="h2">Fetch</Typography>
     </Box>
   );
 };
 
-export default Forms;
+export default Fetch;
