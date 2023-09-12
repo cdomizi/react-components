@@ -20,6 +20,10 @@ dist-ssr
 !.yarn/sdks
 !.yarn/versions
 
+.eslintrc.cjs
+.eslintignore
+.prettierignore
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,4 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
+import { z, ZodError } from "zod";
+import getRandomData from "../../utils/getRandomData";
 
 import { Button, Stack, TextField, Typography } from "@mui/material";
 
@@ -8,40 +10,83 @@ interface FormErrors {
 }
 
 const TestForm = () => {
+  const userSchema = z.object({
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 3 characters long" }),
+    email: z.string().email({ message: "Please enter a valid email address" }),
+  });
+
+  type User = z.infer<typeof userSchema>;
+
   const formRef = useRef<HTMLFormElement>(null!);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+  const fillWithRandomData = useCallback(async () => {
+    const randomUser = (await getRandomData()) as User;
+    const formElement = Object.values(formRef.current);
+    const formInputs = formElement.filter((el) => el?.id?.length);
+    formInputs.forEach((input) => {
+      const key = input.id as "username" | "email";
+      input.setAttribute("value", randomUser[key]);
+    });
+  }, []);
 
   const handleSubmit = useCallback((event: React.FormEvent) => {
     event.preventDefault();
+    setIsSubmitted(true);
 
     // Create FormData object
     const formData = new FormData(formRef.current);
+    const userData = Object.fromEntries(formData);
 
-    // Set errors for each empty field
-    formData?.forEach((value, key) => {
-      if (typeof value === "string")
-        !value?.length &&
-          setFormErrors((prevErrors) => ({ ...prevErrors, [key]: true }));
-    });
-
-    const formFields = [...formData.entries()];
-    const currentErrors = formFields?.filter(([key, value]) => {
-      if (typeof value === "string") return !value?.length;
-    });
-
-    if (currentErrors?.length) {
-      // On error, log the list of missing fields to the console
-      return console.error(
-        "Missing fields:",
-        currentErrors?.map(([key, value]) => key)?.join(", ")
-      );
-    } else {
-      // On no error, log form data to the console
-      console.log({ formData });
-      // Cleanup after submit
-      return formRef.current?.reset();
+    try {
+      const result = userSchema.parse(userData);
+      console.log(result);
+      // Reset form on successful submit
+      const formElement = Object.values(formRef.current);
+      const formInputs = formElement.filter((el) => el?.id?.length);
+      formInputs.forEach((input) => {
+        input.setAttribute("value", "");
+      });
+      formRef.current.reset();
+      return setIsSubmitted(false);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        err.issues.forEach((issue) => {
+          const field = issue.path[0];
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: true,
+          }));
+        });
+      }
     }
   }, []);
+
+  const checkError = (key: "username" | "email", value?: string) => {
+    if (isSubmitted) {
+      try {
+        const check = userSchema.parse({
+          [key]: value,
+        });
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [key]: !check[key],
+        }));
+      } catch (err) {
+        console.log(err);
+        if (err instanceof ZodError) {
+          const isError = err.issues.find((issue) => issue.path[0] === key);
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            [key]: !!isError,
+          }));
+        }
+      }
+    }
+  };
 
   return (
     <Stack
@@ -50,21 +95,17 @@ const TestForm = () => {
       ref={formRef}
       autoComplete="off"
     >
-      <Typography variant="h4">Controlled Form</Typography>
+      <Typography variant="h4">Uncontrolled Form</Typography>
       <TextField
         id="username"
         name="username"
         label="Username"
-        onChange={(event) => {
-          // Set error if field is empty
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            username: !event.target?.value?.length,
-          }));
-        }}
-        InputLabelProps={{ required: true }}
-        error={formErrors?.username}
-        helperText={formErrors?.username && "Please enter your username"}
+        onChange={(event) => checkError("username", event.target.value)}
+        InputLabelProps={{ required: true, shrink: true }}
+        error={!!formErrors?.username}
+        helperText={
+          formErrors?.username && "Username must be at least 3 characters long"
+        }
         fullWidth
         margin="normal"
       />
@@ -72,20 +113,22 @@ const TestForm = () => {
         id="email"
         name="email"
         label="Email"
-        type="email"
-        onChange={(event) => {
-          // Set error if field is empty
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            email: !event.target?.value?.length,
-          }));
-        }}
-        InputLabelProps={{ required: true }}
-        error={formErrors?.email}
-        helperText={formErrors?.email && "Please enter your email"}
+        onChange={(event) => checkError("email", event.target.value)}
+        InputLabelProps={{ required: true, shrink: true }}
+        error={!!formErrors?.email}
+        helperText={formErrors?.email && "Please enter a valid email address"}
         fullWidth
         margin="normal"
       />
+      <Button
+        type="button"
+        variant="outlined"
+        size="small"
+        sx={{ my: 2 }}
+        onClick={fillWithRandomData}
+      >
+        Fill with random data
+      </Button>
       <Button variant="contained" type="submit">
         Submit
       </Button>
