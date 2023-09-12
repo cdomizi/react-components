@@ -1,4 +1,4 @@
-import ControlledForm from "./ControlledForm";
+import ControlledForm from "./UncontrolledForm";
 
 import { Stack } from "@mui/material";
 
