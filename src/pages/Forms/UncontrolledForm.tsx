@@ -28,7 +28,10 @@ const UncontrolledForm = () => {
       .regex(/^[a-z0-9-_]+$/i, {
         message: "Only use letters, numbers, dashes and underscores",
       }),
-    email: z.string().email({ message: "Please enter a valid email address" }),
+    email: z
+      .string()
+      .email({ message: "Please enter a valid email address" })
+      .optional(),
   });
 
   type User = z.infer<typeof userSchema>;
@@ -63,13 +66,14 @@ const UncontrolledForm = () => {
     const formData = new FormData(formRef.current);
     const userData = Object.fromEntries(formData);
 
+    const formElement = Object.values(formRef.current);
+    const formInputs = formElement.filter((el) => el?.id?.length);
+
     try {
       const result = userSchema.parse(userData);
       // On successful submit, log data to the console
       console.log(result);
       // On successful submit, reset form
-      const formElement = Object.values(formRef.current);
-      const formInputs = formElement.filter((el) => el?.id?.length);
       formInputs.forEach((input) => {
         input.setAttribute("value", "");
       });
@@ -88,6 +92,8 @@ const UncontrolledForm = () => {
             [error]: errors[error]?.[0],
           }));
         }
+        // Focus on first form field with errors
+        formInputs.find((input) => input.id === err.issues[0].path[0]).focus();
       }
       setIsLoading(false);
     }
@@ -117,10 +123,12 @@ const UncontrolledForm = () => {
 
   return (
     <Stack
+      id="uncontrolled-form"
       component="form"
       onSubmit={handleSubmit}
       ref={formRef}
       autoComplete="off"
+      spacing={2}
     >
       <Typography variant="h4">Uncontrolled Form</Typography>
       <TextField
@@ -153,7 +161,6 @@ const UncontrolledForm = () => {
         endIcon={isLoading && <CircularProgress color="inherit" size={20} />}
         variant="outlined"
         size="small"
-        sx={{ my: 2 }}
         onClick={fillWithRandomData}
       >
         Fill with random data
