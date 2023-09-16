@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { z, ZodError } from "zod";
+import { z, ZodError, ZodIssue } from "zod";
 import getRandomData from "../../utils/getRandomData";
 
 import {
@@ -13,6 +13,10 @@ import {
 interface FormErrors {
   username?: string;
   email?: string;
+}
+
+interface ZodErrorType {
+  issues: ZodIssue[];
 }
 
 const UncontrolledForm = () => {
@@ -56,48 +60,54 @@ const UncontrolledForm = () => {
     });
   }, []);
 
-  const handleSubmit = useCallback((event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    setIsLoading(true);
-    setIsSubmitted(true);
+      setIsLoading(true);
+      setIsSubmitted(true);
 
-    // Create FormData object
-    const formData = new FormData(formRef.current);
-    const userData = Object.fromEntries(formData);
+      // Create FormData object
+      const formData = new FormData(formRef.current);
+      const userData = Object.fromEntries(formData);
 
-    const formElement = Object.values(formRef.current);
-    const formInputs = formElement.filter((el) => el?.id?.length);
+      const formElement = Object.values(formRef.current);
+      const formInputs = formElement.filter((el) => el?.id?.length);
 
-    try {
-      const result = userSchema.parse(userData);
-      // On successful submit, log data to the console
-      console.log(result);
-      // On successful submit, reset form
-      formInputs.forEach((input) => {
-        input.setAttribute("value", "");
-      });
-      formRef.current.reset();
-      return (function cleanUp() {
-        setIsSubmitted(false);
-        setIsLoading(false);
-      })();
-    } catch (err) {
-      if (err instanceof ZodError) {
-        const errors = err.flatten().fieldErrors;
-        for (const error in errors) {
-          console.error(`Error: ${errors?.[error]?.[0]}`);
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            [error]: errors[error]?.[0],
-          }));
+      try {
+        const result = userSchema.parse(userData);
+        // On successful submit, log data to the console
+        console.log(result);
+        // On successful submit, reset form
+        formInputs.forEach((input) => {
+          input.setAttribute("value", "");
+        });
+        formRef.current.reset();
+        return (function cleanUp() {
+          setIsSubmitted(false);
+          setIsLoading(false);
+        })();
+      } catch (err) {
+        if (err instanceof ZodError) {
+          const errors = err as ZodErrorType;
+          const flatErrors = err.flatten().fieldErrors;
+          for (const error in flatErrors) {
+            console.error(`Error: ${flatErrors?.[error]?.[0]}`);
+            setFormErrors((prevErrors) => ({
+              ...prevErrors,
+              [error]: flatErrors[error]?.[0],
+            }));
+          }
+          // Focus on first form field with errors
+          formInputs
+            .find((input) => input.id === errors.issues[0].path[0])
+            .focus();
         }
-        // Focus on first form field with errors
-        formInputs.find((input) => input.id === err.issues[0].path[0]).focus();
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   const checkError = (key: "username" | "email", value?: string) => {
     if (isSubmitted) {
