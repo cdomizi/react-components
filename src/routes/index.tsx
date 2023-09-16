@@ -17,8 +17,8 @@ const MainRoutes = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="forms" element={<Forms />} />
       <Route path="fetch" element={<Fetch />} />
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 export default MainRoutes;

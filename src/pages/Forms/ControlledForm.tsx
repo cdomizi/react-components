@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { z, ZodError } from "zod";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { z, ZodError, ZodIssue } from "zod";
 import getRandomData from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
@@ -15,6 +15,10 @@ import {
 interface FormErrors {
   username?: string;
   email?: string;
+}
+
+interface ZodErrorType {
+  issues: ZodIssue[];
 }
 
 const ControlledForm = () => {
@@ -45,6 +49,8 @@ const ControlledForm = () => {
     [],
   );
   const [userData, setUserData] = useState<User>(initialState);
+
+  const formRef = useRef<HTMLFormElement>(null!);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -118,14 +124,24 @@ const ControlledForm = () => {
         })();
       } catch (err) {
         if (err instanceof ZodError) {
-          const errors = err.flatten().fieldErrors;
-          for (const error in errors) {
-            console.error(`Error: ${errors?.[error]?.[0]}`);
+          const errors = err as ZodErrorType;
+          const flatErrors = err.flatten().fieldErrors;
+          for (const error in flatErrors) {
+            console.error(`Error: ${flatErrors?.[error]?.[0]}`);
             setFormErrors({
               ...formErrors,
-              [error]: errors[error]?.[0],
+              [error]: flatErrors[error]?.[0],
             });
           }
+
+          // Set focus on first form field with error
+          const formElement = Object.values(formRef.current);
+          const formInputs = formElement.filter(
+            (el: HTMLInputElement) => el?.id?.length,
+          ) as HTMLInputElement[];
+          formInputs
+            .find((input) => input.id === errors.issues[0].path[0])
+            ?.focus();
         }
         setIsLoading(false);
       }
@@ -138,6 +154,7 @@ const ControlledForm = () => {
       id="controlled-form"
       component="form"
       onSubmit={handleSubmit}
+      ref={formRef}
       autoComplete="off"
       spacing={2}
     >

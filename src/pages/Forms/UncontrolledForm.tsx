@@ -45,20 +45,20 @@ const UncontrolledForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const fillWithRandomData = useCallback(async () => {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      username: undefined,
-      email: undefined,
-    }));
-    const randomUser = (await getRandomData()) as User;
-    const formElement = Object.values(formRef.current);
-    const formInputs = formElement.filter((el) => el?.id?.length);
-    formInputs.forEach((input) => {
-      const key = input.id as "username" | "email";
-      input.setAttribute("value", randomUser[key]);
-    });
-  }, []);
+  const fillWithRandomData = useCallback(() => {
+    void (async () => {
+      setFormErrors({ ...formErrors, username: undefined, email: undefined });
+      const randomUser = (await getRandomData()) as User;
+      const formElement = Object.values(formRef.current);
+      const formInputs = formElement.filter(
+        (el: HTMLInputElement) => el?.id?.length,
+      );
+      formInputs.forEach((input: HTMLInputElement) => {
+        const key = input.id as "username" | "email";
+        input.setAttribute("value", randomUser[key] ?? "");
+      });
+    })();
+  }, [formErrors]);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -72,7 +72,9 @@ const UncontrolledForm = () => {
       const userData = Object.fromEntries(formData);
 
       const formElement = Object.values(formRef.current);
-      const formInputs = formElement.filter((el) => el?.id?.length);
+      const formInputs = formElement.filter(
+        (el: HTMLInputElement) => el?.id?.length,
+      ) as HTMLInputElement[];
 
       try {
         const result = userSchema.parse(userData);
@@ -93,20 +95,20 @@ const UncontrolledForm = () => {
           const flatErrors = err.flatten().fieldErrors;
           for (const error in flatErrors) {
             console.error(`Error: ${flatErrors?.[error]?.[0]}`);
-            setFormErrors((prevErrors) => ({
-              ...prevErrors,
+            setFormErrors({
+              ...formErrors,
               [error]: flatErrors[error]?.[0],
-            }));
+            });
           }
-          // Focus on first form field with errors
+          // Set focus on first form field with error
           formInputs
             .find((input) => input.id === errors.issues[0].path[0])
-            .focus();
+            ?.focus();
         }
         setIsLoading(false);
       }
     },
-    []
+    [formErrors, userSchema],
   );
 
   const checkError = (key: "username" | "email", value?: string) => {
@@ -115,17 +117,17 @@ const UncontrolledForm = () => {
         userSchema.parse({
           [key]: value,
         });
-        setFormErrors((prevErrors) => ({
-          ...prevErrors,
+        setFormErrors({
+          ...formErrors,
           [key]: undefined,
-        }));
+        });
       } catch (err) {
         if (err instanceof ZodError) {
           const error = err.issues.find((issue) => issue.path[0] === key);
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
+          setFormErrors({
+            ...formErrors,
             [key]: error?.message,
-          }));
+          });
         }
       }
     }

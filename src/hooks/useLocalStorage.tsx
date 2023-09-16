@@ -3,12 +3,16 @@ const useLocalStorage = (key: string, initialValue?: string) => {
   if (initialValue) localStorage.setItem(key, JSON.stringify(initialValue));
 
   // Get function
-  const currentValue = localStorage.getItem(key);
-  const getValue = currentValue && JSON.parse(currentValue);
+  const getValue = localStorage.getItem(key);
 
   // Set function
-  const setValue = (value: string) =>
-    localStorage.setItem(key, JSON.stringify(value));
+  const setValue = ({
+    value,
+    expiration = null,
+  }: {
+    value: string;
+    expiration: number | null;
+  }) => localStorage.setItem(key, JSON.stringify({ value, expiration }));
 
   // Delete function
   const deleteValue = () => localStorage.removeItem(key);

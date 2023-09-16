@@ -1,7 +1,12 @@
+interface User {
+  username: string;
+  email: string;
+}
+
 const getRandomData = async () => {
   const id = Math.ceil(Math.random() * 100);
   const data = await fetch(`https://dummyjson.com/users/${id}`);
-  const json = await data.json();
+  const json = (await data.json()) as User;
   return json;
 };
 
