@@ -29,7 +29,7 @@ const ControlledForm = () => {
       })
       .trim()
       .min(3, { message: "Username must be at least 3 characters long" })
-      .max(20, { message: "Username must be less than 20 characters long" })
+      .max(20, { message: "Username max. 20 characters" })
       .regex(/^[a-z0-9-_]+$/i, {
         message: "Only use letters, numbers, dashes and underscores",
       }),
@@ -75,10 +75,10 @@ const ControlledForm = () => {
   }, [formErrors, userData]);
 
   const checkErrors = useCallback(
-    (key: string) => {
+    (key: string, value: string) => {
       if (isSubmitted) {
         try {
-          userSchema.parse(userData);
+          userSchema.parse({ ...userData, [key]: value });
           setFormErrors({
             ...formErrors,
             [key]: undefined,
@@ -101,7 +101,7 @@ const ControlledForm = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
       setUserData({ ...userData, [name]: value });
-      checkErrors(name);
+      checkErrors(name, value);
     },
     [checkErrors, userData],
   );
@@ -126,13 +126,18 @@ const ControlledForm = () => {
         if (err instanceof ZodError) {
           const errors = err as ZodErrorType;
           const flatErrors = err.flatten().fieldErrors;
+          let newErrors = {};
           for (const error in flatErrors) {
             console.error(`Error: ${flatErrors?.[error]?.[0]}`);
-            setFormErrors({
-              ...formErrors,
+            newErrors = {
+              ...newErrors,
               [error]: flatErrors[error]?.[0],
-            });
+            };
           }
+          setFormErrors({
+            ...formErrors,
+            ...newErrors,
+          });
 
           // Set focus on first form field with error
           const formElement = Object.values(formRef.current);
