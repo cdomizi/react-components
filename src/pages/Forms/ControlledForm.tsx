@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
 import getRandomData from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
+// MUI import
 import {
   Button,
   CircularProgress,
@@ -39,7 +40,7 @@ const ControlledForm = () => {
       .optional(),
   });
 
-  type User = z.infer<typeof userSchema>;
+  type UserType = z.infer<typeof userSchema>;
 
   const initialState = useMemo(
     () => ({
@@ -48,7 +49,7 @@ const ControlledForm = () => {
     }),
     [],
   );
-  const [userData, setUserData] = useState<User>(initialState);
+  const [userData, setUserData] = useState<UserType>(initialState);
 
   const formRef = useRef<HTMLFormElement>(null!);
 
@@ -64,12 +65,16 @@ const ControlledForm = () => {
       username: undefined,
       email: undefined,
     });
-    const randomUser = (await getRandomData()) as User;
-    setUserData({
-      ...userData,
-      username: randomUser.username,
-      email: randomUser.email,
-    });
+    try {
+      const randomUser = (await getRandomData()) as UserType;
+      setUserData({
+        ...userData,
+        username: randomUser.username,
+        email: randomUser.email,
+      });
+    } catch (err) {
+      console.error("Error while setting random data", err);
+    }
 
     setIsLoading(false);
   }, [formErrors, userData]);
@@ -220,7 +225,6 @@ const ControlledForm = () => {
         endIcon={isLoading && <CircularProgress color="inherit" size={20} />}
         variant="outlined"
         size="small"
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={fillWithRandomData}
       >
         Fill with random data

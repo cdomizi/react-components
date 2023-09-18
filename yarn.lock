@@ -456,6 +456,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookform/resolvers@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@hookform/resolvers@npm:3.3.1"
+  peerDependencies:
+    react-hook-form: ^7.0.0
+  checksum: 1ddc250a8d6769fb11b03110b586677b03463276dda1cdfd0225ab94f46d422868f74b01bef85f785010cc3d836f0669d6b6c0ed752cae532d2badf3537b1e72
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.11":
   version: 0.11.11
   resolution: "@humanwhocodes/config-array@npm:0.11.11"
@@ -3724,6 +3733,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
+    "@hookform/resolvers": ^3.3.1
     "@loadable/component": ^5.15.3
     "@mui/icons-material": ^5.11.11
     "@mui/material": ^5.11.14
@@ -3741,7 +3751,7 @@ __metadata:
     prettier: 3.0.3
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-hook-form: ^7.45.4
+    react-hook-form: ^7.46.1
     react-router-dom: ^6.14.2
     typescript: ^5.2.2
     vite: ^4.4.9
@@ -3761,7 +3771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.45.4":
+"react-hook-form@npm:^7.46.1":
   version: 7.46.1
   resolution: "react-hook-form@npm:7.46.1"
   peerDependencies:
