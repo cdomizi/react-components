@@ -2,6 +2,7 @@ import UncontrolledForm from "./UncontrolledForm";
 import ControlledForm from "./ControlledForm";
 import ControlledRHF from "./ControlledRHF";
 import UncontrolledRHF from "./UncontrolledRHF";
+import CheckboxForm from "./CheckboxForm";
 
 import { Stack } from "@mui/material";
 
@@ -12,6 +13,7 @@ const Forms = () => {
       <ControlledForm />
       <ControlledRHF />
       <UncontrolledRHF />
+      <CheckboxForm />
     </Stack>
   );
 };
