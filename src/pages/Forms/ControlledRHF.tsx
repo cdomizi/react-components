@@ -31,8 +31,13 @@ const ControlledRHF = () => {
       }),
     email: z
       .string()
+      .trim()
       .email({ message: "Please enter a valid email address" })
-      .optional(),
+      // Accept empty string
+      .or(z.string().length(0))
+      .optional()
+      // Return undefined in case of empty string
+      .transform((val) => (val === "" ? undefined : val)),
   });
 
   type UserType = z.infer<typeof userSchema>;
