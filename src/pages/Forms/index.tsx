@@ -1,6 +1,7 @@
 import UncontrolledForm from "./UncontrolledForm";
 import ControlledForm from "./ControlledForm";
 import ControlledRHF from "./ControlledRHF";
+import UncontrolledRHF from "./UncontrolledRHF";
 
 import { Stack } from "@mui/material";
 
@@ -10,6 +11,7 @@ const Forms = () => {
       <UncontrolledForm />
       <ControlledForm />
       <ControlledRHF />
+      <UncontrolledRHF />
     </Stack>
   );
 };

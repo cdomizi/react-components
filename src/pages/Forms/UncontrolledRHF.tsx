@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 // Project import
 import getRandomData from "../../utils/getRandomData";
@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const ControlledRHF = () => {
+const UncontrolledRHF = () => {
   const userSchema = z.object({
     username: z
       .string({
@@ -47,15 +47,18 @@ const ControlledRHF = () => {
   const [loading, setLoading] = useState(false);
 
   const {
-    control,
     formState: { errors, isLoading, isSubmitSuccessful },
     handleSubmit,
+    register,
     reset,
     watch,
   } = useForm<UserType>({
     defaultValues: initialFormState,
     resolver: zodResolver(userSchema),
   });
+
+  const { ref: usernameRef, ...usernameRegisterProps } = register("username");
+  const { ref: emailRef, ...emailRegisterProps } = register("email");
 
   const fillWithRandomData = useCallback(async () => {
     setLoading(true);
@@ -76,72 +79,60 @@ const ControlledRHF = () => {
 
   return (
     <Stack
-      id="controlled-rhf-form"
+      id="uncontrolled-rhf-form"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
       spacing={2}
     >
-      <Typography variant="h4">Controlled RHF</Typography>
-      <Controller
-        control={control}
-        name="username"
-        render={({ field: { ref, ...fieldProps } }) => (
-          <TextField
-            {...fieldProps}
-            id="username"
-            inputRef={ref}
-            label="Username"
-            InputLabelProps={{ required: true, shrink: true }}
-            autoFocus={!!errors?.username}
-            error={!!errors?.username}
-            helperText={errors?.username?.message}
-            disabled={loading || isLoading}
-            InputProps={{
-              endAdornment: (
-                <>
-                  {(loading || isLoading) && (
-                    <InputAdornment position="end">
-                      <CircularProgress color="inherit" size={20} />
-                    </InputAdornment>
-                  )}
-                </>
-              ),
-            }}
-            fullWidth
-            margin="normal"
-          />
-        )}
+      <Typography variant="h4">Uncontrolled RHF</Typography>
+      <TextField
+        {...usernameRegisterProps}
+        id="username"
+        label="Username"
+        inputRef={usernameRef}
+        InputLabelProps={{ required: true, shrink: true }}
+        autoFocus={!!errors?.username}
+        error={!!errors?.username}
+        helperText={errors?.username?.message}
+        disabled={loading || isLoading}
+        InputProps={{
+          endAdornment: (
+            <>
+              {(loading || isLoading) && (
+                <InputAdornment position="end">
+                  <CircularProgress color="inherit" size={20} />
+                </InputAdornment>
+              )}
+            </>
+          ),
+        }}
+        fullWidth
+        margin="normal"
       />
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { ref, ...fieldProps } }) => (
-          <TextField
-            {...fieldProps}
-            id="email"
-            inputRef={ref}
-            label="Email"
-            InputLabelProps={{ shrink: true }}
-            autoFocus={!!errors?.email}
-            error={!!errors?.email}
-            helperText={errors?.email?.message}
-            disabled={loading || isLoading}
-            InputProps={{
-              endAdornment: (
-                <>
-                  {(loading || isLoading) && (
-                    <InputAdornment position="end">
-                      <CircularProgress color="inherit" size={20} />
-                    </InputAdornment>
-                  )}
-                </>
-              ),
-            }}
-            fullWidth
-            margin="normal"
-          />
-        )}
+      <TextField
+        {...emailRegisterProps}
+        id="email"
+        label="Email"
+        inputRef={emailRef}
+        InputLabelProps={{ shrink: true }}
+        autoFocus={!!errors?.email}
+        error={!!errors?.email}
+        helperText={errors?.email?.message}
+        disabled={loading || isLoading}
+        InputProps={{
+          endAdornment: (
+            <>
+              {(loading || isLoading) && (
+                <InputAdornment position="end">
+                  <CircularProgress color="inherit" size={20} />
+                </InputAdornment>
+              )}
+            </>
+          ),
+        }}
+        fullWidth
+        margin="normal"
       />
       <Button
         type="button"
@@ -174,4 +165,4 @@ const ControlledRHF = () => {
   );
 };
 
-export default ControlledRHF;
+export default UncontrolledRHF;
