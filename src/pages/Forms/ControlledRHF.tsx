@@ -48,7 +48,7 @@ const ControlledRHF = () => {
 
   const {
     control,
-    formState: { errors, isLoading, isSubmitSuccessful },
+    formState: { errors, isLoading, isSubmitSuccessful, isSubmitting },
     handleSubmit,
     reset,
     watch,
@@ -96,11 +96,11 @@ const ControlledRHF = () => {
             autoFocus={!!errors?.username}
             error={!!errors?.username}
             helperText={errors?.username?.message}
-            disabled={loading || isLoading}
+            disabled={loading || isLoading || isSubmitting}
             InputProps={{
               endAdornment: (
                 <>
-                  {(loading || isLoading) && (
+                  {(loading || isLoading || isSubmitting) && (
                     <InputAdornment position="end">
                       <CircularProgress color="inherit" size={20} />
                     </InputAdornment>
@@ -126,11 +126,11 @@ const ControlledRHF = () => {
             autoFocus={!!errors?.email}
             error={!!errors?.email}
             helperText={errors?.email?.message}
-            disabled={loading || isLoading}
+            disabled={loading || isLoading || isSubmitting}
             InputProps={{
               endAdornment: (
                 <>
-                  {(loading || isLoading) && (
+                  {(loading || isLoading || isSubmitting) && (
                     <InputAdornment position="end">
                       <CircularProgress color="inherit" size={20} />
                     </InputAdornment>
@@ -145,9 +145,9 @@ const ControlledRHF = () => {
       />
       <Button
         type="button"
-        disabled={loading || isLoading}
+        disabled={loading || isLoading || isSubmitting}
         endIcon={
-          (loading || isLoading) && (
+          (loading || isLoading || isSubmitting) && (
             <CircularProgress color="inherit" size={20} />
           )
         }
@@ -159,9 +159,9 @@ const ControlledRHF = () => {
       </Button>
       <Button
         type="submit"
-        disabled={loading || isLoading}
+        disabled={loading || isLoading || isSubmitting}
         endIcon={
-          (loading || isLoading) && (
+          (loading || isLoading || isSubmitting) && (
             <CircularProgress color="inherit" size={20} />
           )
         }
