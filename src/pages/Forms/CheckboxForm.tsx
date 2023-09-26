@@ -16,9 +16,11 @@ import {
 } from "@mui/material";
 
 const CheckboxForm = () => {
-  const formSchema = z.object({
-    status: z.boolean(),
-  });
+  const formSchema = z
+    .object({
+      status: z.boolean(),
+    })
+    .strict();
 
   type UserType = z.infer<typeof formSchema>;
 
