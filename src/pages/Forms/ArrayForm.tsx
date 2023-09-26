@@ -101,7 +101,7 @@ const CartForm = () => {
     >
       <Typography variant="h4">Array Form</Typography>
       {fields.map((item, index) => (
-        <Stack key={index} direction="row" spacing={1}>
+        <Stack key={item.id} direction="row" spacing={1}>
           <Controller
             control={control}
             name={`products.${index}.product`}
