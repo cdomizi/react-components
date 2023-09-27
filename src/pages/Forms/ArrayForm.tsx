@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -7,8 +7,12 @@ import {
   SubmitHandler,
   useFieldArray,
 } from "react-hook-form";
+
+// Project import
+import { getRandomUser, getProductsArray } from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
+// MUI import
 import {
   Autocomplete,
   Button,
@@ -122,10 +126,23 @@ const CartForm = () => {
   // Reset the form on submit
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset();
-      remove();
+      reset({ customer: undefined, products: [] });
     }
   }, [isSubmitSuccessful, fields, remove, reset]);
+
+  const fillWithRandomData = useCallback(async () => {
+    const products = await getProductsArray();
+
+    const { id } = await getRandomUser();
+    const customer = customers?.find(
+      (customer: CustomerType) => customer.id === id,
+    );
+
+    reset({
+      customer,
+      products,
+    });
+  }, [customers, reset]);
 
   return (
     <Stack
@@ -136,6 +153,14 @@ const CartForm = () => {
       spacing={2}
     >
       <Typography variant="h4">Array Form</Typography>
+      <Button
+        onClick={fillWithRandomData}
+        type="button"
+        variant="outlined"
+        size="small"
+      >
+        Fill with random data
+      </Button>
       <Controller
         control={control}
         name="customer"
@@ -198,7 +223,7 @@ const CartForm = () => {
                 autoFocus={!!errors.products?.[index]?.quantity}
                 error={!!errors.products?.[index]?.quantity}
                 helperText={errors.products?.[index]?.quantity?.message}
-                // InputProps={{ inputProps: { min: 1 } }}
+                InputProps={{ inputProps: { min: 1 } }}
                 sx={{ maxWidth: "5rem" }}
               />
             )}

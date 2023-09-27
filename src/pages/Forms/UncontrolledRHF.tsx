@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 // Project import
-import getRandomData from "../../utils/getRandomData";
+import { getRandomUser } from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
 // MUI import
@@ -65,7 +65,7 @@ const UncontrolledRHF = () => {
   const fillWithRandomData = useCallback(async () => {
     setLoading(true);
 
-    const { username, email } = (await getRandomData()) as UserType;
+    const { username, email } = (await getRandomUser()) as UserType;
     reset({ username, email });
 
     setLoading(false);

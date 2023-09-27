@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
-import getRandomData from "../../utils/getRandomData";
+import { getRandomUser } from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
 // MUI import
@@ -68,7 +68,7 @@ const ControlledForm = () => {
       email: undefined,
     });
     try {
-      const randomUser = (await getRandomData()) as UserType;
+      const randomUser = (await getRandomUser()) as UserType;
       setUserData({
         ...userData,
         username: randomUser.username,
