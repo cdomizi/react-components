@@ -16,7 +16,9 @@ import Logger from "../../components/Logger";
 import {
   Autocomplete,
   Button,
+  CircularProgress,
   IconButton,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -24,6 +26,8 @@ import {
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
 const CartForm = () => {
+  const [loading, setLoading] = useState(false);
+
   const productsSchema = z.object({
     customer: z
       .object({
@@ -92,7 +96,7 @@ const CartForm = () => {
     control,
     handleSubmit,
     watch,
-    formState: { isSubmitSuccessful, errors },
+    formState: { isLoading, isSubmitSuccessful, isSubmitting, errors },
     reset,
   } = useForm<FormType>({
     defaultValues: { customer: undefined, products: [] },
@@ -131,6 +135,8 @@ const CartForm = () => {
   }, [isSubmitSuccessful, fields, remove, reset]);
 
   const fillWithRandomData = useCallback(async () => {
+    setLoading(true);
+
     const products = await getProductsArray();
 
     const { id } = await getRandomUser();
@@ -142,6 +148,8 @@ const CartForm = () => {
       customer,
       products,
     });
+
+    setLoading(false);
   }, [customers, reset]);
 
   return (
@@ -186,6 +194,20 @@ const CartForm = () => {
                 autoFocus={!!errors.customer}
                 error={!!errors.customer}
                 helperText={errors.customer?.message}
+                disabled={loading || isLoading || isSubmitting}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {isLoading || isSubmitting || loading ? (
+                        <InputAdornment position="end">
+                          <CircularProgress color="inherit" size={20} />
+                        </InputAdornment>
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
                 margin="normal"
                 fullWidth
               />
@@ -207,6 +229,18 @@ const CartForm = () => {
                 autoFocus={!!errors.products?.[index]?.product}
                 error={!!errors.products?.[index]?.product}
                 helperText={errors.products?.[index]?.product?.message}
+                disabled={loading || isLoading || isSubmitting}
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {(loading || isLoading || isSubmitting) && (
+                        <InputAdornment position="end">
+                          <CircularProgress color="inherit" size={20} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
               />
             )}
           />
@@ -223,12 +257,27 @@ const CartForm = () => {
                 autoFocus={!!errors.products?.[index]?.quantity}
                 error={!!errors.products?.[index]?.quantity}
                 helperText={errors.products?.[index]?.quantity?.message}
-                InputProps={{ inputProps: { min: 1 } }}
+                disabled={loading || isLoading || isSubmitting}
+                InputProps={{
+                  inputProps: { min: 1 },
+                  endAdornment: (
+                    <>
+                      {(loading || isLoading || isSubmitting) && (
+                        <InputAdornment position="end">
+                          <CircularProgress color="inherit" size={20} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
                 sx={{ maxWidth: "5rem" }}
               />
             )}
           />
-          <IconButton onClick={() => remove(index)}>
+          <IconButton
+            onClick={() => remove(index)}
+            disabled={loading || isLoading || isSubmitting}
+          >
             <DeleteIcon />
           </IconButton>
         </Stack>
@@ -239,10 +288,15 @@ const CartForm = () => {
         variant="outlined"
         size="small"
         onClick={() => append({ product: "", quantity: 1 })}
+        disabled={loading || isLoading || isSubmitting}
       >
         Add Product
       </Button>
-      <Button type="submit" variant="contained">
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={loading || isLoading || isSubmitting}
+      >
         Submit
       </Button>
       <Logger value={watch()} />
