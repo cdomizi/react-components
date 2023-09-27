@@ -7,7 +7,7 @@ interface LoggerProps {
 
 const Logger = ({ value, replacer = undefined, space = 2 }: LoggerProps) => {
   return (
-    <pre>
+    <pre style={{ overflow: "hidden", whiteSpace: "break-spaces" }}>
       <code>{JSON.stringify(value, replacer, space)}</code>
     </pre>
   );
