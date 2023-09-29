@@ -1,7 +1,11 @@
 import { useCallback, useState } from "react";
-import { delayRequest } from "../../utils/delay";
+
+// Project import
+import axios from "axios";
+import axiosErrorHandler from "../../utils/axiosErrorHandler";
 import Logger from "../../components/Logger";
 
+// MUI components
 import { Box, Button, Typography } from "@mui/material";
 
 interface Product {
@@ -12,7 +16,7 @@ interface Product {
   brand: string;
 }
 
-const SimpleFetch = () => {
+const Axios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Product | null>(null);
@@ -21,17 +25,12 @@ const SimpleFetch = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://dummyjson.com/product/1");
-      // Artificially delay function to show loading state
-      const delayedResponse = (await delayRequest(response)) as Response;
-      const { id, title, price, brand } =
-        (await delayedResponse.json()) as Product;
+      const response = await axios.get("https://dummyjson.com/product/1");
+      const { id, title, price, brand } = (await response.data) as Product;
       setData({ method: "GET", id, title, price, brand });
     } catch (err) {
-      if (err instanceof Error)
-        setError(
-          `${err?.name || "Error"}: ${err?.message || "Unexpected error"}`,
-        );
+      const axiosError = axiosErrorHandler(err) ?? null;
+      setError(axiosError);
       console.error(err);
     }
 
@@ -42,25 +41,16 @@ const SimpleFetch = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://dummyjson.com/products/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "Ethernet Cable",
-          price: "12",
-          brand: "genTech",
-        }),
+      const response = await axios.post("https://dummyjson.com/product/add", {
+        title: "Ethernet Cable",
+        price: "12",
+        brand: "genTech",
       });
-      // Artificially delay function to show loading state
-      const delayedResponse = (await delayRequest(response)) as Response;
-      const { id, title, price, brand } =
-        (await delayedResponse.json()) as Product;
+      const { id, title, price, brand } = (await response.data) as Product;
       setData({ method: "POST", id, title, price, brand });
     } catch (err) {
-      if (err instanceof Error)
-        setError(
-          `${err?.name || "Error"}: ${err?.message || "Unexpected error"}`,
-        );
+      const axiosError = axiosErrorHandler(err) ?? null;
+      setError(axiosError);
       console.error(err);
     }
 
@@ -70,7 +60,7 @@ const SimpleFetch = () => {
   return (
     <Box>
       <Typography variant="h4" paragraph>
-        Simple Fetch
+        Axios
       </Typography>
       <Button onClick={getProduct} variant="outlined" size="small">
         Get product
@@ -85,4 +75,4 @@ const SimpleFetch = () => {
   );
 };
 
-export default SimpleFetch;
+export default Axios;
