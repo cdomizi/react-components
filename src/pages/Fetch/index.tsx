@@ -5,7 +5,7 @@ import SimpleFetch from "./SimpleFetch";
 const Fetch = () => {
   return (
     <Box mx={3}>
-      <Stack mt={5}>
+      <Stack direction={{ xs: "column", sm: "row" }} mt={5} spacing={3}>
         <ContentCard>
           <SimpleFetch />
         </ContentCard>
