@@ -8,13 +8,13 @@ import Logger from "../../components/Logger";
 // MUI components
 import { Box, Button, Typography } from "@mui/material";
 
-interface Product {
+type Product = {
   method?: "GET" | "POST";
   id: number;
   title: string;
   price: number;
   brand: string;
-}
+};
 
 const Axios = () => {
   const [isLoading, setIsLoading] = useState(false);

@@ -2,10 +2,10 @@ import { NavLink } from "react-router-dom";
 
 import { Button } from "@mui/material";
 
-interface MenuItemProps {
+type MenuItemProps = {
   title: string;
   url: string;
-}
+};
 
 const MenuItem = ({ title, url }: MenuItemProps) => (
   <NavLink

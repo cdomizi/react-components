@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-interface LoggerProps {
+type LoggerProps = {
   value: any;
   replacer?: (this: any, key: string, value: any) => any;
   space?: string | number;
-}
+};
 
 const Logger = ({ value, replacer = undefined, space = 2 }: LoggerProps) => {
   return (

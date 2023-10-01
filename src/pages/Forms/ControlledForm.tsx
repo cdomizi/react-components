@@ -13,14 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 
-interface FormErrors {
+type FormErrors = {
   username?: string;
   email?: string;
-}
+};
 
-interface ZodErrorType {
+type ZodErrorType = {
   issues: ZodIssue[];
-}
+};
 
 const ControlledForm = () => {
   const userSchema = z

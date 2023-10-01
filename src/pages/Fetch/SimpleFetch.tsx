@@ -4,13 +4,13 @@ import Logger from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
 
-interface Product {
+type Product = {
   method?: "GET" | "POST";
   id: number;
   title: string;
   price: number;
   brand: string;
-}
+};
 
 const SimpleFetch = () => {
   const [isLoading, setIsLoading] = useState(false);

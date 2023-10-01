@@ -1,12 +1,12 @@
-interface User {
+type User = {
   id?: number;
   username?: string;
   email?: string;
-}
+};
 
-interface Product {
+type Product = {
   title?: string;
-}
+};
 
 const getRandomInt = (max = 10, min = 1) =>
   Math.floor(Math.random() * max + min);
