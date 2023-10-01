@@ -1,7 +1,5 @@
-export {};
-
-declare global {
-  interface CustomError {
-    message?: string | undefined;
-  }
+interface CustomError {
+  message?: string | undefined;
 }
+
+export { CustomError };
