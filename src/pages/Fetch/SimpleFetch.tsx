@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+
 import { delayRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 
@@ -72,10 +73,10 @@ const SimpleFetch = () => {
       <Typography variant="h4" paragraph>
         Simple Fetch
       </Typography>
-      <Button onClick={getProduct} variant="outlined" size="small">
+      <Button onClick={() => void getProduct()} variant="outlined" size="small">
         Get product
       </Button>
-      <Button onClick={addProduct} variant="outlined" size="small">
+      <Button onClick={() => void addProduct()} variant="outlined" size="small">
         Add product
       </Button>
       <Logger

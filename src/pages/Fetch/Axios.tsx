@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
+import axios, { AxiosResponse } from "axios";
 
 // Project import
-import axios from "axios";
 import axiosErrorHandler from "../../utils/axiosErrorHandler";
+import { delayRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 
 // MUI components
@@ -26,8 +27,17 @@ const Axios = () => {
 
     try {
       const response = await axios.get("https://dummyjson.com/product/1");
-      const { id, title, price, brand } = (await response.data) as Product;
-      setData({ method: "GET", id, title, price, brand });
+      const delayedResponse = (await delayRequest(
+        response,
+      )) as AxiosResponse<Product>;
+      const { id, title, brand, price } = delayedResponse.data ?? null;
+      setData({
+        method: "GET",
+        id,
+        title,
+        brand,
+        price,
+      });
     } catch (err) {
       const axiosError = axiosErrorHandler(err) ?? null;
       setError(axiosError);
@@ -46,8 +56,17 @@ const Axios = () => {
         price: "12",
         brand: "genTech",
       });
-      const { id, title, price, brand } = (await response.data) as Product;
-      setData({ method: "POST", id, title, price, brand });
+      const delayedResponse = (await delayRequest(
+        response,
+      )) as AxiosResponse<Product>;
+      const { id, title, brand, price } = delayedResponse.data ?? null;
+      setData({
+        method: "GET",
+        id,
+        title,
+        brand,
+        price,
+      });
     } catch (err) {
       const axiosError = axiosErrorHandler(err) ?? null;
       setError(axiosError);
@@ -62,10 +81,10 @@ const Axios = () => {
       <Typography variant="h4" paragraph>
         Axios
       </Typography>
-      <Button onClick={getProduct} variant="outlined" size="small">
+      <Button onClick={() => void getProduct()} variant="outlined" size="small">
         Get product
       </Button>
-      <Button onClick={addProduct} variant="outlined" size="small">
+      <Button onClick={() => void addProduct()} variant="outlined" size="small">
         Add product
       </Button>
       <Logger

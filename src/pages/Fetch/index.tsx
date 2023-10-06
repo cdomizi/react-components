@@ -9,13 +9,13 @@ const Fetch = () => {
     <Box mx={3}>
       <Stack direction={{ xs: "column", sm: "row" }} mt={5} spacing={3}>
         <ContentCard>
-          <SimpleFetch />
+          <TanstackQuery />
         </ContentCard>
         <ContentCard>
           <Axios />
         </ContentCard>
         <ContentCard>
-          <TanstackQuery />
+          <SimpleFetch />
         </ContentCard>
       </Stack>
     </Box>
