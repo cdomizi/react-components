@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { useMemo, useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { delayAxiosRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
@@ -8,7 +8,7 @@ import Logger from "../../components/Logger";
 import { Box, Button, Typography } from "@mui/material";
 
 type Product = {
-  id: number;
+  id?: number;
   title: string;
   price: number;
   brand: string;
@@ -25,29 +25,73 @@ const TanstackQuery = () => {
     // Artificially delay function to show loading state
     delayAxiosRequest(await axios.get("https://dummyjson.com/product/1"));
 
-  const productQuery = useQuery<ProductQuery, AxiosError<Product>>({
+  const getQuery = useQuery<ProductQuery, AxiosError<Product>>({
     queryKey: ["product"],
     queryFn: getProduct,
     enabled: isProductFetched,
   });
 
-  const result = (() => {
+  const ethernetCable = useMemo(
+    (): Product => ({
+      title: "Ethernet Cable",
+      brand: "genTech",
+      price: 12,
+    }),
+    [],
+  );
+
+  const getResult = (() => {
     if (!isProductFetched) return null;
 
-    switch (productQuery.status) {
+    switch (getQuery.status) {
       case "loading":
         return "loading...";
       case "error": {
-        const { code, response, message } = productQuery.error;
+        const { code, response, message } = getQuery.error;
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return `${code} ${response?.status || 500}: ${message}`;
       }
       case "success": {
         const {
           data: { id, title, brand, price },
-        } = productQuery.data;
+        } = getQuery.data;
         return {
           method: "GET",
+          data: { id, title, brand, price },
+        };
+      }
+      default:
+        return null;
+    }
+  })();
+
+  const addProduct = useMutation<
+    AxiosResponse<Product>,
+    AxiosError<Product>,
+    Product,
+    unknown
+  >({
+    mutationFn: (newProduct: Product) =>
+      delayAxiosRequest(
+        axios.post("https://dummyjson.com/product/add", newProduct),
+      ),
+  });
+
+  const addResult = (() => {
+    switch (addProduct.status) {
+      case "loading":
+        return "loading...";
+      case "error": {
+        const { code, response, message } = addProduct.error;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return `${code} ${response?.status || 500}: ${message}`;
+      }
+      case "success": {
+        const {
+          data: { id, title, brand, price },
+        } = addProduct.data;
+        return {
+          method: "POST",
           data: { id, title, brand, price },
         };
       }
@@ -68,10 +112,16 @@ const TanstackQuery = () => {
       >
         Get product
       </Button>
-      <Button onClick={() => null} variant="outlined" size="small">
+      <Button
+        onClick={() => {
+          addProduct.mutate(ethernetCable);
+        }}
+        variant="outlined"
+        size="small"
+      >
         Add product
       </Button>
-      <Logger value={result} />
+      <Logger value={[getResult, addResult]} />
     </Box>
   );
 };

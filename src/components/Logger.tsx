@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 type LoggerProps = {
-  value: any;
-  replacer?: (this: any, key: string, value: any) => any;
+  value: unknown;
+  replacer?: (this: unknown, key: string, value: unknown) => unknown;
   space?: string | number;
 };
 
