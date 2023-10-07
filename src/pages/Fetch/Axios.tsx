@@ -61,8 +61,8 @@ const Axios = () => {
         "https://dummyjson.com/product/add",
         {
           title: "Ethernet Cable",
+          price: "12",
           brand: "genTech",
-          price: 12,
         },
       );
       const delayedResponse = await delayAxiosRequest(response);

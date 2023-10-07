@@ -6,6 +6,7 @@ import { AppBar, Box, Stack, Toolbar, Typography } from "@mui/material";
 const menuItems = [
   { id: "forms", title: "forms", url: "/forms" },
   { id: "fetch", title: "fetch", url: "/fetch" },
+  { id: "todos", title: "todos", url: "/todos" },
 ];
 
 const TopBar = () => {

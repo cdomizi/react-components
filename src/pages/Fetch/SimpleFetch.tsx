@@ -52,8 +52,8 @@ const SimpleFetch = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: "Ethernet Cable",
+          price: "12",
           brand: "genTech",
-          price: 12,
         }),
       });
       // Artificially delay function to show loading state
