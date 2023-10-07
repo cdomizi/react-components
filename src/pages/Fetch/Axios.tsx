@@ -1,5 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosResponse } from "axios";
+
+// Types import
+import { Product, ProductQuery } from "../../types";
 
 // Project import
 import axiosErrorHandler from "../../utils/axiosErrorHandler";
@@ -9,22 +12,10 @@ import Logger from "../../components/Logger";
 // MUI components
 import { Box, Button, Typography } from "@mui/material";
 
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  brand: string;
-};
-
-type ProductData = {
-  method?: "GET" | "POST";
-  data: Product;
-};
-
 const Axios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<ProductData | null>(null);
+  const [data, setData] = useState<ProductQuery | null>(null);
 
   const getProduct = useCallback(async () => {
     setIsLoading(true);
@@ -53,17 +44,22 @@ const Axios = () => {
     setIsLoading(false);
   }, []);
 
+  const newProduct: Product = useMemo(
+    () => ({
+      title: "Ethernet Cable",
+      price: 12,
+      brand: "genTech",
+    }),
+    [],
+  );
+
   const addProduct = useCallback(async () => {
     setIsLoading(true);
 
     try {
       const response: AxiosResponse<Product> = await axios.post(
         "https://dummyjson.com/product/add",
-        {
-          title: "Ethernet Cable",
-          price: "12",
-          brand: "genTech",
-        },
+        newProduct,
       );
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
@@ -83,7 +79,7 @@ const Axios = () => {
     }
 
     setIsLoading(false);
-  }, []);
+  }, [newProduct]);
 
   return (
     <Box>

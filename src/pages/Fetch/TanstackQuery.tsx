@@ -1,23 +1,12 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { useMemo, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
+import { Product, ProductQuery } from "../../types";
 import { delayAxiosRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  brand: string;
-};
-
-type ProductQuery = {
-  method?: "GET" | "POST";
-  data: Product;
-};
 
 const TanstackQuery = () => {
   const [isProductFetched, setIsProductFetched] = useState(false);
@@ -31,7 +20,7 @@ const TanstackQuery = () => {
     enabled: isProductFetched,
   });
 
-  const result = (() => {
+  const getResult = (() => {
     if (!isProductFetched) return null;
 
     switch (productQuery.status) {
@@ -56,6 +45,50 @@ const TanstackQuery = () => {
     }
   })();
 
+  const newProduct: Product = useMemo(
+    () => ({
+      title: "Ethernet Cable",
+      price: 12,
+      brand: "genTech",
+    }),
+    [],
+  );
+
+  const productMutation = useMutation<
+    AxiosResponse<Product>,
+    AxiosError<Product>,
+    Product,
+    unknown
+  >({
+    mutationFn: async (product) =>
+      delayAxiosRequest(
+        await axios.post("https://dummyjson.com/product/add", product),
+      ),
+  });
+
+  const addResult = (() => {
+    switch (productMutation.status) {
+      case "loading":
+        return "loading...";
+      case "error": {
+        const { code, response, message } = productMutation.error;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return `${code} ${response?.status || 500}: ${message}`;
+      }
+      case "success": {
+        const {
+          data: { id, title, brand, price },
+        } = productMutation.data;
+        return {
+          method: "GET",
+          data: { id, title, brand, price },
+        };
+      }
+      default:
+        return null;
+    }
+  })();
+
   return (
     <Box>
       <Typography variant="h4" paragraph>
@@ -68,10 +101,14 @@ const TanstackQuery = () => {
       >
         Get product
       </Button>
-      <Button onClick={() => null} variant="outlined" size="small">
+      <Button
+        onClick={() => productMutation.mutate(newProduct)}
+        variant="outlined"
+        size="small"
+      >
         Add product
       </Button>
-      <Logger value={result} />
+      <Logger value={[getResult, addResult]} />
     </Box>
   );
 };

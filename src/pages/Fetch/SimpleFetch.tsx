@@ -1,21 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+
+import { Product, ProductQuery } from "../../types";
 
 import { delayRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  brand: string;
-};
-
-type ProductQuery = {
-  method?: "GET" | "POST";
-  data: Product;
-};
 
 const SimpleFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +33,15 @@ const SimpleFetch = () => {
     setIsLoading(false);
   }, []);
 
+  const newProduct: Product = useMemo(
+    () => ({
+      title: "Ethernet Cable",
+      price: 12,
+      brand: "genTech",
+    }),
+    [],
+  );
+
   const addProduct = useCallback(async () => {
     setIsLoading(true);
 
@@ -50,11 +49,7 @@ const SimpleFetch = () => {
       const response = await fetch("https://dummyjson.com/products/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "Ethernet Cable",
-          price: "12",
-          brand: "genTech",
-        }),
+        body: JSON.stringify(newProduct),
       });
       // Artificially delay function to show loading state
       const delayedResponse = await delayRequest(response);
@@ -70,7 +65,7 @@ const SimpleFetch = () => {
     }
 
     setIsLoading(false);
-  }, []);
+  }, [newProduct]);
 
   return (
     <Box>
