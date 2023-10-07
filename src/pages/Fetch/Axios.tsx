@@ -3,40 +3,46 @@ import axios, { AxiosResponse } from "axios";
 
 // Project import
 import axiosErrorHandler from "../../utils/axiosErrorHandler";
-import { delayRequest } from "../../utils/delay";
+import { delayAxiosRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 
 // MUI components
 import { Box, Button, Typography } from "@mui/material";
 
 type Product = {
-  method?: "GET" | "POST";
   id: number;
   title: string;
   price: number;
   brand: string;
 };
 
+type ProductData = {
+  method?: "GET" | "POST";
+  data: Product;
+};
+
 const Axios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<Product | null>(null);
+  const [data, setData] = useState<ProductData | null>(null);
 
   const getProduct = useCallback(async () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get("https://dummyjson.com/product/1");
-      const delayedResponse = (await delayRequest(
-        response,
-      )) as AxiosResponse<Product>;
+      const response: AxiosResponse<Product> = await axios.get(
+        "https://dummyjson.com/product/1",
+      );
+      const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
         method: "GET",
-        id,
-        title,
-        brand,
-        price,
+        data: {
+          id,
+          title,
+          brand,
+          price,
+        },
       });
     } catch (err) {
       const axiosError = axiosErrorHandler(err) ?? null;
@@ -51,21 +57,24 @@ const Axios = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("https://dummyjson.com/product/add", {
-        title: "Ethernet Cable",
-        price: "12",
-        brand: "genTech",
-      });
-      const delayedResponse = (await delayRequest(
-        response,
-      )) as AxiosResponse<Product>;
+      const response: AxiosResponse<Product> = await axios.post(
+        "https://dummyjson.com/product/add",
+        {
+          title: "Ethernet Cable",
+          price: "12",
+          brand: "genTech",
+        },
+      );
+      const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
         method: "GET",
-        id,
-        title,
-        brand,
-        price,
+        data: {
+          id,
+          title,
+          brand,
+          price,
+        },
       });
     } catch (err) {
       const axiosError = axiosErrorHandler(err) ?? null;

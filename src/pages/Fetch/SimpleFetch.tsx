@@ -6,17 +6,21 @@ import Logger from "../../components/Logger";
 import { Box, Button, Typography } from "@mui/material";
 
 type Product = {
-  method?: "GET" | "POST";
   id: number;
   title: string;
   price: number;
   brand: string;
 };
 
+type ProductQuery = {
+  method?: "GET" | "POST";
+  data: Product;
+};
+
 const SimpleFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<Product | null>(null);
+  const [data, setData] = useState<ProductQuery | null>(null);
 
   const getProduct = useCallback(async () => {
     setIsLoading(true);
@@ -24,10 +28,10 @@ const SimpleFetch = () => {
     try {
       const response = await fetch("https://dummyjson.com/product/1");
       // Artificially delay function to show loading state
-      const delayedResponse = (await delayRequest(response)) as Response;
+      const delayedResponse = await delayRequest(response);
       const { id, title, price, brand } =
         (await delayedResponse.json()) as Product;
-      setData({ method: "GET", id, title, price, brand });
+      setData({ method: "GET", data: { id, title, price, brand } });
     } catch (err) {
       if (err instanceof Error)
         setError(
@@ -53,10 +57,10 @@ const SimpleFetch = () => {
         }),
       });
       // Artificially delay function to show loading state
-      const delayedResponse = (await delayRequest(response)) as Response;
+      const delayedResponse = await delayRequest(response);
       const { id, title, price, brand } =
         (await delayedResponse.json()) as Product;
-      setData({ method: "POST", id, title, price, brand });
+      setData({ method: "POST", data: { id, title, price, brand } });
     } catch (err) {
       if (err instanceof Error)
         setError(
