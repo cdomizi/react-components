@@ -885,12 +885,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-query@npm:^4.34.1":
-  version: 4.34.1
-  resolution: "@tanstack/eslint-plugin-query@npm:4.34.1"
+"@tanstack/eslint-plugin-query@npm:^4.36.1":
+  version: 4.36.1
+  resolution: "@tanstack/eslint-plugin-query@npm:4.36.1"
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: f88cb3721225ca79aa536886809b90d690edeacd7194e4c7ba28d7211d76b2c532691a02b74dfb3d4f9c36bdcef32c7c6f4ca9fe46eecc6aaeb73dbc87e6c599
+  checksum: ed98b520b0194fc2ee8d26f393f58ce16576eaa199419f4f8b88e3f3c675c7fc987eac719b72aa788d138d15c5c11a2c3c82f00fb1a8060c21caafebced1346e
   languageName: node
   linkType: hard
 
@@ -3890,7 +3890,7 @@ __metadata:
     "@loadable/component": ^5.15.3
     "@mui/icons-material": ^5.11.11
     "@mui/material": ^5.11.14
-    "@tanstack/eslint-plugin-query": ^4.34.1
+    "@tanstack/eslint-plugin-query": ^4.36.1
     "@tanstack/react-query": ^4.35.3
     "@tanstack/react-query-devtools": ^4.35.7
     "@types/loadable__component": ^5.13.5
