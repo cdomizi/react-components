@@ -36,8 +36,8 @@ const SimpleFetch = () => {
   const newProduct: Product = useMemo(
     () => ({
       title: "Ethernet Cable",
-      price: 12,
       brand: "genTech",
+      price: 12,
     }),
     [],
   );
