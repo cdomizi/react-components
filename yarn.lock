@@ -3483,6 +3483,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "nanoid@npm:5.0.1"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: fb5a57ec0563f12f101129b2f11fe50505e5f1219760c43e6ae30fc0a0d2aa269985f6d07ddea15e3bd4b24751c9ef14fa8117cbc80d410726429e2b37a4b13f
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -3905,6 +3914,7 @@ __metadata:
     eslint-plugin-prettier: ^5.0.0
     eslint-plugin-react: latest
     eslint-plugin-react-hooks: ^4.6.0
+    nanoid: ^5.0.1
     prettier: 3.0.3
     react: ^18.2.0
     react-dom: ^18.2.0
