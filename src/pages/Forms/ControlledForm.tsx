@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
-import { getRandomUser } from "../../utils/getRandomData";
+
+import getRandomData from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
 // MUI import
@@ -68,7 +69,9 @@ const ControlledForm = () => {
       email: undefined,
     });
     try {
-      const randomUser = (await getRandomUser()) as UserType;
+      const randomUser = await getRandomData<UserType>(
+        "https://dummyjson.com/users/",
+      );
       setUserData({
         ...userData,
         username: randomUser.username,
@@ -175,7 +178,7 @@ const ControlledForm = () => {
         id="username"
         name="username"
         label="Username"
-        value={userData.username || ""}
+        value={userData.username ?? ""}
         onChange={handleChange}
         InputLabelProps={{ required: true, shrink: true }}
         autoFocus={!!formErrors?.username}
@@ -227,7 +230,7 @@ const ControlledForm = () => {
         endIcon={isLoading && <CircularProgress color="inherit" size={20} />}
         variant="outlined"
         size="small"
-        onClick={fillWithRandomData}
+        onClick={() => void fillWithRandomData()}
       >
         Fill with random data
       </Button>

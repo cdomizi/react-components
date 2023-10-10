@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
-import { getRandomUser } from "../../utils/getRandomData";
+import getRandomData from "../../utils/getRandomData";
 
 // MUI import
 import {
@@ -57,7 +57,9 @@ const UncontrolledForm = () => {
   const fillWithRandomData = useCallback(() => {
     void (async () => {
       setFormErrors({ ...formErrors, username: undefined, email: undefined });
-      const randomUser = (await getRandomUser()) as UserType;
+      const randomUser = await getRandomData<UserType>(
+        "https://dummyjson.com/users/",
+      );
       const formElement = Object.values(formRef.current);
       const formInputs = formElement.filter(
         (el: HTMLInputElement) => el?.id?.length,

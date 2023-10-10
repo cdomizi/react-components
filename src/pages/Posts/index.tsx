@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
-import { getRandomData } from "../../utils/getRandomData";
+
+import getRandomData from "../../utils/getRandomData";
+import Post from "./Post";
 import Logger from "../../components/Logger";
 
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 
-type PostType = {
+export type PostType = {
   id: number;
   title: string;
   body: string;
@@ -190,7 +192,18 @@ const Posts = () => {
       </Button>
       <Logger value={randomPost} />
       <Divider />
-      <Logger value={posts} />
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={5}
+        justifyContent="center"
+        useFlexGap
+        mt={4}
+        sx={{ flexWrap: { xs: "nowrap", sm: "wrap" } }}
+      >
+        {posts.length
+          ? posts.map((post) => <Post key={post.id} post={post} />)
+          : "No posts yet."}
+      </Stack>
     </Box>
   );
 };

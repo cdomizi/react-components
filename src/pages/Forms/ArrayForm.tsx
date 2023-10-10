@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 
 // Project import
-import { getRandomUser, getProductsArray } from "../../utils/getRandomData";
+import getRandomData, { getProductsArray } from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
 // MUI import
@@ -62,6 +62,12 @@ const CartForm = () => {
       )
       .nonempty({ message: "Please add at least one product" }),
   });
+
+  type UserType = {
+    id?: number;
+    username?: string;
+    email?: string;
+  };
 
   type CustomerType = z.infer<typeof productsSchema>["customer"];
 
@@ -139,7 +145,9 @@ const CartForm = () => {
 
     const products = await getProductsArray();
 
-    const { id } = await getRandomUser();
+    const { id } = await getRandomData<UserType>(
+      "https://dummyjson.com/users/",
+    );
     const customer = customers?.find(
       (customer: CustomerType) => customer.id === id,
     );
@@ -156,13 +164,13 @@ const CartForm = () => {
     <Stack
       id="array-form"
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={() => void handleSubmit(onSubmit)}
       autoComplete="off"
       spacing={2}
     >
       <Typography variant="h4">Array Form</Typography>
       <Button
-        onClick={fillWithRandomData}
+        onClick={() => void fillWithRandomData()}
         type="button"
         variant="outlined"
         size="small"

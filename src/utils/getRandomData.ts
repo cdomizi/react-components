@@ -1,10 +1,4 @@
-type User = {
-  id?: number;
-  username?: string;
-  email?: string;
-};
-
-type Product = {
+type ProductType = {
   title?: string;
 };
 
@@ -15,19 +9,6 @@ const getRandomData = async <T>(url: string, id?: number) => {
   const randomId = id ?? getRandomInt(30);
   const data = await fetch(`${url}/${randomId}`);
   const json = (await data.json()) as T;
-  return json;
-};
-
-const getRandomUser = async () => {
-  const id = getRandomInt(30);
-  const data = await fetch(`https://dummyjson.com/users/${id}`);
-  const json = (await data.json()) as User;
-  return json;
-};
-
-const getRandomProduct = async (id: number) => {
-  const data = await fetch(`https://dummyjson.com/products/${id}`);
-  const json = (await data.json()) as Product;
   return json;
 };
 
@@ -45,7 +26,10 @@ const getProductsArray = async () => {
   let i = 0;
   while (i < randomProductsCount) {
     const randomId = getUniqueId(productIds);
-    const { title } = await getRandomProduct(randomId);
+    const { title } = await getRandomData<ProductType>(
+      "https://dummyjson.com/products/",
+      randomId,
+    );
     products.push({ product: title, quantity: randomProductsCount });
     i++;
   }
@@ -53,10 +37,6 @@ const getProductsArray = async () => {
   return products;
 };
 
-export {
-  getRandomInt,
-  getRandomData,
-  getRandomUser,
-  getRandomProduct,
-  getProductsArray,
-};
+export default getRandomData;
+
+export { getRandomInt, getProductsArray };
