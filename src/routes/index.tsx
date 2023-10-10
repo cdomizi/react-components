@@ -11,6 +11,7 @@ const Home = loadable(() => import("../pages/Home"));
 const Forms = loadable(() => import("../pages/Forms"));
 const Fetch = loadable(() => import("../pages/Fetch"));
 const Todos = loadable(() => import("../pages/Todos"));
+const Posts = loadable(() => import("../pages/Posts"));
 
 const MainRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const MainRoutes = createBrowserRouter(
       <Route path="forms" element={<Forms />} />
       <Route path="fetch" element={<Fetch />} />
       <Route path="todos" element={<Todos />} />
+      <Route path="posts" element={<Posts />} />
     </Route>,
   ),
 );

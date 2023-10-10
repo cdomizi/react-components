@@ -160,7 +160,7 @@ const Todos = () => {
   );
 
   return (
-    <Box sx={{ padding: "0px 12px" }}>
+    <Box m={3}>
       <Typography variant="h2" mb={6}>
         Todo List
       </Typography>

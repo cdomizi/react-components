@@ -11,6 +11,13 @@ type Product = {
 const getRandomInt = (max = 10, min = 1) =>
   Math.floor(Math.random() * max + min);
 
+const getRandomData = async <T>(url: string, id?: number) => {
+  const randomId = id ?? getRandomInt(30);
+  const data = await fetch(`${url}/${randomId}`);
+  const json = (await data.json()) as T;
+  return json;
+};
+
 const getRandomUser = async () => {
   const id = getRandomInt(30);
   const data = await fetch(`https://dummyjson.com/users/${id}`);
@@ -46,4 +53,10 @@ const getProductsArray = async () => {
   return products;
 };
 
-export { getRandomInt, getRandomUser, getRandomProduct, getProductsArray };
+export {
+  getRandomInt,
+  getRandomData,
+  getRandomUser,
+  getRandomProduct,
+  getProductsArray,
+};
