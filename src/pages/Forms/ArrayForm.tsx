@@ -1,14 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  useFieldArray,
-} from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 
 // Project import
+import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData, { getProductsArray } from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
@@ -73,7 +69,7 @@ const CartForm = () => {
 
   type ProductType = z.infer<typeof productsSchema>["products"][number];
 
-  type FormType = z.infer<typeof productsSchema>;
+  type FormInputsType = z.infer<typeof productsSchema>;
 
   const [customers, setCustomers] = useState<CustomerType[] | null>(null);
 
@@ -104,12 +100,12 @@ const CartForm = () => {
     watch,
     formState: { isLoading, isSubmitSuccessful, isSubmitting, errors },
     reset,
-  } = useForm<FormType>({
+  } = useForm<FormInputsType>({
     defaultValues: { customer: undefined, products: [] },
     resolver: zodResolver(productsSchema),
   });
 
-  const { fields, append, remove } = useFieldArray<FormType, "products">({
+  const { fields, append, remove } = useFieldArray<FormInputsType, "products">({
     control,
     name: "products",
     rules: {
@@ -117,7 +113,7 @@ const CartForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormType> = (formData) => {
+  const onSubmit = (formData: FormInputsType) => {
     // Process form data for submit
     const submitData = {
       customer: formData.customer,
@@ -164,7 +160,9 @@ const CartForm = () => {
     <Stack
       id="array-form"
       component="form"
-      onSubmit={() => void handleSubmit(onSubmit)}
+      onSubmit={(event) =>
+        onSubmitHandler<FormInputsType>(event, handleSubmit, onSubmit)
+      }
       autoComplete="off"
       spacing={2}
     >

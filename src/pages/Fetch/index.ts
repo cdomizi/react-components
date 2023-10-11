@@ -1,7 +1,3 @@
-export type CustomError = {
-  message?: string | undefined;
-};
-
 export type Product = {
   id?: number;
   title: string;

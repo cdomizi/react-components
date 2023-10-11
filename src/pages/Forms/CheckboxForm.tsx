@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 // Project import
+import onSubmitHandler from "../../utils/onSubmitHandler";
 import Logger from "../../components/Logger";
 
 // MUI import
@@ -22,7 +23,7 @@ const CheckboxForm = () => {
     })
     .strict();
 
-  type UserType = z.infer<typeof formSchema>;
+  type FormInputsType = z.infer<typeof formSchema>;
 
   const initialFormState = useMemo(() => ({ status: false }), []);
 
@@ -32,12 +33,12 @@ const CheckboxForm = () => {
     handleSubmit,
     reset,
     watch,
-  } = useForm<UserType>({
+  } = useForm<FormInputsType>({
     defaultValues: initialFormState,
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<UserType> = useCallback((formData) => {
+  const onSubmit = useCallback((formData: FormInputsType) => {
     console.log(formData);
   }, []);
 
@@ -49,7 +50,9 @@ const CheckboxForm = () => {
     <Stack
       id="checkbox-form"
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(event) =>
+        onSubmitHandler<FormInputsType>(event, handleSubmit, onSubmit)
+      }
       autoComplete="off"
       spacing={2}
     >

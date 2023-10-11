@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 
 // Types import
-import { Product, ProductQuery } from "../../types";
+import { Product, ProductQuery } from "./index";
 
 // Project import
 import axiosErrorHandler from "../../utils/axiosErrorHandler";

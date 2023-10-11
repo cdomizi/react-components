@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Product, ProductQuery } from "../../types";
+import { Product, ProductQuery } from "./index";
 import { delayAxiosRequest } from "../../utils/delay";
 import Logger from "../../components/Logger";
 

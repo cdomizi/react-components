@@ -1,5 +1,8 @@
 import axios from "axios";
-import { CustomError } from "../types";
+
+export type CustomError = {
+  message?: string | undefined;
+};
 
 const axiosErrorHandler = (error: unknown) => {
   if (axios.isAxiosError<CustomError>(error))

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 
 // Project import
+import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData from "../../utils/getRandomData";
 import Logger from "../../components/Logger";
 
@@ -70,19 +72,21 @@ const ControlledRHF = () => {
     setLoading(false);
   }, [reset]);
 
-  const onSubmit: SubmitHandler<UserType> = useCallback((formData) => {
+  function onSubmit(formData: UserType) {
     console.log(formData);
-  }, []);
+  }
 
   useEffect(() => {
-    isSubmitSuccessful && reset();
-  });
+    if (isSubmitSuccessful) reset(initialFormState);
+  }, [initialFormState, isSubmitSuccessful, reset]);
 
   return (
     <Stack
       id="controlled-rhf-form"
       component="form"
-      onSubmit={() => void handleSubmit(onSubmit)}
+      onSubmit={(event) =>
+        onSubmitHandler<UserType>(event, handleSubmit, onSubmit)
+      }
       autoComplete="off"
       spacing={2}
     >
@@ -174,6 +178,7 @@ const ControlledRHF = () => {
         Submit
       </Button>
       <Logger value={watch()} />
+      <DevTool control={control} />
     </Stack>
   );
 };
