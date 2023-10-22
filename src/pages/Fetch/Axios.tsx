@@ -12,7 +12,7 @@ import Logger from "../../components/Logger";
 // MUI components
 import { Box, Button, Typography } from "@mui/material";
 
-const Axios = () => {
+export const Axios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ProductQuery | null>(null);
@@ -98,5 +98,3 @@ const Axios = () => {
     </Box>
   );
 };
-
-export default Axios;

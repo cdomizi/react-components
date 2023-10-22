@@ -20,7 +20,7 @@ type ZodErrorType = {
   issues: ZodIssue[];
 };
 
-const UncontrolledForm = () => {
+export const UncontrolledForm = () => {
   // Form validation schema
   const userSchema = z
     .object({
@@ -199,5 +199,3 @@ const UncontrolledForm = () => {
     </Stack>
   );
 };
-
-export default UncontrolledForm;

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 // Project import
 import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData from "../../utils/getRandomData";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI import
 import {
@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const UncontrolledRHF = () => {
+export const UncontrolledRHF = () => {
   const userSchema = z
     .object({
       username: z
@@ -171,5 +171,3 @@ const UncontrolledRHF = () => {
     </Stack>
   );
 };
-
-export default UncontrolledRHF;

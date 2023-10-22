@@ -2,8 +2,8 @@ import { useReducer, useMemo, useEffect, useCallback } from "react";
 import { nanoid } from "nanoid";
 
 // Project import
-import NewTodo from "./NewTodo";
-import Todo from "./Todo";
+import { NewTodo } from "./NewTodo";
+import { Todo } from "./Todo";
 import { TodoType } from "./Todo";
 
 // MUI imoport

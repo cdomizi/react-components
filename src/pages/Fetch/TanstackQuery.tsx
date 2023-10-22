@@ -4,11 +4,11 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Product, ProductQuery } from "./index";
 import { delayAxiosRequest } from "../../utils/delay";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
 
-const TanstackQuery = () => {
+export const TanstackQuery = () => {
   const [isProductFetched, setIsProductFetched] = useState(false);
   const getProduct = async (): Promise<ProductQuery> =>
     // Artificially delay function to show loading state
@@ -112,5 +112,3 @@ const TanstackQuery = () => {
     </Box>
   );
 };
-
-export default TanstackQuery;

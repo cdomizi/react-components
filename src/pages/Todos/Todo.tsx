@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 
 // Project import
-import UpDownArrows from "./UpDownArrows";
+import { UpDownArrows } from "./UpDownArrows";
 
 // MUI components
 import {
@@ -38,7 +38,7 @@ type PropsType = TodoType & {
   onMove: (moveUp: boolean, id: string) => void;
 };
 
-const Todo = ({
+export const Todo = ({
   id,
   position,
   title,
@@ -145,5 +145,3 @@ const Todo = ({
     </ListItem>
   );
 };
-
-export default Todo;

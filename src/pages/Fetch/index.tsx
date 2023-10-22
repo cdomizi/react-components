@@ -1,8 +1,9 @@
+import { SimpleFetch } from "./SimpleFetch";
+import { Axios } from "./Axios";
+import { TanstackQuery } from "./TanstackQuery";
+import { ContentCard } from "../../components/{ContentCard}";
+
 import { Box, Stack } from "@mui/material";
-import ContentCard from "../../components/ContentCard";
-import SimpleFetch from "./SimpleFetch";
-import Axios from "./Axios";
-import TanstackQuery from "./TanstackQuery";
 
 const Fetch = () => {
   return (

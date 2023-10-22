@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 
 // Project import
 import onSubmitHandler from "../../utils/onSubmitHandler";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI import
 import {
@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const CheckboxForm = () => {
+export const CheckboxForm = () => {
   const formSchema = z
     .object({
       status: z.boolean(),
@@ -75,5 +75,3 @@ const CheckboxForm = () => {
     </Stack>
   );
 };
-
-export default CheckboxForm;

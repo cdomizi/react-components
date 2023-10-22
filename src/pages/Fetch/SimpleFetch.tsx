@@ -3,11 +3,11 @@ import { useCallback, useMemo, useState } from "react";
 import { Product, ProductQuery } from "./index";
 
 import { delayRequest } from "../../utils/delay";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
 
-const SimpleFetch = () => {
+export const SimpleFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ProductQuery | null>(null);
@@ -84,5 +84,3 @@ const SimpleFetch = () => {
     </Box>
   );
 };
-
-export default SimpleFetch;

@@ -2,7 +2,11 @@ import { useCallback, useState } from "react";
 
 import { Box, Button, TextField } from "@mui/material";
 
-const NewTodo = ({ onAddTodo }: { onAddTodo: (title: string) => void }) => {
+export const NewTodo = ({
+  onAddTodo,
+}: {
+  onAddTodo: (title: string) => void;
+}) => {
   const [title, setTitle] = useState("");
   const [error, setError] = useState(false);
 
@@ -30,5 +34,3 @@ const NewTodo = ({ onAddTodo }: { onAddTodo: (title: string) => void }) => {
     </Box>
   );
 };
-
-export default NewTodo;

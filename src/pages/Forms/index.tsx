@@ -1,9 +1,9 @@
-import UncontrolledForm from "./UncontrolledForm";
-import ControlledForm from "./ControlledForm";
-import ControlledRHF from "./ControlledRHF";
-import UncontrolledRHF from "./UncontrolledRHF";
-import CheckboxForm from "./CheckboxForm";
-import ArrayForm from "./ArrayForm";
+import { UncontrolledForm } from "./UncontrolledForm";
+import { ControlledForm } from "./ControlledForm";
+import { ControlledRHF } from "./ControlledRHF";
+import { UncontrolledRHF } from "./UncontrolledRHF";
+import { CheckboxForm } from "./CheckboxForm";
+import { CartForm as ArrayForm } from "./ArrayForm";
 
 import { Stack } from "@mui/material";
 

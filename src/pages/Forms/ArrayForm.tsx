@@ -6,7 +6,7 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 // Project import
 import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData, { getProductsArray } from "../../utils/getRandomData";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI import
 import {
@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
-const CartForm = () => {
+export const CartForm = () => {
   const [loading, setLoading] = useState(false);
 
   const productsSchema = z.object({
@@ -309,5 +309,3 @@ const CartForm = () => {
     </Stack>
   );
 };
-
-export default CartForm;

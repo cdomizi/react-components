@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 
 import getRandomData from "../../utils/getRandomData";
-import Post from "./Post";
-import Logger from "../../components/Logger";
+import { Post } from "./Post";
+import { Logger } from "../../components/Logger";
 
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 

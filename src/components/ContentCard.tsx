@@ -5,7 +5,7 @@ type ContentCardProps = {
   sx?: SxProps;
 };
 
-const ContentCard = ({ children, sx }: ContentCardProps) => {
+export const ContentCard = ({ children, sx }: ContentCardProps) => {
   return (
     <Card
       sx={{
@@ -18,5 +18,3 @@ const ContentCard = ({ children, sx }: ContentCardProps) => {
     </Card>
   );
 };
-
-export default ContentCard;

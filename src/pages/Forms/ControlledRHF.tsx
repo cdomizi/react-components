@@ -7,7 +7,7 @@ import { DevTool } from "@hookform/devtools";
 // Project import
 import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData from "../../utils/getRandomData";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI import
 import {
@@ -19,7 +19,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const ControlledRHF = () => {
+export const ControlledRHF = () => {
   const userSchema = z
     .object({
       username: z
@@ -182,5 +182,3 @@ const ControlledRHF = () => {
     </Stack>
   );
 };
-
-export default ControlledRHF;

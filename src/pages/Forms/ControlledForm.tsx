@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
 
 import getRandomData from "../../utils/getRandomData";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI import
 import {
@@ -23,7 +23,7 @@ type ZodErrorType = {
   issues: ZodIssue[];
 };
 
-const ControlledForm = () => {
+export const ControlledForm = () => {
   const userSchema = z
     .object({
       username: z
@@ -246,5 +246,3 @@ const ControlledForm = () => {
     </Stack>
   );
 };
-
-export default ControlledForm;

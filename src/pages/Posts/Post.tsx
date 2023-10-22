@@ -1,7 +1,7 @@
 import { PostType } from ".";
 import { Card, CardContent, Typography } from "@mui/material";
 
-const Post = ({ post }: { post: PostType }) => {
+export const Post = ({ post }: { post: PostType }) => {
   return (
     <Card raised={true} sx={{ width: 270, borderRadius: "2%" }}>
       <CardContent>
@@ -23,5 +23,3 @@ const Post = ({ post }: { post: PostType }) => {
     </Card>
   );
 };
-
-export default Post;

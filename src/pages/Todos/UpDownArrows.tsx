@@ -8,7 +8,7 @@ type PropsType = {
   disabled: boolean;
 };
 
-const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
+export const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
   const [first, last] = position;
 
   return (
@@ -30,5 +30,3 @@ const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
     </Stack>
   );
 };
-
-export default UpDownArrows;
