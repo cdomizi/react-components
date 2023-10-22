@@ -2,12 +2,12 @@ import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 
 // Types import
-import { Product, ProductQuery } from "./index";
+import { Product, ProductQuery } from "./types";
 
 // Project import
 import axiosErrorHandler from "../../utils/axiosErrorHandler";
 import { delayAxiosRequest } from "../../utils/delay";
-import Logger from "../../components/Logger";
+import { Logger } from "../../components/Logger";
 
 // MUI components
 import { Box, Button, Typography } from "@mui/material";

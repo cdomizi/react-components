@@ -2,11 +2,22 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Product, ProductQuery } from "./index";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
+
+type Product = {
+  id?: number;
+  title: string;
+  price: number;
+  brand: string;
+};
+
+type ProductQuery = {
+  method?: "GET" | "POST";
+  data: Product;
+};
 
 export const TanstackQuery = () => {
   const [isProductFetched, setIsProductFetched] = useState(false);
@@ -24,7 +35,7 @@ export const TanstackQuery = () => {
     if (!isProductFetched) return null;
 
     switch (productQuery.status) {
-      case "loading":
+      case "pending":
         return "loading...";
       case "error": {
         const { code, response, message } = productQuery.error;
@@ -68,7 +79,7 @@ export const TanstackQuery = () => {
 
   const addResult = (() => {
     switch (productMutation.status) {
-      case "loading":
+      case "pending":
         return "loading...";
       case "error": {
         const { code, response, message } = productMutation.error;
