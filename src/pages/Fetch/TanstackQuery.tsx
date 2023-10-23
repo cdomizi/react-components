@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
@@ -20,7 +20,6 @@ type ProductQuery = {
 };
 
 export const TanstackQuery = () => {
-  const [isProductFetched, setIsProductFetched] = useState(false);
   const getProduct = async (): Promise<ProductQuery> =>
     // Artificially delay function to show loading state
     delayAxiosRequest(await axios.get("https://dummyjson.com/product/1"));
@@ -28,12 +27,10 @@ export const TanstackQuery = () => {
   const productQuery = useQuery<ProductQuery, AxiosError<Product>>({
     queryKey: ["product"],
     queryFn: getProduct,
-    enabled: isProductFetched,
+    enabled: false,
   });
 
   const getResult = (() => {
-    if (!isProductFetched) return null;
-
     switch (productQuery.status) {
       case "pending":
         return "loading...";
@@ -106,7 +103,7 @@ export const TanstackQuery = () => {
         Tanstack Query
       </Typography>
       <Button
-        onClick={() => setIsProductFetched(true)}
+        onClick={() => void productQuery.refetch()}
         variant="outlined"
         size="small"
       >
