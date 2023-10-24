@@ -2,19 +2,13 @@ import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
+// Project import
 import getRandomData from "../../utils/getRandomData";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Post } from "./Post";
-import { Logger } from "../../components/Logger";
 
-import {
-  Box,
-  Button,
-  capitalize,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+// MUI components
+import { Box, Button, capitalize, Stack, Typography } from "@mui/material";
 
 export type Post = {
   id: number;
@@ -30,9 +24,13 @@ type PostQuery = {
 const Posts = () => {
   const postQueryClient = useQueryClient();
 
+  const queryParams = useMemo(() => "?_sort=id&_order=desc", []);
+
   const getPost = async (): Promise<PostQuery> =>
     // Artificially delay function to show loading state
-    delayAxiosRequest(await axios.get("http://localhost:3500/posts"));
+    delayAxiosRequest(
+      await axios.get(`http://localhost:3500/posts${queryParams}`),
+    );
 
   const postQuery = useQuery<PostQuery, AxiosError<Post>>({
     queryKey: ["posts"],
@@ -48,7 +46,7 @@ const Posts = () => {
     const formatBody =
       capitalize(body.split(" ")[29]) +
       " " +
-      body.split(" ").slice(30, 47).join(" ") +
+      body.split(" ").slice(30, 58).join(" ") +
       ".";
     const randomPost = {
       id: postQuery.isSuccess ? postQuery.data.data?.length + 1 : 1,
@@ -88,8 +86,6 @@ const Posts = () => {
       >
         Add random post
       </Button>
-      <Logger value={addPost.data?.data} />
-      <Divider />
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={5}
