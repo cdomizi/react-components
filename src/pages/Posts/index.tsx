@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { useCallback, useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import getRandomData from "../../utils/getRandomData";
 import { delayAxiosRequest } from "../../utils/delay";
@@ -28,7 +28,7 @@ type PostQuery = {
 };
 
 const Posts = () => {
-  const [randomPost, setRandomPost] = useState<Post | null>(null);
+  const postQueryClient = useQueryClient();
 
   const getPost = async (): Promise<PostQuery> =>
     // Artificially delay function to show loading state
@@ -39,7 +39,7 @@ const Posts = () => {
     queryFn: getPost,
   });
 
-  const getRandomPost = useCallback(async () => {
+  const randomPost = useMemo(async (): Promise<Post> => {
     const { body } = await getRandomData<Post>("https://dummyjson.com/posts");
     const title =
       capitalize(body.split(" ")[19]) +
@@ -56,8 +56,25 @@ const Posts = () => {
       body: formatBody,
     };
 
-    setRandomPost(randomPost);
+    return randomPost;
   }, [postQuery.data, postQuery.isSuccess]);
+
+  const addPost = useMutation<
+    AxiosResponse<Post>,
+    AxiosError<Post>,
+    Post,
+    unknown
+  >({
+    mutationFn: async (post) =>
+      delayAxiosRequest(await axios.post("http://localhost:3500/posts", post)),
+    onSuccess: () =>
+      void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
+  });
+
+  const onAddRandomPost = useCallback(async () => {
+    const newPost = await randomPost;
+    addPost.mutate(newPost);
+  }, [addPost, randomPost]);
 
   return (
     <Box m={3}>
@@ -67,11 +84,11 @@ const Posts = () => {
       <Button
         variant="outlined"
         size="small"
-        onClick={() => void getRandomPost()}
+        onClick={() => void onAddRandomPost()}
       >
-        Get random post
+        Add random post
       </Button>
-      <Logger value={randomPost} />
+      <Logger value={addPost.data?.data} />
       <Divider />
       <Stack
         direction={{ xs: "column", sm: "row" }}
@@ -91,7 +108,11 @@ const Posts = () => {
           ? postQuery.data.data.map((post) => (
               <Post key={post.id} post={post} />
             ))
-          : !(postQuery.isLoading || postQuery.isFetching) && "No posts yet."}
+          : !(
+              postQuery.isLoading ||
+              postQuery.isFetching ||
+              postQuery.isError
+            ) && "No posts yet."}
       </Stack>
     </Box>
   );

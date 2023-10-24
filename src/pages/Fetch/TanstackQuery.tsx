@@ -33,7 +33,7 @@ export const TanstackQuery = () => {
   const getResult = (() => {
     switch (productQuery.status) {
       case "pending":
-        return "loading...";
+        return productQuery.isLoading ? "loading..." : null;
       case "error": {
         const { code, response, message } = productQuery.error;
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
