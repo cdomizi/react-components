@@ -10,7 +10,7 @@ import { Post } from "./Post";
 // MUI components
 import { Box, Button, capitalize, Stack, Typography } from "@mui/material";
 
-export type Post = {
+export type PostType = {
   id: number;
   title: string;
   body: string;
@@ -18,7 +18,7 @@ export type Post = {
 
 type PostQuery = {
   method?: "GET" | "POST";
-  data: Post[];
+  data: PostType[];
 };
 
 const Posts = () => {
@@ -32,13 +32,15 @@ const Posts = () => {
       await axios.get(`http://localhost:3500/posts${queryParams}`),
     );
 
-  const postQuery = useQuery<PostQuery, AxiosError<Post>>({
+  const postQuery = useQuery<PostQuery, AxiosError<PostType>>({
     queryKey: ["posts"],
     queryFn: getPost,
   });
 
-  const randomPost = useMemo(async (): Promise<Post> => {
-    const { body } = await getRandomData<Post>("https://dummyjson.com/posts");
+  const randomPost = useMemo(async (): Promise<PostType> => {
+    const { body } = await getRandomData<PostType>(
+      "https://dummyjson.com/posts",
+    );
     const title =
       capitalize(body.split(" ")[19]) +
       " " +
@@ -46,7 +48,7 @@ const Posts = () => {
     const formatBody =
       capitalize(body.split(" ")[29]) +
       " " +
-      body.split(" ").slice(30, 58).join(" ") +
+      body.split(" ").slice(30, 56).join(" ") +
       ".";
     const randomPost = {
       id: postQuery.isSuccess ? postQuery.data.data?.length + 1 : 1,
@@ -58,9 +60,9 @@ const Posts = () => {
   }, [postQuery.data, postQuery.isSuccess]);
 
   const addPost = useMutation<
-    AxiosResponse<Post>,
-    AxiosError<Post>,
-    Post,
+    AxiosResponse<PostType>,
+    AxiosError<PostType>,
+    PostType,
     unknown
   >({
     mutationFn: async (post) =>
@@ -73,6 +75,19 @@ const Posts = () => {
     const newPost = await randomPost;
     addPost.mutate(newPost);
   }, [addPost, randomPost]);
+
+  const deletePost = useMutation<
+    AxiosResponse<PostType>,
+    AxiosError<PostType>,
+    number,
+    unknown
+  >({
+    mutationFn: async (id: number) => {
+      return await axios.delete(`http://localhost:3500/posts/${id}`);
+    },
+    onSuccess: () =>
+      void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
+  });
 
   return (
     <Box m={3}>
@@ -102,7 +117,11 @@ const Posts = () => {
           }: ${postQuery.error.message}`}
         {postQuery.isSuccess
           ? postQuery.data.data.map((post) => (
-              <Post key={post.id} post={post} />
+              <Post
+                key={post.id}
+                post={post}
+                onDelete={() => void deletePost.mutate(post.id)}
+              />
             ))
           : !(
               postQuery.isLoading ||
