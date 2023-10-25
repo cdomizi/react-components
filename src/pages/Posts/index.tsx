@@ -16,25 +16,19 @@ export type PostType = {
   body: string;
 };
 
-type PostQuery = {
-  method?: "GET" | "POST";
-  data: PostType[];
-};
-
 const Posts = () => {
   const postQueryClient = useQueryClient();
 
-  const queryParams = useMemo(() => "?_sort=id&_order=desc", []);
-
-  const getPost = async (): Promise<PostQuery> =>
-    // Artificially delay function to show loading state
-    delayAxiosRequest(
-      await axios.get(`http://localhost:3500/posts${queryParams}`),
-    );
-
-  const postQuery = useQuery<PostQuery, AxiosError<PostType>>({
+  const getPosts = useQuery<
+    AxiosResponse<PostType[]>,
+    AxiosError<PostType[]>,
+    PostType[]
+  >({
     queryKey: ["posts"],
-    queryFn: getPost,
+    queryFn: async () =>
+      delayAxiosRequest(await axios.get("http://localhost:3500/posts")),
+    // Order by descending id (new to old)
+    select: (data) => data.data.sort((current, next) => next.id - current.id),
   });
 
   const randomPost = useMemo(async (): Promise<PostType> => {
@@ -51,23 +45,23 @@ const Posts = () => {
       body.split(" ").slice(30, 56).join(" ") +
       ".";
     const randomPost = {
-      id: postQuery.isSuccess ? postQuery.data.data?.length + 1 : 1,
+      id: getPosts.isSuccess ? getPosts.data?.length + 1 : 1,
       title,
       body: formatBody,
     };
 
     return randomPost;
-  }, [postQuery.data, postQuery.isSuccess]);
+  }, [getPosts.data, getPosts.isSuccess]);
 
   const addPost = useMutation<
     AxiosResponse<PostType>,
     AxiosError<PostType>,
-    PostType,
-    unknown
+    PostType
   >({
     mutationFn: async (post) =>
       delayAxiosRequest(await axios.post("http://localhost:3500/posts", post)),
     onSuccess: () =>
+      // Mutation with network call
       void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
@@ -76,11 +70,42 @@ const Posts = () => {
     addPost.mutate(newPost);
   }, [addPost, randomPost]);
 
+  const editPost = useMutation<
+    AxiosResponse<PostType>,
+    AxiosError<PostType>,
+    PostType
+  >({
+    mutationFn: async (post) =>
+      delayAxiosRequest(
+        await axios.put(`http://localhost:3500/posts/${post.id}`, post),
+      ),
+    onSuccess: (data) => {
+      // Mutation with no network call
+      postQueryClient.setQueryData(
+        ["posts", { id: data.data.id }],
+        (oldData: PostType) =>
+          oldData
+            ? {
+                ...oldData,
+                ...data.data,
+              }
+            : oldData,
+      );
+    },
+  });
+
+  const onEditPost = useCallback(
+    async (id: number) => {
+      const newPost = await randomPost;
+      editPost.mutate({ ...newPost, id });
+    },
+    [editPost, randomPost],
+  );
+
   const deletePost = useMutation<
     AxiosResponse<PostType>,
     AxiosError<PostType>,
-    number,
-    unknown
+    number
   >({
     mutationFn: async (id: number) => {
       return await axios.delete(`http://localhost:3500/posts/${id}`);
@@ -109,25 +134,23 @@ const Posts = () => {
         mt={4}
         sx={{ flexWrap: { xs: "nowrap", sm: "wrap" } }}
       >
-        {postQuery.isLoading && <Typography paragraph>Loading...</Typography>}
-        {postQuery.isError &&
-          `${postQuery.error.code} ${
+        {getPosts.isLoading && <Typography paragraph>Loading...</Typography>}
+        {getPosts.isError &&
+          `${getPosts.error.code} ${
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            postQuery.error.response?.status || 500
-          }: ${postQuery.error.message}`}
-        {postQuery.isSuccess
-          ? postQuery.data.data.map((post) => (
+            getPosts.error.response?.status || 500
+          }: ${getPosts.error.message}`}
+        {getPosts.isSuccess
+          ? getPosts.data.map((post) => (
               <Post
                 key={post.id}
                 post={post}
+                onEdit={() => void onEditPost(post.id)}
                 onDelete={() => void deletePost.mutate(post.id)}
               />
             ))
-          : !(
-              postQuery.isLoading ||
-              postQuery.isFetching ||
-              postQuery.isError
-            ) && "No posts yet."}
+          : !(getPosts.isLoading || getPosts.isFetching || getPosts.isError) &&
+            "No posts yet."}
       </Stack>
     </Box>
   );

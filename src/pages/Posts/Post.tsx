@@ -4,15 +4,18 @@ import {
   CardContent,
   CardHeader,
   IconButton,
+  Stack,
   Typography,
 } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 
 export const Post = ({
   post,
+  onEdit,
   onDelete,
 }: {
   post: PostType;
+  onEdit: () => void;
   onDelete: () => void;
 }) => {
   return (
@@ -21,9 +24,14 @@ export const Post = ({
         title={post.title}
         subheader={`#${post.id}`}
         action={
-          <IconButton size="small" onClick={() => onDelete()}>
-            <DeleteIcon color="error" />
-          </IconButton>
+          <Stack>
+            <IconButton size="small" onClick={() => onEdit()}>
+              <EditIcon color="primary" />
+            </IconButton>
+            <IconButton size="small" onClick={() => onDelete()}>
+              <DeleteIcon color="error" />
+            </IconButton>
+          </Stack>
         }
       />
       <CardContent>
