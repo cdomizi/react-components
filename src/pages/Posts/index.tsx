@@ -53,11 +53,7 @@ const Posts = () => {
     return randomPost;
   }, [getPosts.data, getPosts.isSuccess]);
 
-  const addPost = useMutation<
-    AxiosResponse<PostType>,
-    AxiosError<PostType>,
-    PostType
-  >({
+  const addPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) =>
       delayAxiosRequest(await axios.post("http://localhost:3500/posts", post)),
     onSuccess: () =>
@@ -70,24 +66,22 @@ const Posts = () => {
     addPost.mutate(newPost);
   }, [addPost, randomPost]);
 
-  const editPost = useMutation<
-    AxiosResponse<PostType>,
-    AxiosError<PostType>,
-    PostType
-  >({
+  const editPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) =>
       delayAxiosRequest(
         await axios.put(`http://localhost:3500/posts/${post.id}`, post),
       ),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       // Mutation with no network call
       postQueryClient.setQueryData(
-        ["posts", { id: data.data.id }],
-        (oldData: PostType) =>
+        ["posts"],
+        (oldData: AxiosResponse<PostType[]> | undefined) =>
           oldData
             ? {
                 ...oldData,
-                ...data.data,
+                data: oldData?.data.map((post: PostType) =>
+                  post.id === variables.id ? { ...post, ...variables } : post,
+                ),
               }
             : oldData,
       );
@@ -102,13 +96,9 @@ const Posts = () => {
     [editPost, randomPost],
   );
 
-  const deletePost = useMutation<
-    AxiosResponse<PostType>,
-    AxiosError<PostType>,
-    number
-  >({
-    mutationFn: async (id: number) => {
-      return await axios.delete(`http://localhost:3500/posts/${id}`);
+  const deletePost = useMutation<PostType, AxiosError<PostType>, PostType>({
+    mutationFn: async (post) => {
+      return await axios.delete(`http://localhost:3500/posts/${post.id}`);
     },
     onSuccess: () =>
       void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
@@ -146,7 +136,7 @@ const Posts = () => {
                 key={post.id}
                 post={post}
                 onEdit={() => void onEditPost(post.id)}
-                onDelete={() => void deletePost.mutate(post.id)}
+                onDelete={() => void deletePost.mutate(post)}
               />
             ))
           : !(getPosts.isLoading || getPosts.isFetching || getPosts.isError) &&
