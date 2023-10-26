@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "serve-db": "json-server --watch db.json --port 3500",
+    "serve-db": "json-server --watch db.json --port 4000",
     "start": "yarn dev & yarn serve-db"
   },
   "dependencies": {

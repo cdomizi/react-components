@@ -26,7 +26,7 @@ const Posts = () => {
   >({
     queryKey: ["posts"],
     queryFn: async () =>
-      delayAxiosRequest(await axios.get("http://localhost:3500/posts")),
+      delayAxiosRequest(await axios.get("http://localhost:4000/posts")),
     // Order by descending id (new to old)
     select: (data) => data.data.sort((current, next) => next.id - current.id),
   });
@@ -55,10 +55,39 @@ const Posts = () => {
 
   const addPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) =>
-      delayAxiosRequest(await axios.post("http://localhost:3500/posts", post)),
-    onSuccess: () =>
-      // Mutation with network call
-      void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
+      delayAxiosRequest(await axios.post("http://localhost:4000/posts", post)),
+    // Optimistic update
+    onMutate: async (data) => {
+      await postQueryClient.cancelQueries({ queryKey: ["posts"] });
+
+      const previousPosts = postQueryClient.getQueryData<
+        AxiosResponse<PostType[]>
+      >(["posts"]);
+
+      postQueryClient.setQueryData<AxiosResponse<PostType[]>>(
+        ["posts"],
+        (oldData: AxiosResponse<PostType[]> | undefined) =>
+          oldData
+            ? {
+                ...oldData,
+                data: [...oldData.data, data],
+              }
+            : oldData,
+      );
+
+      return () => ({ previousPosts: previousPosts?.data });
+    },
+    onError: (err, _data, context) => {
+      const { previousPosts } = context();
+      if (previousPosts)
+        postQueryClient.setQueryData<PostType[]>(["posts"], previousPosts);
+      console.error(
+        `Error while adding new post: ${err?.status} - ${err?.message}`,
+      );
+    },
+    onSettled: () => {
+      void postQueryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
   });
 
   const onAddRandomPost = useCallback(async () => {
@@ -69,9 +98,9 @@ const Posts = () => {
   const editPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) =>
       delayAxiosRequest(
-        await axios.put(`http://localhost:3500/posts/${post.id}`, post),
+        await axios.put(`http://localhost:4000/posts/${post.id}`, post),
       ),
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // Mutation with no network call
       postQueryClient.setQueryData(
         ["posts"],
@@ -97,10 +126,12 @@ const Posts = () => {
   );
 
   const deletePost = useMutation<PostType, AxiosError<PostType>, PostType>({
-    mutationFn: async (post) => {
-      return await axios.delete(`http://localhost:3500/posts/${post.id}`);
-    },
+    mutationFn: async (post) =>
+      delayAxiosRequest(
+        await axios.delete(`http://localhost:4000/posts/${post.id}`),
+      ),
     onSuccess: () =>
+      // Mutation with network call
       void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
@@ -137,6 +168,7 @@ const Posts = () => {
                 post={post}
                 onEdit={() => void onEditPost(post.id)}
                 onDelete={() => void deletePost.mutate(post)}
+                isPending={addPost.isPending}
               />
             ))
           : !(getPosts.isLoading || getPosts.isFetching || getPosts.isError) &&

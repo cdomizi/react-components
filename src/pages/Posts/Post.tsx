@@ -13,13 +13,22 @@ export const Post = ({
   post,
   onEdit,
   onDelete,
+  isPending,
 }: {
   post: PostType;
   onEdit: () => void;
   onDelete: () => void;
+  isPending: boolean;
 }) => {
   return (
-    <Card raised={true} sx={{ width: 270, borderRadius: "2%" }}>
+    <Card
+      raised={true}
+      sx={{
+        ...(isPending && { opacity: "0.5" }),
+        width: 270,
+        borderRadius: "2%",
+      }}
+    >
       <CardHeader
         title={post.title}
         subheader={`#${post.id}`}
