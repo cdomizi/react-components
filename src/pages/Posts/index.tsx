@@ -85,9 +85,8 @@ const Posts = () => {
         `Error while adding new post: ${err?.status} - ${err?.message}`,
       );
     },
-    onSettled: () => {
-      void postQueryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
+    onSettled: async () =>
+      await postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
   const onAddRandomPost = useCallback(async () => {
@@ -130,9 +129,9 @@ const Posts = () => {
       delayAxiosRequest(
         await axios.delete(`http://localhost:4000/posts/${post.id}`),
       ),
-    onSuccess: () =>
+    onSuccess: async () =>
       // Mutation with network call
-      void postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
+      await postQueryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
   return (
@@ -140,11 +139,7 @@ const Posts = () => {
       <Typography variant="h2" mb={6}>
         Posts
       </Typography>
-      <Button
-        variant="outlined"
-        size="small"
-        onClick={() => void onAddRandomPost()}
-      >
+      <Button variant="outlined" size="small" onClick={() => onAddRandomPost()}>
         Add random post
       </Button>
       <Stack
@@ -166,8 +161,8 @@ const Posts = () => {
               <Post
                 key={post.id}
                 post={post}
-                onEdit={() => void onEditPost(post.id)}
-                onDelete={() => void deletePost.mutate(post)}
+                onEdit={() => onEditPost(post.id)}
+                onDelete={() => deletePost.mutate(post)}
                 isPending={addPost.isPending}
               />
             ))

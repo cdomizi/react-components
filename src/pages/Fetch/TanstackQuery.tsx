@@ -2,22 +2,11 @@ import { useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
+import { Product, ProductQuery } from "../../types";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
-
-type Product = {
-  id?: number;
-  title: string;
-  price: number;
-  brand: string;
-};
-
-type ProductQuery = {
-  method?: "GET" | "POST";
-  data: Product;
-};
 
 export const TanstackQuery = () => {
   const getProduct = async (): Promise<ProductQuery> =>
@@ -103,7 +92,7 @@ export const TanstackQuery = () => {
         Tanstack Query
       </Typography>
       <Button
-        onClick={() => void productQuery.refetch()}
+        onClick={() => productQuery.refetch()}
         variant="outlined"
         size="small"
       >

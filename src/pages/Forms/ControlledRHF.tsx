@@ -161,7 +161,7 @@ export const ControlledRHF = () => {
         }
         variant="outlined"
         size="small"
-        onClick={() => void fillWithRandomData()}
+        onClick={fillWithRandomData}
       >
         Fill with random data
       </Button>

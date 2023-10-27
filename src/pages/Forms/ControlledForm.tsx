@@ -128,7 +128,7 @@ export const ControlledForm = () => {
         // Reset form on successful submit
         setUserData(initialState);
 
-        return (function cleanUp() {
+        return (function cleanUp(): void {
           setIsSubmitted(false);
           setIsLoading(false);
         })();
@@ -230,7 +230,7 @@ export const ControlledForm = () => {
         endIcon={isLoading && <CircularProgress color="inherit" size={20} />}
         variant="outlined"
         size="small"
-        onClick={() => void fillWithRandomData()}
+        onClick={fillWithRandomData}
       >
         Fill with random data
       </Button>

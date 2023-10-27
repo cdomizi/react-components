@@ -54,21 +54,19 @@ export const UncontrolledForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const fillWithRandomData = useCallback(() => {
-    void (async () => {
-      setFormErrors({ ...formErrors, username: undefined, email: undefined });
-      const randomUser = await getRandomData<UserType>(
-        "https://dummyjson.com/users/",
-      );
-      const formElement = Object.values(formRef.current);
-      const formInputs = formElement.filter(
-        (el: HTMLInputElement) => el?.id?.length,
-      );
-      formInputs.forEach((input: HTMLInputElement) => {
-        const key = input.id as "username" | "email";
-        input.setAttribute("value", randomUser[key] ?? "");
-      });
-    })();
+  const fillWithRandomData = useCallback(async () => {
+    setFormErrors({ ...formErrors, username: undefined, email: undefined });
+    const randomUser = await getRandomData<UserType>(
+      "https://dummyjson.com/users/",
+    );
+    const formElement = Object.values(formRef.current);
+    const formInputs = formElement.filter(
+      (el: HTMLInputElement) => el?.id?.length,
+    );
+    formInputs.forEach((input: HTMLInputElement) => {
+      const key = input.id as "username" | "email";
+      input.setAttribute("value", randomUser[key] ?? "");
+    });
   }, [formErrors]);
 
   const handleSubmit = useCallback(
@@ -96,7 +94,7 @@ export const UncontrolledForm = () => {
           input.setAttribute("value", "");
         });
         formRef.current.reset();
-        return (function cleanUp() {
+        return (function cleanUp(): void {
           setIsSubmitted(false);
           setIsLoading(false);
         })();

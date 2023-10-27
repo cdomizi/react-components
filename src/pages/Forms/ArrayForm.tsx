@@ -168,7 +168,7 @@ export const CartForm = () => {
     >
       <Typography variant="h4">Array Form</Typography>
       <Button
-        onClick={() => void fillWithRandomData()}
+        onClick={fillWithRandomData}
         type="button"
         variant="outlined"
         size="small"

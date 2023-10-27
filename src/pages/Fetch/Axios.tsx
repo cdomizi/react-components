@@ -2,10 +2,10 @@ import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 
 // Types import
-import { Product, ProductQuery } from "./types";
+import { Product, ProductQuery } from "../../types";
 
 // Project import
-import axiosErrorHandler from "../../utils/axiosErrorHandler";
+import { axiosErrorHandler } from "../../utils/axiosErrorHandler";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
@@ -86,10 +86,10 @@ export const Axios = () => {
       <Typography variant="h4" paragraph>
         Axios
       </Typography>
-      <Button onClick={() => void getProduct()} variant="outlined" size="small">
+      <Button onClick={getProduct} variant="outlined" size="small">
         Get product
       </Button>
-      <Button onClick={() => void addProduct()} variant="outlined" size="small">
+      <Button onClick={addProduct} variant="outlined" size="small">
         Add product
       </Button>
       <Logger
