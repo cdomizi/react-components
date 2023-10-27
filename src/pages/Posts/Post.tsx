@@ -15,10 +15,10 @@ export const Post = ({
   onDelete,
   isPending,
 }: {
-  post: PostType;
-  onEdit: () => void;
-  onDelete: () => void;
-  isPending: boolean;
+  post?: PostType;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  isPending?: boolean;
 }) => {
   return (
     <Card
@@ -30,14 +30,14 @@ export const Post = ({
       }}
     >
       <CardHeader
-        title={post.title}
-        subheader={`#${post.id}`}
+        title={post?.title ?? ""}
+        subheader={`#${post?.id ?? ""}`}
         action={
           <Stack>
-            <IconButton size="small" onClick={() => onEdit()}>
+            <IconButton size="small" onClick={onEdit}>
               <EditIcon color="primary" />
             </IconButton>
-            <IconButton size="small" onClick={() => onDelete()}>
+            <IconButton size="small" onClick={onDelete}>
               <DeleteIcon color="error" />
             </IconButton>
           </Stack>
@@ -45,7 +45,7 @@ export const Post = ({
       />
       <CardContent>
         <Typography display="block" paragraph>
-          {post.body}
+          {post?.body ?? ""}
         </Typography>
       </CardContent>
     </Card>
