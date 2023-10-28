@@ -1,5 +1,6 @@
 import { PostType } from "./index";
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -14,36 +15,59 @@ export const Post = ({
   onEdit,
   onDelete,
   isPending,
+  error,
+  onError,
 }: {
   post?: PostType;
   onEdit?: () => void;
   onDelete?: () => void;
   isPending?: boolean;
+  error?: string;
+  onError?: () => void;
 }) => {
   return (
     <Card
       raised={true}
       sx={{
         ...(isPending && { opacity: "0.5" }),
+        ...(!!error && { borderColor: "red" }),
         width: 270,
         borderRadius: "2%",
       }}
+      variant={error ? "outlined" : "elevation"}
     >
       <CardHeader
         title={post?.title ?? ""}
-        subheader={`#${post?.id ?? ""}`}
+        subheader={
+          error ? (
+            <Typography color="error">Error: Could not add post</Typography>
+          ) : (
+            `#${post?.id ?? ""}`
+          )
+        }
         action={
-          <Stack>
-            <IconButton size="small" onClick={onEdit}>
-              <EditIcon color="primary" />
-            </IconButton>
-            <IconButton size="small" onClick={onDelete}>
-              <DeleteIcon color="error" />
-            </IconButton>
-          </Stack>
+          error ? (
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={onError}
+            >
+              Retry
+            </Button>
+          ) : (
+            <Stack>
+              <IconButton size="small" onClick={onEdit}>
+                <EditIcon color="primary" />
+              </IconButton>
+              <IconButton size="small" onClick={onDelete}>
+                <DeleteIcon color="error" />
+              </IconButton>
+            </Stack>
+          )
         }
       />
-      <CardContent>
+      <CardContent sx={{ ...(error && { opacity: "0.5" }) }}>
         <Typography display="block" paragraph>
           {post?.body ?? ""}
         </Typography>

@@ -155,6 +155,17 @@ const Posts = () => {
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             getPosts.error.response?.status || 500
           }: ${getPosts.error.message}`}
+        {addPost.isPending && addPost?.variables && (
+          <Post post={addPost.variables} isPending={addPost.isPending} />
+        )}
+        {addPost.isError && addPost?.variables && (
+          <Post
+            post={addPost.variables}
+            isPending={addPost.isPending}
+            error={addPost.error.message}
+            onError={() => addPost.mutate(addPost.variables)}
+          />
+        )}
         {getPosts.isSuccess &&
           (getPosts.data?.length
             ? getPosts.data.map((post) => (
@@ -164,7 +175,11 @@ const Posts = () => {
                   onEdit={() => onEditPost(post.id)}
                   onDelete={() => deletePost.mutate(post)}
                   isPending={
-                    addPost.isPending && addPost.variables.id === post.id
+                    getPosts.isPending ||
+                    (editPost.isPending &&
+                      editPost.variables?.id === post.id) ||
+                    (deletePost.isPending &&
+                      deletePost.variables?.id === post.id)
                   }
                 />
               ))
