@@ -5,19 +5,17 @@ import { nanoid } from "nanoid";
 import { NewTodo } from "./NewTodo";
 import { Todo } from "./Todo";
 import { TodoType } from "./Todo";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 // MUI imoport
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 
 const Todos = () => {
-  // Get list from localStorage
-  const initialTodos = useMemo<TodoType[]>(() => {
-    const existingTodos = localStorage.getItem("todos");
-    return (JSON.parse(existingTodos ?? "[]") as TodoType[]) ?? [];
-  }, []);
+  const { currentValue: initialTodoList, setValue: setTodos } =
+    useLocalStorage<TodoType[]>("todos");
 
-  const TODOS_ACTIONS = useMemo(
+  const TODO_ACTIONS = useMemo(
     () =>
       ({
         ADD: "add",
@@ -32,7 +30,7 @@ const Todos = () => {
   type TodoPayload = {
     id?: string;
     title?: string;
-    complete?: boolean;
+    done?: boolean;
     moveUp?: boolean;
   };
 
@@ -45,19 +43,19 @@ const Todos = () => {
       },
     ) => {
       switch (action.type) {
-        case TODOS_ACTIONS.ADD: {
+        case TODO_ACTIONS.ADD: {
           return action.payload?.title
             ? [
                 {
                   id: nanoid(12),
                   title: action.payload.title ?? "",
-                  complete: false,
+                  done: false,
                 },
                 ...todos,
               ]
             : todos;
         }
-        case TODOS_ACTIONS.EDIT: {
+        case TODO_ACTIONS.EDIT: {
           return action.payload?.title
             ? todos.map((todo) =>
                 todo.id === action.payload.id
@@ -66,19 +64,19 @@ const Todos = () => {
               )
             : todos;
         }
-        case TODOS_ACTIONS.DELETE: {
+        case TODO_ACTIONS.DELETE: {
           return todos.filter((todo) => todo.id !== action.payload.id);
         }
-        case TODOS_ACTIONS.TOGGLE: {
+        case TODO_ACTIONS.TOGGLE: {
           return todos.map(
             (todo) =>
               (todo =
                 todo.id === action.payload.id
-                  ? { ...todo, complete: !action.payload.complete }
+                  ? { ...todo, done: !action.payload.done }
                   : { ...todo }),
           );
         }
-        case TODOS_ACTIONS.MOVE: {
+        case TODO_ACTIONS.MOVE: {
           const index = todos.findIndex(
             (todo) => todo.id === action.payload.id,
           );
@@ -99,15 +97,15 @@ const Todos = () => {
         }
       }
     },
-    [TODOS_ACTIONS],
+    [TODO_ACTIONS],
   );
 
-  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+  const [todos, dispatch] = useReducer(todosReducer, initialTodoList ?? []);
 
-  // Update list in localStorage
+  // Update todo list
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    setTodos(todos);
+  }, [setTodos, todos]);
 
   // Add a new todo
   const handleAddTodo = useCallback((title: string) => {
@@ -126,8 +124,8 @@ const Todos = () => {
   }, []);
 
   // Check/uncheck a todo
-  const handleToggleTodo = useCallback((id: string, complete: boolean) => {
-    dispatch({ type: "toggle", payload: { id, complete } });
+  const handleToggleTodo = useCallback((id: string, done: boolean) => {
+    dispatch({ type: "toggle", payload: { id, done } });
   }, []);
 
   // Move todos up/down the list
@@ -135,22 +133,23 @@ const Todos = () => {
     dispatch({ type: "move", payload: { id, moveUp } });
   }, []);
 
-  // List todos, display complete at the bottom of the list
+  // List todos, display done at the bottom of the list
   const todoList = useMemo(
     () =>
+      todos.length &&
       todos
-        .sort((a, b) => Number(a.complete) - Number(b.complete))
+        .sort((a, b) => Number(a.done) - Number(b.done))
         .map((todo: TodoType, index: number) => (
           <Todo
             key={index}
             position={[
               index === 0,
-              index === todos.filter((todo) => !todo.complete).length - 1,
+              index === todos.filter((todo) => !todo.done).length - 1,
             ]}
             id={todo.id}
             title={todo.title}
-            complete={todo.complete}
-            onToggleTodo={() => handleToggleTodo(todo.id, todo.complete)}
+            done={todo.done}
+            onToggleTodo={() => handleToggleTodo(todo.id, todo.done)}
             onDeleteTodo={() => handleDeleteTodo(todo.id)}
             onEditTodo={handleEditTodo}
             onMove={handleMove}
@@ -167,7 +166,13 @@ const Todos = () => {
 
       <NewTodo onAddTodo={handleAddTodo} />
 
-      {todos.length ? todoList : <Typography>Your list is empty.</Typography>}
+      {todos.length ? (
+        <Stack component="ul" maxWidth="24rem" spacing={2} useFlexGap p={0}>
+          {todoList}
+        </Stack>
+      ) : (
+        <Typography>Your list is empty.</Typography>
+      )}
     </Box>
   );
 };

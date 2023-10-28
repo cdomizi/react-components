@@ -7,9 +7,8 @@ import { UpDownArrows } from "./UpDownArrows";
 import {
   Checkbox,
   IconButton,
-  ListItem,
   ListItemIcon,
-  ListItemText,
+  Stack,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -24,7 +23,7 @@ import {
 export type TodoType = {
   id: string;
   title: string;
-  complete: boolean;
+  done: boolean;
 };
 
 type PropsType = TodoType & {
@@ -42,7 +41,7 @@ export const Todo = ({
   id,
   position,
   title,
-  complete,
+  done,
   onToggleTodo,
   onDeleteTodo,
   onEditTodo,
@@ -82,66 +81,70 @@ export const Todo = ({
 
   const todo = useMemo(() => {
     return (
-      <>
+      <Stack component="li" direction="row" alignItems="center">
+        <ListItemIcon>
+          <Checkbox checked={done} onChange={onToggleTodo} />
+        </ListItemIcon>
+        <TextField
+          variant="standard"
+          value={content}
+          ref={inputRef}
+          onChange={handleChange}
+          onBlur={handleEdit}
+          error={error}
+          helperText={error && "This field can't be empty."}
+          inputProps={{ readOnly: !editing }}
+          sx={{
+            "& .MuiInputBase-input": {
+              textDecoration: done ? "line-through" : "inherit",
+              color: done ? "text.disabled" : "inherit",
+            },
+          }}
+          autoFocus={editing}
+          multiline
+        />
         {!editing ? (
-          <>
-            <ListItemText
-              primary={title}
-              sx={{
-                maxWidth: "13.5rem",
-                textDecoration: complete ? "line-through" : "inherit",
-                color: complete ? "text.disabled" : "inherit",
-              }}
-            />
-            <Tooltip title="Edit">
-              <IconButton
-                aria-label="edit"
-                sx={{ ml: 2 }}
-                onClick={() => setEditing(true)}
-              >
-                <EditIcon color="primary" />
-              </IconButton>
-            </Tooltip>
-          </>
+          <Tooltip title="Edit">
+            <IconButton
+              aria-label="edit"
+              sx={{ ml: "auto" }}
+              onClick={() => setEditing(true)}
+            >
+              <EditIcon color="primary" />
+            </IconButton>
+          </Tooltip>
         ) : (
-          <>
-            <TextField
-              variant="standard"
-              value={content}
-              ref={inputRef}
-              onChange={handleChange}
-              onBlur={handleEdit}
-              error={error}
-              helperText={error && "This field can't be empty."}
-              autoFocus
-            />
-            <Tooltip title="Done">
-              <IconButton aria-label="done" color="success" sx={{ ml: 2 }}>
-                <DoneIcon />
-              </IconButton>
-            </Tooltip>
-          </>
+          <Tooltip title="Done">
+            <IconButton
+              aria-label="done"
+              color="success"
+              sx={{ ml: "auto" }}
+              onClick={() => setEditing(false)}
+            >
+              <DoneIcon />
+            </IconButton>
+          </Tooltip>
         )}
-      </>
+        <Tooltip title="Delete">
+          <IconButton href="#" aria-label="delete" onClick={onDeleteTodo}>
+            <DeleteIcon color="error" />
+          </IconButton>
+        </Tooltip>
+        <UpDownArrows position={position} moveUp={handleMove} disabled={done} />
+      </Stack>
     );
-  }, [editing, title, complete, content, handleChange, handleEdit, error]);
+  }, [
+    done,
+    onToggleTodo,
+    content,
+    handleChange,
+    handleEdit,
+    error,
+    editing,
+    onDeleteTodo,
+    position,
+    handleMove,
+  ]);
 
-  return (
-    <ListItem>
-      <ListItemIcon>
-        <Checkbox checked={complete} onChange={onToggleTodo} />
-      </ListItemIcon>
-      {todo}
-      <Tooltip title="Delete">
-        <IconButton href="#" aria-label="delete" onClick={onDeleteTodo}>
-          <DeleteIcon color="error" />
-        </IconButton>
-      </Tooltip>
-      <UpDownArrows
-        position={position}
-        moveUp={handleMove}
-        disabled={complete}
-      />
-    </ListItem>
-  );
+  return todo;
 };

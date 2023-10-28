@@ -1,7 +1,8 @@
 import { useState, useMemo, useLayoutEffect, ReactElement } from "react";
 import { ColorModeContext } from "../contexts/ColorModeContext";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
-// mui components
+// MUI components
 import {
   ThemeProvider,
   createTheme,
@@ -11,22 +12,21 @@ import {
 } from "@mui/material";
 
 const ThemeCustomization = ({ children }: { children: ReactElement }) => {
+  const { currentValue: initialState, setValue: setColorMode } =
+    useLocalStorage<PaletteMode>("colorMode");
+
   const defaultMode = useMediaQuery<PaletteMode>(
     "(prefers-color-scheme: light)",
   )
     ? "light"
     : "dark";
-  // Check for existing color mode setting,
-  // else set it according to browser preference
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const initialState =
-    (localStorage.getItem("colorMode") as PaletteMode) || defaultMode;
-  const [mode, setMode] = useState<PaletteMode>(initialState);
+  // Check for existing color mode setting, else set it according to the browser
+  const [mode, setMode] = useState<PaletteMode>(initialState ?? defaultMode);
 
-  // update color mode setting in storage
+  // Update color mode setting in localStorage
   useLayoutEffect(() => {
-    localStorage.setItem("colorMode", mode);
-  }, [mode]);
+    setColorMode(mode);
+  }, [mode, setColorMode]);
 
   const colorMode = useMemo(
     () => ({
