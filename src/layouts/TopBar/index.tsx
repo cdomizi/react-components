@@ -1,7 +1,24 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { ColorModeContext } from "../../contexts/ColorModeContext";
 import MenuItem from "./MenuItem";
 
-import { AppBar, Box, Stack, Toolbar, Typography } from "@mui/material";
+// MUI components & icons
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Stack,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import {
+  Brightness4 as LightModeIcon,
+  Brightness7 as DarkModeIcon,
+} from "@mui/icons-material";
 
 const menuItems = [
   { id: "forms", title: "forms", url: "/forms" },
@@ -12,6 +29,9 @@ const menuItems = [
 
 const TopBar = () => {
   const navigate = useNavigate();
+
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
 
   return (
     <>
@@ -35,6 +55,17 @@ const TopBar = () => {
             {menuItems.map((item) => (
               <MenuItem key={item.id} title={item.title} url={item.url} />
             ))}
+            <Tooltip
+              title={theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"}
+            >
+              <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === "dark" ? (
+                  <DarkModeIcon />
+                ) : (
+                  <LightModeIcon />
+                )}
+              </IconButton>
+            </Tooltip>
           </Stack>
         </Toolbar>
       </AppBar>

@@ -4,16 +4,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Project import
 import Routes from "./routes";
+import ThemeCustomization from "./layouts/ThemeCustomization";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <div className="App">
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={Routes} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <ThemeCustomization>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={Routes} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ThemeCustomization>
     </div>
   );
 };
