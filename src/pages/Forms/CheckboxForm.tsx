@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
 // Project import
-import onSubmitHandler from "../../utils/onSubmitHandler";
 import { Logger } from "../../components/Logger";
 
 // MUI import
@@ -50,9 +49,7 @@ export const CheckboxForm = () => {
     <Stack
       id="checkbox-form"
       component="form"
-      onSubmit={(event) =>
-        onSubmitHandler<FormInputsType>(event, handleSubmit, onSubmit)
-      }
+      onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
       spacing={2}
     >
@@ -60,10 +57,10 @@ export const CheckboxForm = () => {
       <Controller
         control={control}
         name="status"
-        render={({ field }) => (
+        render={({ field: { ref, value, ...fieldProps } }) => (
           <FormControlLabel
-            {...field}
-            control={<Checkbox />}
+            {...fieldProps}
+            control={<Checkbox inputRef={ref} checked={value} />}
             label="Accept Terms & Conditions"
           />
         )}

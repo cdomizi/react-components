@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 // Project import
-import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
@@ -84,9 +83,7 @@ export const ControlledRHF = () => {
     <Stack
       id="controlled-rhf-form"
       component="form"
-      onSubmit={(event) =>
-        onSubmitHandler<UserType>(event, handleSubmit, onSubmit)
-      }
+      onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
       spacing={2}
     >

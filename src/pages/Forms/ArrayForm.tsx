@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 
 // Project import
-import onSubmitHandler from "../../utils/onSubmitHandler";
 import getRandomData, { getProductsArray } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
@@ -160,9 +159,7 @@ export const CartForm = () => {
     <Stack
       id="array-form"
       component="form"
-      onSubmit={(event) =>
-        onSubmitHandler<FormInputsType>(event, handleSubmit, onSubmit)
-      }
+      onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
       spacing={2}
     >
