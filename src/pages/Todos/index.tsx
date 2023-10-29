@@ -1,4 +1,4 @@
-import { useReducer, useMemo, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { nanoid } from "nanoid";
 
 // Project import
@@ -12,6 +12,7 @@ import { Box, Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 
 const Todos = () => {
+  const [error, setError] = useState<string | null>(null);
   const { currentValue: initialTodoList, setValue: setTodos } =
     useLocalStorage<TodoType[]>("todos");
 
@@ -153,9 +154,18 @@ const Todos = () => {
             onDeleteTodo={() => handleDeleteTodo(todo.id)}
             onEditTodo={handleEditTodo}
             onMove={handleMove}
+            onError={setError}
+            error={error}
           />
         )),
-    [handleDeleteTodo, handleEditTodo, handleMove, handleToggleTodo, todos],
+    [
+      error,
+      handleDeleteTodo,
+      handleEditTodo,
+      handleMove,
+      handleToggleTodo,
+      todos,
+    ],
   );
 
   return (
@@ -164,7 +174,7 @@ const Todos = () => {
         Todo List
       </Typography>
 
-      <NewTodo onAddTodo={handleAddTodo} />
+      <NewTodo onAddTodo={handleAddTodo} disabled={!!error} />
 
       {todos.length ? (
         <Stack component="ul" maxWidth="24rem" spacing={2} useFlexGap p={0}>

@@ -1,9 +1,7 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-
-// Project import
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { UpDownArrows } from "./UpDownArrows";
 
-// MUI components
+// MUI components & icons
 import {
   Checkbox,
   IconButton,
@@ -12,13 +10,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-
-// MUI icons
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Done as DoneIcon,
-} from "@mui/icons-material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 
 export type TodoType = {
   id: string;
@@ -35,6 +27,8 @@ type PropsType = TodoType & {
   onDeleteTodo: React.MouseEventHandler<HTMLAnchorElement>;
   onEditTodo: (todo: [string, string]) => void;
   onMove: (moveUp: boolean, id: string) => void;
+  onError: (id: string | null) => void;
+  error: string | null;
 };
 
 export const Todo = ({
@@ -46,11 +40,10 @@ export const Todo = ({
   onDeleteTodo,
   onEditTodo,
   onMove,
+  onError,
+  error = null,
 }: PropsType) => {
-  const [error, setError] = useState(false);
-  const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(title);
-  const inputRef = useRef(null);
 
   // Update content as the user types
   useEffect(() => setContent(title), [title]);
@@ -58,10 +51,10 @@ export const Todo = ({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
-      error && value.length && setError(false);
+      value.length && onError(null);
       setContent(value);
     },
-    [error],
+    [onError],
   );
 
   // Handle moving todo up/down
@@ -75,62 +68,45 @@ export const Todo = ({
     if (content.length) {
       onEditTodo([id, content]);
       setContent(title);
-      setEditing(false);
-    } else setError(true);
-  }, [content, id, onEditTodo, title]);
+    } else onError(id);
+  }, [content, id, onEditTodo, onError, title]);
 
   const todo = useMemo(() => {
     return (
       <Stack component="li" direction="row" alignItems="center">
         <ListItemIcon>
-          <Checkbox checked={done} onChange={onToggleTodo} />
+          <Checkbox checked={done} onChange={onToggleTodo} disabled={!!error} />
         </ListItemIcon>
         <TextField
-          variant="standard"
+          variant="outlined"
           value={content}
-          ref={inputRef}
           onChange={handleChange}
           onBlur={handleEdit}
-          error={error}
-          helperText={error && "This field can't be empty."}
-          inputProps={{ readOnly: !editing }}
+          error={error === id}
+          helperText={error === id && "This field can't be empty."}
           sx={{
             "& .MuiInputBase-input": {
               textDecoration: done ? "line-through" : "inherit",
               color: done ? "text.disabled" : "inherit",
             },
           }}
-          autoFocus={editing}
           multiline
         />
-        {!editing ? (
-          <Tooltip title="Edit">
-            <IconButton
-              aria-label="edit"
-              sx={{ ml: "auto" }}
-              onClick={() => setEditing(true)}
-            >
-              <EditIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Done">
-            <IconButton
-              aria-label="done"
-              color="success"
-              sx={{ ml: "auto" }}
-              onClick={() => setEditing(false)}
-            >
-              <DoneIcon />
-            </IconButton>
-          </Tooltip>
-        )}
         <Tooltip title="Delete">
-          <IconButton href="#" aria-label="delete" onClick={onDeleteTodo}>
-            <DeleteIcon color="error" />
+          <IconButton
+            href="#"
+            aria-label="delete"
+            onClick={onDeleteTodo}
+            disabled={!!error}
+          >
+            <DeleteIcon color={error ? "disabled" : "error"} />
           </IconButton>
         </Tooltip>
-        <UpDownArrows position={position} moveUp={handleMove} disabled={done} />
+        <UpDownArrows
+          position={position}
+          moveUp={handleMove}
+          disabled={done || !!error}
+        />
       </Stack>
     );
   }, [
@@ -140,7 +116,7 @@ export const Todo = ({
     handleChange,
     handleEdit,
     error,
-    editing,
+    id,
     onDeleteTodo,
     position,
     handleMove,

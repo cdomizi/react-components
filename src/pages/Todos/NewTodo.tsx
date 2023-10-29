@@ -4,8 +4,10 @@ import { Box, Button, TextField } from "@mui/material";
 
 export const NewTodo = ({
   onAddTodo,
+  disabled,
 }: {
   onAddTodo: (title: string) => void;
+  disabled: boolean;
 }) => {
   const [title, setTitle] = useState("");
   const [error, setError] = useState(false);
@@ -27,8 +29,14 @@ export const NewTodo = ({
         onChange={(e) => setTitle(e.target.value)}
         error={error}
         helperText={error && "This field can't be empty."}
+        disabled={disabled}
       />
-      <Button variant="outlined" sx={{ margin: "12px" }} onClick={handleSubmit}>
+      <Button
+        variant="outlined"
+        sx={{ margin: "12px" }}
+        onClick={handleSubmit}
+        disabled={disabled}
+      >
         Add
       </Button>
     </Box>
