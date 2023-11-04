@@ -27,7 +27,7 @@ export const Axios = () => {
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
-        method: "GET",
+        method: delayedResponse.config.method?.toUpperCase(),
         data: {
           id,
           title,
@@ -64,7 +64,7 @@ export const Axios = () => {
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
-        method: "GET",
+        method: delayedResponse.config.method?.toUpperCase(),
         data: {
           id,
           title,

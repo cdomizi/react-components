@@ -3,8 +3,8 @@ const delayFunc = async (func: () => unknown, ms?: number) =>
     setTimeout(() => resolve(func()), ms ?? 2000);
   });
 
-const delayRequest = async (value: Response) =>
-  new Promise<Response>((resolve) => {
+const delayRequest = async <TData>(value: TData) =>
+  new Promise<TData>((resolve) => {
     setTimeout(() => resolve(value), 2000);
   });
 

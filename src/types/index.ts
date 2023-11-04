@@ -6,6 +6,6 @@ export type Product = {
 };
 
 export type ProductQuery = {
-  method?: "GET" | "POST";
+  method?: string;
   data: Product;
 };

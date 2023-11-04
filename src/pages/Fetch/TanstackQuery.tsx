@@ -2,18 +2,18 @@ import { useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Product, ProductQuery } from "../../types";
+import { Product } from "../../types";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
 import { Box, Button, Typography } from "@mui/material";
 
 export const TanstackQuery = () => {
-  const getProduct = async (): Promise<ProductQuery> =>
+  const getProduct = async (): Promise<AxiosResponse<Product>> =>
     // Artificially delay function to show loading state
     delayAxiosRequest(await axios.get("https://dummyjson.com/product/1"));
 
-  const productQuery = useQuery<ProductQuery, AxiosError<Product>>({
+  const productQuery = useQuery<AxiosResponse<Product>, AxiosError<Product>>({
     queryKey: ["product"],
     queryFn: getProduct,
     enabled: false,
@@ -31,9 +31,10 @@ export const TanstackQuery = () => {
       case "success": {
         const {
           data: { id, title, brand, price },
+          config: { method },
         } = productQuery.data;
         return {
-          method: "GET",
+          method: method?.toUpperCase(),
           data: { id, title, brand, price },
         };
       }
@@ -75,9 +76,10 @@ export const TanstackQuery = () => {
       case "success": {
         const {
           data: { id, title, brand, price },
+          config: { method },
         } = productMutation.data;
         return {
-          method: "GET",
+          method: method?.toUpperCase(),
           data: { id, title, brand, price },
         };
       }
