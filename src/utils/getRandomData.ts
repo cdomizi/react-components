@@ -3,7 +3,7 @@ type ProductType = {
 };
 
 const getRandomInt = (max = 10, min = 1) =>
-  Math.floor(Math.random() * max + min);
+  Math.floor(Math.random() * (max - min) + min);
 
 const getRandomData = async <T>(url: string, id?: number) => {
   const randomId = id ?? getRandomInt(30);
