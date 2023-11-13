@@ -15,15 +15,15 @@ import {
   Typography,
 } from "@mui/material";
 
+const formSchema = z
+  .object({
+    status: z.boolean(),
+  })
+  .strict();
+
+type FormInputsType = z.infer<typeof formSchema>;
+
 export const CheckboxForm = () => {
-  const formSchema = z
-    .object({
-      status: z.boolean(),
-    })
-    .strict();
-
-  type FormInputsType = z.infer<typeof formSchema>;
-
   const initialFormState = useMemo(() => ({ status: false }), []);
 
   const {

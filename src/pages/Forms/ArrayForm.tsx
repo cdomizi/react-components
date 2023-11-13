@@ -20,55 +20,55 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
+const productsSchema = z.object({
+  customer: z
+    .object({
+      id: z.number().positive(),
+      firstName: z.string(),
+      lastName: z.string(),
+    })
+    .strict(),
+  products: z
+    .array(
+      z
+        .object({
+          product: z
+            .string({ required_error: "Product name is required" })
+            .min(1, { message: "Product name is required" })
+            .trim(),
+          quantity: z
+            .number({
+              required_error: "Quantity is required",
+              invalid_type_error: "Please enter a positive number",
+            })
+            .positive({ message: "Add at least one product" })
+            .or(
+              // Allow strings if they are integers
+              z.custom<string>(
+                (data) => typeof data === "string" && parseInt(data) > 0,
+                "Please enter a positive number",
+              ),
+            ),
+        })
+        .strict(),
+    )
+    .nonempty({ message: "Please add at least one product" }),
+});
+
+type UserType = {
+  id?: number;
+  username?: string;
+  email?: string;
+};
+
+type CustomerType = z.infer<typeof productsSchema>["customer"];
+
+type ProductType = z.infer<typeof productsSchema>["products"][number];
+
+type FormInputsType = z.infer<typeof productsSchema>;
+
 export const CartForm = () => {
   const [loading, setLoading] = useState(false);
-
-  const productsSchema = z.object({
-    customer: z
-      .object({
-        id: z.number().positive(),
-        firstName: z.string(),
-        lastName: z.string(),
-      })
-      .strict(),
-    products: z
-      .array(
-        z
-          .object({
-            product: z
-              .string({ required_error: "Product name is required" })
-              .min(1, { message: "Product name is required" })
-              .trim(),
-            quantity: z
-              .number({
-                required_error: "Quantity is required",
-                invalid_type_error: "Please enter a positive number",
-              })
-              .positive({ message: "Add at least one product" })
-              .or(
-                // Allow strings if they are integers
-                z.custom<string>(
-                  (data) => typeof data === "string" && parseInt(data) > 0,
-                  "Please enter a positive number",
-                ),
-              ),
-          })
-          .strict(),
-      )
-      .nonempty({ message: "Please add at least one product" }),
-  });
-
-  type UserType = {
-    id?: number;
-    username?: string;
-    email?: string;
-  };
-
-  type CustomerType = z.infer<typeof productsSchema>["customer"];
-
-  type ProductType = z.infer<typeof productsSchema>["products"][number];
-
-  type FormInputsType = z.infer<typeof productsSchema>;
 
   const [customers, setCustomers] = useState<CustomerType[] | null>(null);
 
