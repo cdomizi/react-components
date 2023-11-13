@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 // Project import
+import { userSchema, UserType } from "../../types";
 import { getRandomData } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
@@ -18,32 +18,6 @@ import {
 } from "@mui/material";
 
 export const UncontrolledRHF = () => {
-  const userSchema = z
-    .object({
-      username: z
-        .string({
-          required_error: "Username is required",
-        })
-        .trim()
-        .min(3, { message: "Username must be at least 3 characters long" })
-        .max(20, { message: "Username max. 20 characters" })
-        .regex(/^[a-z0-9-_]+$/i, {
-          message: "Only use letters, numbers, dashes and underscores",
-        }),
-      email: z
-        .string()
-        .trim()
-        .email({ message: "Please enter a valid email address" })
-        // Accept empty string
-        .or(z.string().length(0))
-        .optional()
-        // Return undefined in case of empty string
-        .transform((val) => (val === "" ? undefined : val)),
-    })
-    .strict();
-
-  type UserType = z.infer<typeof userSchema>;
-
   const initialFormState = useMemo(() => ({ username: "", email: "" }), []);
 
   const [loading, setLoading] = useState(false);
