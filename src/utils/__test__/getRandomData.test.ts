@@ -58,24 +58,26 @@ describe("getRandomData", () => {
 
     test("array items to have the expected properties", async () => {
       const products = await getProductsArray();
+      const randomProduct = products[0];
 
-      expect(products[0]).toHaveProperty("product");
-      expect(products[0]).toHaveProperty("quantity");
+      expect(randomProduct).toHaveProperty("product");
+      expect(randomProduct).toHaveProperty("quantity");
     });
 
     test("array items properties to be of the expected type", async () => {
       const products = await getProductsArray();
+      const randomProduct = products[0];
 
-      expect(products[0].product).toBeTypeOf("string");
-      expect(products[0].quantity).toBeTypeOf("number");
+      expect(randomProduct.product).toBeTypeOf("string");
+      expect(randomProduct.quantity).toBeTypeOf("number");
     });
   });
 
   test("array does not contain duplicate products", async () => {
-    const products = await getProductsArray();
-    const productTitles = products.map((product) => product.product);
-    const uniqueProducts = new Set(productTitles);
+    const productsArray = await getProductsArray();
+    const products = productsArray.map((product) => product.product);
+    const uniqueProducts = new Set(products);
 
-    expect(uniqueProducts.size).toBe(products.length);
+    expect(uniqueProducts.size).toBe(productsArray.length);
   });
 });
