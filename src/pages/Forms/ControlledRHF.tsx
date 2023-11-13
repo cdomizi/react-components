@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 // Project import
-import getRandomData from "../../utils/getRandomData";
+import { getRandomData } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
 // MUI import

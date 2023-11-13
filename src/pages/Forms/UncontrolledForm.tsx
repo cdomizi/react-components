@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
-import getRandomData from "../../utils/getRandomData";
+import { getRandomData } from "../../utils/getRandomData";
 
 // MUI import
 import {

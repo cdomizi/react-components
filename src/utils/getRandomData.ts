@@ -37,6 +37,4 @@ const getProductsArray = async () => {
   return products;
 };
 
-export default getRandomData;
-
-export { getRandomInt, getProductsArray };
+export { getRandomData, getRandomInt, getProductsArray };

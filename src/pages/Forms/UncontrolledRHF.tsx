@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 // Project import
-import getRandomData from "../../utils/getRandomData";
+import { getRandomData } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
 // MUI import

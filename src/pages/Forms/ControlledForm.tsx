@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { z, ZodError, ZodIssue } from "zod";
 
-import getRandomData from "../../utils/getRandomData";
+import { getRandomData } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
 
 // MUI import
