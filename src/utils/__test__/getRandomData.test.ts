@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { UserType } from "../types";
-import { getProductsArray, getRandomData, getRandomInt } from "./getRandomData";
+import { UserType } from "../../types";
+import {
+  getProductsArray,
+  getRandomData,
+  getRandomInt,
+} from "../getRandomData";
 
 describe("getRandomInt", () => {
   test("return random integer between 1 and 10 with no arguments", () => {
