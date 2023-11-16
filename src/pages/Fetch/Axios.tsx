@@ -22,7 +22,7 @@ export const Axios = () => {
 
     try {
       const response: AxiosResponse<Product> = await axios.get(
-        "https://dummyjson.com/product/1",
+        "https://dummyjson.com/product/a1",
       );
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
