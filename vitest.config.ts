@@ -8,6 +8,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: "happy-dom",
+      setupFiles: "./src/setupFile.ts",
       coverage: {
         reporter: ["text", "json", "html"],
       },
