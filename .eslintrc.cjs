@@ -39,6 +39,7 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
     "no-unused-vars": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": 0,
     "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-misused-promises": [
