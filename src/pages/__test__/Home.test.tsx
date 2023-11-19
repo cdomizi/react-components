@@ -8,6 +8,6 @@ describe("Home page", () => {
     const heading = screen.getByRole("heading");
 
     expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent("Home");
+    expect(heading).toHaveTextContent(/home/i);
   });
 });

@@ -1,9 +1,5 @@
 import loadable from "@loadable/component";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 // Project import
 const RootLayout = loadable(() => import("../layouts/RootLayout"));
@@ -14,8 +10,8 @@ const Fetch = loadable(() => import("../pages/Fetch"));
 const Todos = loadable(() => import("../pages/Todos"));
 const Posts = loadable(() => import("../pages/Posts"));
 
-const MainRoutes = createBrowserRouter(
-  createRoutesFromElements(
+const MainRoutes = () => (
+  <Routes>
     <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
       <Route errorElement={<ErrorPage />}>
         <Route index element={<Home />} />
@@ -24,8 +20,8 @@ const MainRoutes = createBrowserRouter(
         <Route path="todos" element={<Todos />} />
         <Route path="posts" element={<Posts />} />
       </Route>
-    </Route>,
-  ),
+    </Route>
+  </Routes>
 );
 
 export default MainRoutes;
