@@ -13,6 +13,9 @@ export default mergeConfig(
       coverage: {
         reporter: ["text", "json", "html"],
       },
+      clearMocks: true,
+      mockReset: true,
+      restoreMocks: true,
     },
   }),
 );

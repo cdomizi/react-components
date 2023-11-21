@@ -17,13 +17,11 @@ const Posts = loadable(() => import("../pages/Posts"));
 const MainRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
-      <Route errorElement={<ErrorPage />}>
-        <Route index element={<Home />} />
-        <Route path="forms" element={<Forms />} />
-        <Route path="fetch" element={<Fetch />} />
-        <Route path="todos" element={<Todos />} />
-        <Route path="posts" element={<Posts />} />
-      </Route>
+      <Route index element={<Home />} />
+      <Route path="forms" element={<Forms />} />
+      <Route path="fetch" element={<Fetch />} />
+      <Route path="todos" element={<Todos />} />
+      <Route path="posts" element={<Posts />} />
     </Route>,
   ),
 );
