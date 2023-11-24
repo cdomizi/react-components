@@ -13,28 +13,31 @@ const getRandomData = async <T>(url: string, id?: number) => {
 };
 
 const getProductsArray = async () => {
-  // Prevent getting duplicate product Ids
-  const productIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const getUniqueId = (arr: number[]) => {
-    const removedId = arr.splice(getRandomInt(arr.length - 1, 0), 1)[0];
-    return removedId;
-  };
   const randomProductsCount = getRandomInt(3);
 
-  // Set a random number of random product IDs.
-  const products = [];
+  // Set a random number of random unique product IDs.
+  const products = new Map<string, number>();
   let i = 0;
   while (i < randomProductsCount) {
-    const randomId = getUniqueId(productIds);
+    const randomId = getRandomInt(10, 1);
     const { title } = await getRandomData<ProductType>(
       "https://dummyjson.com/products/",
       randomId,
     );
-    products.push({ product: title, quantity: randomProductsCount });
+    title?.length && products.set(title, randomProductsCount);
     i++;
   }
 
-  return products;
+  // Format output as an array
+  const productsArray: { product: string; quantity: number }[] = [];
+  products.forEach((items, title) =>
+    productsArray.push({
+      product: title,
+      quantity: items,
+    }),
+  );
+
+  return productsArray;
 };
 
 export { getRandomData, getRandomInt, getProductsArray };
