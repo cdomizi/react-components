@@ -1,4 +1,3 @@
-import { describe, expect, test, vi } from "vitest";
 import { delayAxiosRequest, delayFunc, delayRequest } from "../delay";
 import axios from "axios";
 

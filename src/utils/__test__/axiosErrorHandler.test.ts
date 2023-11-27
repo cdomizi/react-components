@@ -1,5 +1,4 @@
 import { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
-import { describe, expect, test } from "vitest";
 import { axiosErrorHandler } from "../axiosErrorHandler";
 
 describe("axiosErrorHandler", () => {
