@@ -49,10 +49,10 @@ const TestRoutes = () => (
   </Routes>
 );
 
-const MainRoutes = vi.fn().mockImplementation(TestRoutes);
-
 describe("router", () => {
   test("renders home page on default route", () => {
+    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
+
     render(
       <MemoryRouter>
         <MainRoutes />
@@ -64,6 +64,8 @@ describe("router", () => {
   });
 
   test("renders page component for specific route", () => {
+    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
+
     render(
       <MemoryRouter initialEntries={["/todos"]}>
         <MainRoutes />
