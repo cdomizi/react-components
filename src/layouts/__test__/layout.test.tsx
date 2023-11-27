@@ -5,7 +5,6 @@ import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import RootLayout from "../RootLayout";
 import TopBar from "../TopBar";
 import MenuItem from "../TopBar/MenuItem";
-import Home from "../../pages/Home";
 import Todos from "../../pages/Todos";
 import Posts from "../../pages/Posts";
 
@@ -23,14 +22,6 @@ vi.mock("../RootLayout", () => ({
     <div>
       <TopBar />
       <Outlet />
-    </div>
-  ),
-}));
-
-vi.mock("../../pages/Home", () => ({
-  default: () => (
-    <div>
-      <h2>Home</h2>
     </div>
   ),
 }));
@@ -54,15 +45,14 @@ vi.mock("../../pages/Posts", () => ({
 const TestRoutes = () => (
   <Routes>
     <Route path="/" element={<RootLayout />}>
-      <Route index element={<Home />} />
       <Route path="/todos" element={<Todos />} />
       <Route path="/posts" element={<Posts />} />
     </Route>
   </Routes>
 );
 
-describe("top bar", () => {
-  test("active navlinks on top bar", () => {
+describe("navbar", () => {
+  test("active links on navbar", () => {
     const MainRoutes = vi.fn().mockImplementation(TestRoutes);
 
     render(
