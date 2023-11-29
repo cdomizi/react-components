@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 // Types import
 import { Product, ProductQuery } from "../../types";
@@ -22,7 +22,7 @@ export const Axios = () => {
 
     try {
       const response: AxiosResponse<Product> = await axios.get(
-        "https://dummyjson.com/product/a1",
+        "https://dummyjson.com/product/1",
       );
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
@@ -36,7 +36,8 @@ export const Axios = () => {
         },
       });
     } catch (err) {
-      const axiosError = axiosErrorHandler(err) ?? null;
+      const axiosError =
+        err instanceof AxiosError ? axiosErrorHandler(err) : null;
       setError(axiosError);
       console.error(err);
     }
@@ -73,7 +74,8 @@ export const Axios = () => {
         },
       });
     } catch (err) {
-      const axiosError = axiosErrorHandler(err) ?? null;
+      const axiosError =
+        err instanceof AxiosError ? axiosErrorHandler(err) : null;
       setError(axiosError);
       console.error(err);
     }

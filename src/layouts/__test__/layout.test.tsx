@@ -68,3 +68,11 @@ describe("navbar", () => {
     expect(postsNavLink).not.toHaveClass("active");
   });
 });
+
+describe("color mode", () => {
+  test("default color mode", () => {
+    const defaultColorMode = undefined;
+
+    expect(defaultColorMode).toBe("light");
+  });
+});

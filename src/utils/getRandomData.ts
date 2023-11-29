@@ -15,11 +15,11 @@ const getRandomData = async <T>(url: string, id?: number) => {
 const getProductsArray = async () => {
   const randomProductsCount = getRandomInt(3);
 
-  // Set a random number of random unique product IDs.
+  // Randomly set between 1and 3 unique product IDs
   const products = new Map<string, number>();
   let i = 0;
   while (i < randomProductsCount) {
-    const randomId = getRandomInt(10, 1);
+    const randomId = getRandomInt();
     const { title } = await getRandomData<ProductType>(
       "https://dummyjson.com/products/",
       randomId,
