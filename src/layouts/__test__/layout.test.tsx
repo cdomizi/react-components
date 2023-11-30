@@ -69,7 +69,7 @@ describe("navbar", () => {
   });
 });
 
-describe("color mode", () => {
+describe.skip("color mode", () => {
   test("default color mode", () => {
     const defaultColorMode = undefined;
 

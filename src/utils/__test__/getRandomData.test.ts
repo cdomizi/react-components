@@ -76,7 +76,6 @@ describe("getRandomData", () => {
     const productsArray = await getProductsArray();
     const products = productsArray.map((product) => product.product);
     const uniqueProducts = new Set(products);
-    console.log(uniqueProducts);
 
     expect(uniqueProducts.size).toBe(productsArray.length);
   });
