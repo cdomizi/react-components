@@ -1,57 +1,65 @@
-import { delayAxiosRequest, delayFunc, delayRequest } from "../delay";
-import axios from "axios";
+import {
+  delayCallback,
+  delayFunc,
+  delayAxiosRequest,
+  delayRequest,
+} from "../delay";
+import axios, { AxiosResponse, AxiosHeaders } from "axios";
 
 // Mocks
-const func = vi.fn(() => "run");
-const asyncFunc = Promise.resolve("run");
-
-const productData = {
-  id: 1,
-  title: "iPhone 9",
-  price: 549,
-};
+const func = vi.fn();
+const users = [{ name: "John Doe" }];
 vi.mock("axios");
-vi.mocked(axios, true).get.mockResolvedValueOnce({ data: productData });
-const response = await axios.get("https://dummyjson.com/product/1");
+vi.mocked(axios, true).get.mockResolvedValue({ data: users });
+const response: AxiosResponse = {
+  data: users,
+  status: 200,
+  statusText: "OK",
+  headers: new AxiosHeaders(),
+  config: { headers: new AxiosHeaders() },
+};
 
-describe("delay", () => {
+describe("delay helper functions", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
-
-  test.only("fake timers", () => {
-    func();
-
-    expect(func).toHaveBeenCalledTimes(1);
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
-  test("function delayed 2000ms", async () => {
-    await delayFunc(func);
+  test("delayed function execution", () => {
+    delayFunc(func, 1000);
 
-    vi.advanceTimersByTime(1000);
     expect(func).not.toHaveBeenCalled();
 
-    vi.advanceTimersByTime(1000);
-    expect(func).toHaveBeenCalledTimes(1);
-  }, 2000);
+    vi.runAllTimers();
+    expect(func).toHaveBeenCalledOnce();
+  });
 
-  test("function delayed with specified timeout", async () => {
-    await expect(delayFunc(func, 1000)).resolves.toBe("run");
-  }, 1000);
+  test("delayed Promise resolution", async () => {
+    // const delayedData = delayRequest(true, 1000).then((resolved) => {
+    //   expect(resolved).toBe(true);
+    // });
+    // vi.runAllTimers();
+    // return delayedData;
 
-  test("Promise delayed 2000ms", async () => {
-    await expect(delayRequest(asyncFunc)).resolves.toBe("run");
-  }, 2000);
+    const delayedData = delayRequest(true, 1000);
+    vi.runAllTimers();
+    await expect(delayedData).resolves.toBe(true);
+  });
 
-  test("Promise delayed with specified timeout", async () => {
-    await expect(delayRequest(asyncFunc, 1000)).resolves.toBe("run");
-  }, 1000);
+  test("delayed function execution within a Promise", async () => {
+    const delayedResult = delayCallback(func);
+    expect(func).not.toHaveBeenCalled();
 
-  test("Axios request delayed 2000ms", async () => {
-    await expect(delayAxiosRequest(response)).resolves.toBe(response);
-  }, 2010);
+    vi.runAllTimers();
+    await expect(delayedResult).resolves.toBeUndefined();
+    expect(func).toHaveBeenCalledOnce();
+  });
 
-  test("Axios request delayed with specified timeout", async () => {
-    await expect(delayAxiosRequest(response, 1500)).resolves.toBe(response);
-  }, 1510);
+  test("delayed Axios request with specified timeout", async () => {
+    const delayedData = delayAxiosRequest(response, 1000);
+    vi.runAllTimers();
+    await expect(delayedData).resolves.toBe(response);
+  });
 });
