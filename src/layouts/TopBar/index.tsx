@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ColorModeContext } from "../../contexts/ColorModeContext";
-import MenuItem from "./MenuItem";
+import { MenuItem } from "./MenuItem";
 
 // MUI components & icons
 import {
@@ -27,7 +27,7 @@ const menuItems = [
   { id: "posts", title: "posts", url: "/posts" },
 ];
 
-const TopBar = () => {
+export const TopBar = () => {
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -72,5 +72,3 @@ const TopBar = () => {
     </>
   );
 };
-
-export default TopBar;

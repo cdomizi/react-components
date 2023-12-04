@@ -4,13 +4,13 @@ import { Link, MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
 import RootLayout from "../../layouts/RootLayout";
-import TopBar from "../../layouts/TopBar";
+import { TopBar } from "../../layouts/TopBar";
 import Home from "../../pages/Home";
 import ErrorPage from "../../pages/ErrorPage";
 import Todos from "../../pages/Todos";
 
 vi.mock("../../layouts/TopBar", () => ({
-  default: () => (
+  TopBar: () => (
     <header>
       <Link to="/">myApp</Link>
       <Link to="/todos">Todos</Link>

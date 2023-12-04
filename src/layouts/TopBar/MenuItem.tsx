@@ -7,7 +7,7 @@ type MenuItemProps = {
   url: string;
 };
 
-const MenuItem = ({ title, url }: MenuItemProps) => (
+export const MenuItem = ({ title, url }: MenuItemProps) => (
   <NavLink
     to={url}
     style={({ isActive }) => ({
@@ -22,5 +22,3 @@ const MenuItem = ({ title, url }: MenuItemProps) => (
     <Button sx={{ color: "inherit" }}>{title.toUpperCase()}</Button>
   </NavLink>
 );
-
-export default MenuItem;
