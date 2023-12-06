@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
@@ -7,9 +7,10 @@ import { Product } from "../../types";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 export const TanstackQuery = () => {
+  const [error, setError] = useState(false);
   const getProduct = async (): Promise<AxiosResponse<Product>> =>
     // Artificially delay response to show loading state
     delayAxiosRequest(await axios.get("https://dummyjson.com/product/1"));
@@ -63,7 +64,13 @@ export const TanstackQuery = () => {
     mutationFn: async (product) =>
       // Artificially delay response to show loading state
       delayAxiosRequest(
-        await axios.post("https://dummyjson.com/product/add", product),
+        await axios.post(
+          // Provide wrong URL if `error` is set to true, else provide valid URL
+          error
+            ? "https://dummyjson.com/product/add/NOT_FOUND"
+            : "https://dummyjson.com/product/add",
+          product,
+        ),
       ),
   });
 
@@ -96,20 +103,42 @@ export const TanstackQuery = () => {
       <Typography variant="h4" paragraph>
         Tanstack Query
       </Typography>
-      <Button
-        onClick={() => productQuery.refetch()}
-        variant="outlined"
-        size="small"
-      >
-        Get product
-      </Button>
-      <Button
-        onClick={() => productMutation.mutate(newProduct)}
-        variant="outlined"
-        size="small"
-      >
-        Add product
-      </Button>
+      <Stack direction="row" flexWrap="wrap" mt={1} gap={1}>
+        <Button
+          onClick={() => {
+            setError(true);
+            return productQuery.refetch();
+          }}
+          variant="outlined"
+          size="small"
+          disabled={productQuery.isLoading || productMutation.isPending}
+        >
+          Get product
+        </Button>
+        <Button
+          onClick={() => {
+            setError(false);
+            return productMutation.mutate(newProduct);
+          }}
+          variant="outlined"
+          size="small"
+          disabled={productQuery.isLoading || productMutation.isPending}
+        >
+          Add product
+        </Button>
+        <Button
+          onClick={() => {
+            setError(true);
+            return productMutation.mutate(newProduct);
+          }}
+          variant="outlined"
+          size="small"
+          disabled={productQuery.isLoading || productMutation.isPending}
+          color="error"
+        >
+          Add product error
+        </Button>
+      </Stack>
       {/* Show response data/error or loading */}
       <Logger value={[getResult, addResult]} />
     </Box>
