@@ -11,7 +11,11 @@ import {
   PaletteMode,
 } from "@mui/material";
 
-const ThemeCustomization = ({ children }: { children: ReactElement }) => {
+export const ThemeCustomization = ({
+  children,
+}: {
+  children: ReactElement;
+}) => {
   const { currentValue: initialState, setValue: setColorMode } =
     useLocalStorage<PaletteMode>("colorMode");
 
@@ -56,5 +60,3 @@ const ThemeCustomization = ({ children }: { children: ReactElement }) => {
     </ColorModeContext.Provider>
   );
 };
-
-export default ThemeCustomization;
