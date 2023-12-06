@@ -35,7 +35,7 @@ export const Todo = ({
   id,
   position,
   title,
-  done,
+  done = false,
   onToggleTodo,
   onDeleteTodo,
   onEditTodo,
@@ -74,9 +74,11 @@ export const Todo = ({
   const todo = useMemo(() => {
     return (
       <Stack component="li" direction="row" alignItems="center">
+        {/* Done checkbox */}
         <ListItemIcon>
           <Checkbox checked={done} onChange={onToggleTodo} disabled={!!error} />
         </ListItemIcon>
+        {/* Text input */}
         <TextField
           variant="outlined"
           value={content}
@@ -92,6 +94,7 @@ export const Todo = ({
           }}
           multiline
         />
+        {/* Delete button */}
         <Tooltip title="Delete">
           <IconButton
             href="#"
@@ -102,6 +105,7 @@ export const Todo = ({
             <DeleteIcon color={error ? "disabled" : "error"} />
           </IconButton>
         </Tooltip>
+        {/* Move up/down buttons */}
         <UpDownArrows
           position={position}
           moveUp={handleMove}

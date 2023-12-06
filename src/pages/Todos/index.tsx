@@ -1,105 +1,22 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
-import { nanoid } from "nanoid";
 
 // Project import
+import { todosReducer } from "./todosReducer";
 import { NewTodo } from "./NewTodo";
 import { Todo } from "./Todo";
 import { TodoType } from "./Todo";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-// MUI imoport
+// MUI import
 import { Box, Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 
 const Todos = () => {
   const [error, setError] = useState<string | null>(null);
+
+  // Set up todo list saving & retrieval in LocalStorage
   const { currentValue: initialTodoList, setValue: setTodos } =
     useLocalStorage<TodoType[]>("todos");
-
-  const TODO_ACTIONS = useMemo(
-    () =>
-      ({
-        ADD: "add",
-        EDIT: "edit",
-        DELETE: "delete",
-        TOGGLE: "toggle",
-        MOVE: "move",
-      }) as const,
-    [],
-  );
-
-  type TodoPayload = {
-    id?: string;
-    title?: string;
-    done?: boolean;
-    moveUp?: boolean;
-  };
-
-  const todosReducer = useCallback(
-    (
-      todos: TodoType[],
-      action: {
-        type: "add" | "edit" | "delete" | "toggle" | "move";
-        payload: TodoPayload;
-      },
-    ) => {
-      switch (action.type) {
-        case TODO_ACTIONS.ADD: {
-          return action.payload?.title
-            ? [
-                {
-                  id: nanoid(12),
-                  title: action.payload.title ?? "",
-                  done: false,
-                },
-                ...todos,
-              ]
-            : todos;
-        }
-        case TODO_ACTIONS.EDIT: {
-          return action.payload?.title
-            ? todos.map((todo) =>
-                todo.id === action.payload.id
-                  ? { ...todo, title: action.payload?.title?.trim() ?? "" }
-                  : { ...todo },
-              )
-            : todos;
-        }
-        case TODO_ACTIONS.DELETE: {
-          return todos.filter((todo) => todo.id !== action.payload.id);
-        }
-        case TODO_ACTIONS.TOGGLE: {
-          return todos.map(
-            (todo) =>
-              (todo =
-                todo.id === action.payload.id
-                  ? { ...todo, done: !action.payload.done }
-                  : { ...todo }),
-          );
-        }
-        case TODO_ACTIONS.MOVE: {
-          const index = todos.findIndex(
-            (todo) => todo.id === action.payload.id,
-          );
-          const newList = [...todos];
-          action.payload.moveUp
-            ? ([newList[index], newList[index - 1]] = [
-                newList[index - 1],
-                newList[index],
-              ])
-            : ([newList[index], newList[index + 1]] = [
-                newList[index + 1],
-                newList[index],
-              ]);
-          return newList;
-        }
-        default: {
-          throw new Error("Unknown action");
-        }
-      }
-    },
-    [TODO_ACTIONS],
-  );
 
   const [todos, dispatch] = useReducer(todosReducer, initialTodoList ?? []);
 
@@ -176,6 +93,7 @@ const Todos = () => {
 
       <NewTodo onAddTodo={handleAddTodo} disabled={!!error} />
 
+      {/* Display the items if available, else display "Your list is empty" */}
       {todos.length ? (
         <Stack component="ul" maxWidth="24rem" spacing={2} useFlexGap p={0}>
           {todoList}

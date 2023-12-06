@@ -8,7 +8,11 @@ type PropsType = {
   disabled: boolean;
 };
 
-export const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
+export const UpDownArrows = ({
+  position,
+  moveUp,
+  disabled = false,
+}: PropsType) => {
   const [first, last] = position;
 
   return (
@@ -16,6 +20,7 @@ export const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
       <IconButton
         onClick={() => moveUp(true)}
         sx={{ p: 0, m: 0, mt: 0.3 }}
+        // Move up disabled on the first element of the list
         disabled={disabled || first}
       >
         <ArrowDropUpIcon />
@@ -23,6 +28,7 @@ export const UpDownArrows = ({ position, moveUp, disabled }: PropsType) => {
       <IconButton
         onClick={() => moveUp(false)}
         sx={{ p: 0, m: 0 }}
+        // Move down disabled on the last element of the list
         disabled={disabled || last}
       >
         <ArrowDropDownIcon />

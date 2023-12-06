@@ -4,7 +4,7 @@ import { Box, Button, TextField } from "@mui/material";
 
 export const NewTodo = ({
   onAddTodo,
-  disabled,
+  disabled = false,
 }: {
   onAddTodo: (title: string) => void;
   disabled: boolean;

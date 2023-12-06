@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export type CustomError = Error & {
+  data?: string;
+  status?: number;
+  statusText?: string;
+};
+
 export type Product = {
   id?: number;
   title: string;
