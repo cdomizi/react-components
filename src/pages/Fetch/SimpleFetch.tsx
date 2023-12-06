@@ -17,7 +17,7 @@ export const SimpleFetch = () => {
 
     try {
       const response = await fetch("https://dummyjson.com/product/1");
-      // Artificially delay function to show loading state
+      // Artificially delay response to show loading state
       const delayedResponse = await delayRequest(response);
       const { id, title, price, brand } =
         (await delayedResponse.json()) as Product;
@@ -33,6 +33,7 @@ export const SimpleFetch = () => {
     setIsLoading(false);
   }, []);
 
+  // New sample product
   const newProduct: Product = useMemo(
     () => ({
       title: "Ethernet Cable",
@@ -78,6 +79,7 @@ export const SimpleFetch = () => {
       <Button onClick={addProduct} variant="outlined" size="small">
         Add product
       </Button>
+      {/* Show response data/error or loading */}
       <Logger
         value={((isLoading && "loading...") || (data ?? error)) ?? null}
       />

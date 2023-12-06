@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Product } from "../../types";
+
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
@@ -10,7 +11,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 export const TanstackQuery = () => {
   const getProduct = async (): Promise<AxiosResponse<Product>> =>
-    // Artificially delay function to show loading state
+    // Artificially delay response to show loading state
     delayAxiosRequest(await axios.get("https://dummyjson.com/product/1"));
 
   const productQuery = useQuery<AxiosResponse<Product>, AxiosError<Product>>({
@@ -25,7 +26,6 @@ export const TanstackQuery = () => {
         return productQuery.isLoading ? "loading..." : null;
       case "error": {
         const { code, response, message } = productQuery.error;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return `${code} ${response?.status || 500}: ${message}`;
       }
       case "success": {
@@ -43,6 +43,7 @@ export const TanstackQuery = () => {
     }
   })();
 
+  // New sample product
   const newProduct: Product = useMemo(
     () => ({
       title: "Ethernet Cable",
@@ -52,6 +53,7 @@ export const TanstackQuery = () => {
     [],
   );
 
+  // Set up mutation
   const productMutation = useMutation<
     AxiosResponse<Product>,
     AxiosError<Product>,
@@ -59,18 +61,19 @@ export const TanstackQuery = () => {
     unknown
   >({
     mutationFn: async (product) =>
+      // Artificially delay response to show loading state
       delayAxiosRequest(
         await axios.post("https://dummyjson.com/product/add", product),
       ),
   });
 
+  // Output result based on mutation state/outcome
   const addResult = (() => {
     switch (productMutation.status) {
       case "pending":
         return "loading...";
       case "error": {
         const { code, response, message } = productMutation.error;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return `${code} ${response?.status || 500}: ${message}`;
       }
       case "success": {
@@ -107,6 +110,7 @@ export const TanstackQuery = () => {
       >
         Add product
       </Button>
+      {/* Show response data/error or loading */}
       <Logger value={[getResult, addResult]} />
     </Box>
   );

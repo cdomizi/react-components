@@ -1,15 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-// Types import
 import { Product, ProductQuery } from "../../types";
 
-// Project import
 import { axiosErrorHandler } from "../../utils/axiosErrorHandler";
 import { delayAxiosRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
 
-// MUI components
 import { Box, Button, Typography } from "@mui/material";
 
 export const Axios = () => {
@@ -24,6 +21,7 @@ export const Axios = () => {
       const response: AxiosResponse<Product> = await axios.get(
         "https://dummyjson.com/product/1",
       );
+      // Artificially delay response to show loading state
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
@@ -45,6 +43,7 @@ export const Axios = () => {
     setIsLoading(false);
   }, []);
 
+  // New sample product
   const newProduct: Product = useMemo(
     () => ({
       title: "Ethernet Cable",
@@ -62,6 +61,7 @@ export const Axios = () => {
         "https://dummyjson.com/product/add",
         newProduct,
       );
+      // Artificially delay response to show loading state
       const delayedResponse = await delayAxiosRequest(response);
       const { id, title, brand, price } = delayedResponse.data ?? null;
       setData({
@@ -94,6 +94,7 @@ export const Axios = () => {
       <Button onClick={addProduct} variant="outlined" size="small">
         Add product
       </Button>
+      {/* Show response data/error or loading */}
       <Logger
         value={((isLoading && "loading...") || (data ?? error)) ?? null}
       />
