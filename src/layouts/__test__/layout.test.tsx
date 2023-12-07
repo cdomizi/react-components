@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
 import RootLayout from "../RootLayout";
-import TopBar from "../TopBar";
-import MenuItem from "../TopBar/MenuItem";
+import { ThemeCustomization } from "../ThemeCustomization";
+import { TopBar } from "../TopBar";
+import { MenuItem } from "../TopBar/MenuItem";
 import Todos from "../../pages/Todos";
 import Posts from "../../pages/Posts";
 
@@ -69,10 +70,31 @@ describe("navbar", () => {
   });
 });
 
-describe.skip("color mode", () => {
-  test("default color mode", () => {
-    const defaultColorMode = undefined;
+describe.only("color mode", () => {
+  test("default color mode", async () => {
+    vi.unmock("../TopBar");
+    render(
+      <ThemeCustomization>
+        <MemoryRouter>
+          <Routes>
+            <Route path="/" element={<TopBar />} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeCustomization>,
+    );
 
-    expect(defaultColorMode).toBe("light");
+    const header = screen.getByRole("banner");
+
+    await waitFor(
+      () => expect(getComputedStyle(header).backgroundColor).toBe("#1976d2"),
+      // expect(getComputedStyle(header).backgroundColor).toBe("#121212"),
+    );
+
+    const colorModeSwitchButton = screen.getByRole("button", {
+      name: "Dark Mode",
+      // name: "Light Mode",
+    });
+
+    await waitFor(() => expect(colorModeSwitchButton).toBeInTheDocument());
   });
 });
