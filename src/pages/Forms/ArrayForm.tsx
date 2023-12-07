@@ -72,6 +72,7 @@ export const CartForm = () => {
 
   const [customers, setCustomers] = useState<CustomerType[] | null>(null);
 
+  // Get customers list
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -128,8 +129,8 @@ export const CartForm = () => {
     console.log(submitData);
   };
 
-  // Reset the form on submit
   useEffect(() => {
+    // Reset the form on successful submit
     if (isSubmitSuccessful) {
       reset({ customer: undefined, products: [] });
     }
@@ -138,8 +139,10 @@ export const CartForm = () => {
   const fillWithRandomData = useCallback(async () => {
     setLoading(true);
 
+    // Get an array of random products
     const products = await getProductsArray();
 
+    // Get a random customer
     const { id } = await getRandomData<UserType>(
       "https://dummyjson.com/users/",
     );

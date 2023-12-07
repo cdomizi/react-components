@@ -3,7 +3,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
-// Project import
 import { Logger } from "../../components/Logger";
 
 // MUI import
@@ -42,6 +41,7 @@ export const CheckboxForm = () => {
   }, []);
 
   useEffect(() => {
+    // Reset the form on successful submit
     isSubmitSuccessful && reset();
   });
 
