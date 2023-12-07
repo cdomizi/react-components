@@ -6,14 +6,17 @@ import RootLayout from "../RootLayout";
 import { ThemeCustomization } from "../ThemeCustomization";
 import { TopBar } from "../TopBar";
 import { MenuItem } from "../TopBar/MenuItem";
+import { ColorModeSwitch } from "../TopBar/ColorModeSwitch";
 import Todos from "../../pages/Todos";
 import Posts from "../../pages/Posts";
+import { AppBar } from "@mui/material";
 
 vi.mock("../TopBar", () => ({
-  default: () => (
+  TopBar: () => (
     <header>
       <MenuItem title="todos" url="/todos" />
       <MenuItem title="posts" url="/posts" />
+      <ColorModeSwitch />
     </header>
   ),
 }));
@@ -72,14 +75,17 @@ describe("navbar", () => {
 
 describe.only("color mode", () => {
   test("default color mode", async () => {
-    vi.unmock("../TopBar");
+    vi.mock("../TopBar", () => ({
+      TopBar: () => (
+        <AppBar>
+          <ColorModeSwitch />
+        </AppBar>
+      ),
+    }));
+
     render(
       <ThemeCustomization>
-        <MemoryRouter>
-          <Routes>
-            <Route path="/" element={<TopBar />} />
-          </Routes>
-        </MemoryRouter>
+        <TopBar />
       </ThemeCustomization>,
     );
 
