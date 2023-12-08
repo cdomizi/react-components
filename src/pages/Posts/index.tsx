@@ -151,10 +151,9 @@ const Posts = () => {
       >
         {getPosts.isLoading && <Typography paragraph>Loading...</Typography>}
         {getPosts.isError &&
-          `${getPosts.error.code} ${
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            getPosts.error.response?.status || 500
-          }: ${getPosts.error.message}`}
+          `${getPosts.error.code} ${getPosts.error.response?.status || 500}: ${
+            getPosts.error.message
+          }`}
         {addPost.isPending && addPost?.variables && (
           <Post post={addPost.variables} isPending={addPost.isPending} />
         )}

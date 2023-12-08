@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { AxiosError } from "axios";
 
 export const axiosErrorHandler = (error: AxiosError) => {

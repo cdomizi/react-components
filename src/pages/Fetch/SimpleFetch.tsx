@@ -12,28 +12,35 @@ export const SimpleFetch = () => {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ProductQuery | null>(null);
 
-  const getProduct = useCallback(async (url?: string) => {
-    setIsLoading(true);
-    setData(null);
-    setError(null);
-
-    try {
-      const response = await fetch(url || "https://dummyjson.com/product/1");
-      // Artificially delay response to show loading state
-      const delayedResponse = await delayRequest(response);
-      const { id, title, price, brand } =
-        (await delayedResponse.json()) as Product;
-      setData({ method: "GET", data: { id, title, price, brand } });
-    } catch (err) {
-      if (err instanceof Error)
-        setError(
-          `${err?.name || "Error"}: ${err?.message || "Unexpected error"}`,
-        );
-      console.error(err);
-    }
-
-    setIsLoading(false);
+  const handleError = useCallback((err: unknown) => {
+    if (err instanceof Error)
+      setError(
+        `${err?.name || "Error"}: ${err?.message || "Unexpected error"}`,
+      );
+    console.error(err);
   }, []);
+
+  const getProduct = useCallback(
+    async (url?: string) => {
+      setIsLoading(true);
+      setData(null);
+      setError(null);
+
+      try {
+        const response = await fetch(url || "https://dummyjson.com/product/1");
+        // Artificially delay response to show loading state
+        const delayedResponse = await delayRequest(response);
+        const { id, title, price, brand } =
+          (await delayedResponse.json()) as Product;
+        setData({ method: "GET", data: { id, title, price, brand } });
+      } catch (err) {
+        if (err instanceof Error) handleError(err);
+      }
+
+      setIsLoading(false);
+    },
+    [handleError],
+  );
 
   // New sample product
   const newProduct: Product = useMemo(
@@ -66,15 +73,12 @@ export const SimpleFetch = () => {
           (await delayedResponse.json()) as Product;
         setData({ method: "POST", data: { id, title, price, brand } });
       } catch (err) {
-        if (err instanceof Error)
-          setError(
-            `${err?.name || "Error"}: ${err?.message || "Unexpected error"}`,
-          );
+        handleError(err);
       }
 
       setIsLoading(false);
     },
-    [newProduct],
+    [handleError, newProduct],
   );
 
   return (
