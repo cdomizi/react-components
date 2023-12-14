@@ -1,4 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
@@ -55,6 +56,12 @@ const TestRoutes = () => (
   </Routes>
 );
 
+const TestLayout = () => (
+  <ThemeCustomization>
+    <TopBar />
+  </ThemeCustomization>
+);
+
 describe("navbar", () => {
   test("active links on navbar", () => {
     const MainRoutes = vi.fn().mockImplementation(TestRoutes);
@@ -74,7 +81,7 @@ describe("navbar", () => {
 });
 
 describe.only("color mode", () => {
-  test("default color mode", async () => {
+  test("default color mode", () => {
     vi.mock("../TopBar", () => ({
       TopBar: () => (
         <AppBar>
@@ -83,24 +90,41 @@ describe.only("color mode", () => {
       ),
     }));
 
-    render(
-      <ThemeCustomization>
-        <TopBar />
-      </ThemeCustomization>,
-    );
+    render(<TestLayout />);
 
+    // Header background color and toggle button for default theme (light)
     const header = screen.getByRole("banner");
-
-    await waitFor(
-      () => expect(getComputedStyle(header).backgroundColor).toBe("#1976d2"),
-      // expect(getComputedStyle(header).backgroundColor).toBe("#121212"),
-    );
-
-    const colorModeSwitchButton = screen.getByRole("button", {
-      name: "Dark Mode",
-      // name: "Light Mode",
+    const themeToggle = screen.getByRole("button", {
+      name: /dark mode/i,
     });
 
-    await waitFor(() => expect(colorModeSwitchButton).toBeInTheDocument());
+    expect(getComputedStyle(header).backgroundColor).toBe("#1976d2");
+    expect(themeToggle).toBeInTheDocument();
+  });
+
+  test("toggle color mode", async () => {
+    const user = userEvent.setup();
+
+    vi.mock("../TopBar", () => ({
+      TopBar: () => (
+        <AppBar>
+          <ColorModeSwitch />
+        </AppBar>
+      ),
+    }));
+
+    render(<TestLayout />);
+
+    const header = screen.getByRole("banner");
+    const themeToggle = screen.getByRole("button", { name: /dark mode/i });
+
+    // Check default header background color (light theme)
+    expect(getComputedStyle(header).backgroundColor).toBe("#1976d2");
+
+    // Toggle dark theme
+    await user.click(themeToggle);
+
+    // Check dark header background color after theme toggle
+    expect(getComputedStyle(header).backgroundColor).toBe("#121212");
   });
 });
