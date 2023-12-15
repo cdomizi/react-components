@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 
 export function useLocalStorage<TData>(key: string, initialValue?: TData) {
   // Set initial value
-  if (initialValue) localStorage.setItem(key, JSON.stringify({ initialValue }));
+  if (initialValue) localStorage.setItem(key, JSON.stringify(initialValue));
 
   // Get function
   const currentValue = useMemo(() => {
