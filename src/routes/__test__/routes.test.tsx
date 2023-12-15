@@ -51,7 +51,7 @@ vi.mock("../../pages/Todos", () => ({
   ),
 }));
 
-const TestRoutes = () => (
+const MockRoutes = () => (
   <Routes>
     <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
       <Route index element={<Home />} />
@@ -60,64 +60,58 @@ const TestRoutes = () => (
   </Routes>
 );
 
+const MockRouter = ({ initialEntries }: { initialEntries?: string[] }) => (
+  <MemoryRouter {...(initialEntries?.length && { initialEntries })}>
+    <MockRoutes />
+  </MemoryRouter>
+);
+
 describe("router", () => {
   test("render home page on default route", () => {
-    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
+    render(<MockRouter />);
 
-    render(
-      <MemoryRouter>
-        <MainRoutes />
-      </MemoryRouter>,
-    );
     const pageTitle = screen.getByRole("heading");
 
     expect(pageTitle).toMatch(/home/i);
   });
 
   test("render page component for specific route", () => {
-    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
+    render(<MockRouter initialEntries={["/todos"]} />);
 
-    render(
-      <MemoryRouter initialEntries={["/todos"]}>
-        <MainRoutes />
-      </MemoryRouter>,
-    );
     const pageTitle = screen.getByRole("heading");
 
     expect(pageTitle).toMatch(/todo list/i);
   });
 
   test("navigation from the top bar's home button", async () => {
-    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
-
-    render(
-      <MemoryRouter initialEntries={["/todos"]}>
-        <MainRoutes />
-      </MemoryRouter>,
-    );
     const user = userEvent.setup();
+
+    // Start on Todos page
+    render(<MockRouter initialEntries={["/todos"]} />);
+
     const homeButton = screen.getByText(/myapp/i);
 
+    // Navigate to `Home` by clicking the home button on the navbar
     await user.click(homeButton);
 
     const pageTitle = screen.getByRole("heading");
+
     expect(pageTitle).toMatch(/home/i);
   });
 
   test("navigation from the topbar links", async () => {
-    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
-
-    render(
-      <MemoryRouter>
-        <MainRoutes />
-      </MemoryRouter>,
-    );
     const user = userEvent.setup();
+
+    // Start on Home page
+    render(<MockRouter />);
+
     const todosNavLink = screen.getByRole("link", { name: "Todos" });
 
+    // Navigate to `Todos` by clicking the `todos` navlink
     await user.click(todosNavLink);
 
     const pageTitle = screen.getByRole("heading");
+
     expect(pageTitle).toMatch(/todo list/i);
   });
 });
