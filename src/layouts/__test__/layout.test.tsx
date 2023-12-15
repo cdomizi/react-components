@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
@@ -12,20 +12,13 @@ import Todos from "../../pages/Todos";
 import Posts from "../../pages/Posts";
 import { AppBar } from "@mui/material";
 
-vi.mock("../TopBar", () => ({
-  TopBar: () => (
-    <header>
-      <MenuItem title="todos" url="/todos" />
-      <MenuItem title="posts" url="/posts" />
-      <ColorModeSwitch />
-    </header>
-  ),
-}));
-
 vi.mock("../RootLayout", () => ({
   default: () => (
     <div>
-      <TopBar />
+      <header>
+        <MenuItem title="todos" url="/todos" />
+        <MenuItem title="posts" url="/posts" />
+      </header>
       <Outlet />
     </div>
   ),
@@ -47,7 +40,7 @@ vi.mock("../../pages/Posts", () => ({
   ),
 }));
 
-const TestRoutes = () => (
+const MockRoutes = () => (
   <Routes>
     <Route path="/" element={<RootLayout />}>
       <Route path="/todos" element={<Todos />} />
@@ -56,41 +49,39 @@ const TestRoutes = () => (
   </Routes>
 );
 
-const TestLayout = () => (
+vi.mock("../TopBar", () => ({
+  TopBar: () => (
+    <AppBar>
+      <ColorModeSwitch />
+    </AppBar>
+  ),
+}));
+
+const MockLayout = () => (
   <ThemeCustomization>
     <TopBar />
   </ThemeCustomization>
 );
 
 describe("navbar", () => {
-  test("active links on navbar", () => {
-    const MainRoutes = vi.fn().mockImplementation(TestRoutes);
-
+  test("active links on navbar", async () => {
     render(
       <MemoryRouter initialEntries={["/todos"]}>
-        <MainRoutes />
+        <MockRoutes />
       </MemoryRouter>,
     );
 
-    const todosNavLink = screen.getByRole("link", { name: "TODOS" });
-    const postsNavLink = screen.getByRole("link", { name: "POSTS" });
+    const todosNavLink = screen.getByRole("link", { name: /todos/i });
+    const postsNavLink = screen.getByRole("link", { name: /posts/i });
 
-    expect(todosNavLink).toHaveClass("active");
+    await waitFor(() => expect(todosNavLink).toHaveClass("active"));
     expect(postsNavLink).not.toHaveClass("active");
   });
 });
 
-describe.only("color mode", () => {
+describe("color mode", () => {
   test("default color mode", () => {
-    vi.mock("../TopBar", () => ({
-      TopBar: () => (
-        <AppBar>
-          <ColorModeSwitch />
-        </AppBar>
-      ),
-    }));
-
-    render(<TestLayout />);
+    render(<MockLayout />);
 
     // Header background color and toggle button for default theme (light)
     const header = screen.getByRole("banner");
@@ -105,15 +96,7 @@ describe.only("color mode", () => {
   test("toggle color mode", async () => {
     const user = userEvent.setup();
 
-    vi.mock("../TopBar", () => ({
-      TopBar: () => (
-        <AppBar>
-          <ColorModeSwitch />
-        </AppBar>
-      ),
-    }));
-
-    render(<TestLayout />);
+    render(<MockLayout />);
 
     const header = screen.getByRole("banner");
     const themeToggle = screen.getByRole("button", { name: /dark mode/i });
