@@ -6,7 +6,6 @@ import { Link, MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import RootLayout from "../../layouts/RootLayout";
 import { TopBar } from "../../layouts/TopBar";
 import Home from "../../pages/Home";
-import ErrorPage from "../../pages/ErrorPage";
 import Todos from "../../pages/Todos";
 
 vi.mock("../../layouts/TopBar", () => ({
@@ -35,14 +34,6 @@ vi.mock("../../pages/Home", () => ({
   ),
 }));
 
-vi.mock("../../pages/ErrorPage", () => ({
-  default: () => (
-    <div>
-      <p>Error</p>
-    </div>
-  ),
-}));
-
 vi.mock("../../pages/Todos", () => ({
   default: () => (
     <div>
@@ -53,7 +44,7 @@ vi.mock("../../pages/Todos", () => ({
 
 const MockRoutes = () => (
   <Routes>
-    <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
+    <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="/todos" element={<Todos />} />
     </Route>
