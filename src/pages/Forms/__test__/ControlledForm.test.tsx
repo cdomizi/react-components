@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { UncontrolledForm } from "../UncontrolledForm";
+import { ControlledForm } from "../ControlledForm";
 import userEvent from "@testing-library/user-event";
 
-describe("Uncontrolled Form", () => {
+describe("Controlled form", () => {
   test("component renders correctly", () => {
-    render(<UncontrolledForm />);
+    render(<ControlledForm />);
 
     const title = screen.getByRole("heading");
     const usernameField = screen.getByRole("textbox", { name: /username/i });
@@ -14,7 +14,7 @@ describe("Uncontrolled Form", () => {
     });
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
-    expect(title).toMatch(/uncontrolled form/i);
+    expect(title).toMatch(/controlled form/i);
     expect(usernameField).toBeInTheDocument();
     expect(emailField).toBeInTheDocument();
     expect(fillWithRandomDataButton).toBeInTheDocument();
@@ -24,7 +24,7 @@ describe("Uncontrolled Form", () => {
   test("required field", async () => {
     const user = userEvent.setup();
 
-    render(<UncontrolledForm />);
+    render(<ControlledForm />);
 
     const usernameField = screen.getByRole("textbox", {
       name: /username/i,
@@ -77,7 +77,7 @@ describe("Uncontrolled Form", () => {
   test("email field wrong format", async () => {
     const user = userEvent.setup();
 
-    render(<UncontrolledForm />);
+    render(<ControlledForm />);
 
     const emailField = screen.getByRole("textbox", {
       name: /email/i,
@@ -106,5 +106,58 @@ describe("Uncontrolled Form", () => {
     // UI displays no error
     expect(emailField).toHaveValue("john.doe@example.com");
     expect(emailFieldLabel).not.toHaveClass("Mui-error");
+  });
+
+  test("fill with random data", async () => {
+    const user = userEvent.setup();
+
+    render(<ControlledForm />);
+
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
+    const fillWithRandomDataButton = screen.getByRole("button", {
+      name: /fill with random data/i,
+    });
+
+    // Form fields are empty
+    expect(usernameField).toHaveValue("");
+    expect(emailField).toHaveValue("");
+
+    // Fill the form with random data
+    await user.click(fillWithRandomDataButton);
+
+    // Form fields are no more empty
+    expect(usernameField).not.toHaveValue("");
+    expect(emailField).not.toHaveValue("");
+  });
+
+  test("reset on submit", async () => {
+    const user = userEvent.setup();
+
+    render(<ControlledForm />);
+
+    const usernameField = screen.getByRole("textbox", {
+      name: /username/i,
+    });
+    const emailField = screen.getByRole("textbox", {
+      name: /email/i,
+    });
+    const submitButton = screen.getByRole("button", {
+      name: /submit/i,
+    });
+
+    // Fill the form
+    await user.type(usernameField, "johnDoe");
+    await user.type(emailField, "john.doe@example.com");
+
+    expect(usernameField).toHaveValue("johnDoe");
+    expect(emailField).toHaveValue("john.doe@example.com");
+
+    // Submit the form
+    await user.click(submitButton);
+
+    // Check form fields to be empty
+    expect(usernameField).toHaveValue("");
+    expect(emailField).toHaveValue("");
   });
 });
