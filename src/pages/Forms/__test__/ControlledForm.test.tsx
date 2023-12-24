@@ -200,7 +200,7 @@ describe("Controlled form", () => {
     // Submit the form
     await user.click(submitButton);
 
-    // Check form fields to be empty
+    // Form fields reset to default after submit
     expect(usernameField).toHaveValue("");
     expect(emailField).toHaveValue("");
   });

@@ -200,7 +200,7 @@ describe("Controlled RHF", () => {
     // Submit the form
     await user.click(submitButton);
 
-    // Check form fields to be empty
+    // Form fields reset to default after submit
     await waitFor(() => {
       expect(usernameField).toHaveValue("");
       expect(emailField).toHaveValue("");
