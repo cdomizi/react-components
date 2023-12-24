@@ -16,6 +16,7 @@ import {
   InputAdornment,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
@@ -280,12 +281,14 @@ export const CartForm = () => {
               />
             )}
           />
-          <IconButton
-            onClick={() => remove(index)}
-            disabled={loading || isLoading || isSubmitting}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => remove(index)}
+              disabled={loading || isLoading || isSubmitting}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </Stack>
       ))}
       <Typography color="error.main">{errors?.products?.message}</Typography>
