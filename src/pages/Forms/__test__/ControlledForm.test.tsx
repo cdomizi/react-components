@@ -26,13 +26,9 @@ describe("Controlled form", () => {
 
     render(<ControlledForm />);
 
-    const usernameField = screen.getByRole("textbox", {
-      name: /username/i,
-    });
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
     const usernameFieldLabel = usernameField.parentElement;
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // No error displayed in the UI
     expect(usernameFieldLabel).not.toHaveClass("Mui-error");
@@ -79,13 +75,9 @@ describe("Controlled form", () => {
 
     render(<ControlledForm />);
 
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
     const emailFieldLabel = emailField.parentElement;
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // No error displayed in the UI
     expect(emailFieldLabel).not.toHaveClass("Mui-error");
@@ -117,9 +109,7 @@ describe("Controlled form", () => {
     const fillWithRandomDataButton = screen.getByRole("button", {
       name: /fill with random data/i,
     });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Form fields are empty
     expect(usernameField).toHaveValue("");
@@ -147,15 +137,9 @@ describe("Controlled form", () => {
 
     render(<ControlledForm />);
 
-    const usernameField = screen.getByRole("textbox", {
-      name: /username/i,
-    });
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Fill the form
     await user.type(usernameField, "johnDoe");
@@ -180,15 +164,9 @@ describe("Controlled form", () => {
 
     render(<ControlledForm />);
 
-    const usernameField = screen.getByRole("textbox", {
-      name: /username/i,
-    });
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Fill the form
     await user.type(usernameField, "johnDoe");

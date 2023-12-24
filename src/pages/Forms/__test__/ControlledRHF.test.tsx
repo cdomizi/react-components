@@ -79,13 +79,9 @@ describe("Controlled RHF", () => {
 
     render(<ControlledRHF />);
 
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
     const emailFieldLabel = emailField.parentElement;
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // No error displayed in the UI
     expect(emailFieldLabel).not.toHaveClass("Mui-error");
@@ -117,9 +113,7 @@ describe("Controlled RHF", () => {
     const fillWithRandomDataButton = screen.getByRole("button", {
       name: /fill with random data/i,
     });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Form fields are empty
     expect(usernameField).toHaveValue("");
@@ -147,15 +141,9 @@ describe("Controlled RHF", () => {
 
     render(<ControlledRHF />);
 
-    const usernameField = screen.getByRole("textbox", {
-      name: /username/i,
-    });
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Fill the form
     await user.type(usernameField, "johnDoe");
@@ -180,15 +168,9 @@ describe("Controlled RHF", () => {
 
     render(<ControlledRHF />);
 
-    const usernameField = screen.getByRole("textbox", {
-      name: /username/i,
-    });
-    const emailField = screen.getByRole("textbox", {
-      name: /email/i,
-    });
-    const submitButton = screen.getByRole("button", {
-      name: /submit/i,
-    });
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
+    const emailField = screen.getByRole("textbox", { name: /email/i });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
     // Fill the form
     await user.type(usernameField, "johnDoe");
