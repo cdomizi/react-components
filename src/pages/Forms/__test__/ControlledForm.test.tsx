@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { ControlledForm } from "../ControlledForm";
 import userEvent from "@testing-library/user-event";
 
@@ -118,6 +118,9 @@ describe("Controlled form", () => {
     const fillWithRandomDataButton = screen.getByRole("button", {
       name: /fill with random data/i,
     });
+    const submitButton = screen.getByRole("button", {
+      name: /submit/i,
+    });
 
     // Form fields are empty
     expect(usernameField).toHaveValue("");
@@ -126,9 +129,17 @@ describe("Controlled form", () => {
     // Fill the form with random data
     await user.click(fillWithRandomDataButton);
 
-    // Form fields are no more empty
-    expect(usernameField).not.toHaveValue("");
-    expect(emailField).not.toHaveValue("");
+    // Form fields and buttons are disabled while loading
+    expect(usernameField.parentElement).toHaveClass("Mui-disabled");
+    expect(emailField.parentElement).toHaveClass("Mui-disabled");
+    expect(fillWithRandomDataButton).toBeDisabled();
+    expect(submitButton).toBeDisabled();
+
+    // Form fields are filled after loading
+    await waitFor(() => {
+      expect(usernameField).not.toHaveValue("");
+      expect(emailField).not.toHaveValue("");
+    });
   });
 
   test("reset on submit", async () => {
