@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CheckboxForm } from "../CheckboxForm";
 
@@ -92,6 +92,6 @@ describe("Checkbox form", () => {
     await user.click(submitButton);
 
     // Checkbox status reset to default after submit
-    expect(checkbox).not.toBeChecked();
+    await waitFor(() => expect(checkbox).not.toBeChecked());
   });
 });

@@ -41,6 +41,7 @@ describe("Uncontrolled Form", () => {
 
     // Error displayed in the UI
     expect(usernameFieldLabel).toHaveClass("Mui-error");
+    expect(usernameField).toHaveFocus();
 
     const errorHelperText = screen.getByText(
       /username must be at least 3 characters long/i,
@@ -54,6 +55,7 @@ describe("Uncontrolled Form", () => {
 
     // UI still displays error
     expect(usernameFieldLabel).toHaveClass("Mui-error");
+    expect(usernameField).toHaveFocus();
 
     // Enter more characters in the username field
     await user.type(usernameField, "hn");
@@ -68,6 +70,7 @@ describe("Uncontrolled Form", () => {
     // UI displays error again
     expect(usernameField).toHaveValue("Jo");
     expect(usernameFieldLabel).toHaveClass("Mui-error");
+    expect(usernameField).toHaveFocus();
   });
 
   test("email field validation", async () => {
@@ -75,6 +78,7 @@ describe("Uncontrolled Form", () => {
 
     render(<UncontrolledForm />);
 
+    const usernameField = screen.getByRole("textbox", { name: /username/i });
     const emailField = screen.getByRole("textbox", { name: /email/i });
     const emailFieldLabel = emailField.parentElement;
     const submitButton = screen.getByRole("button", { name: /submit/i });
@@ -90,6 +94,8 @@ describe("Uncontrolled Form", () => {
     // UI displays error
     expect(emailField).toHaveValue("john.doe@example");
     expect(emailFieldLabel).toHaveClass("Mui-error");
+    // When more fields have errors, focus is on the first one
+    expect(usernameField).toHaveFocus();
 
     // Enter an email address with the correct format
     await user.type(emailField, ".com");
