@@ -250,5 +250,44 @@ describe("Array form", () => {
     expect(logSpy).toHaveBeenCalledWith(ENTERED_VALUES);
   });
 
-  test.todo("reset on submit");
+  test.only("reset on submit", async () => {
+    const user = userEvent.setup();
+
+    render(<ArrayForm />);
+
+    const customerField = screen.getByRole("combobox");
+    const addProductButton = screen.getByRole("button", {
+      name: /add product/i,
+    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+
+    // Select a customer
+    await user.click(customerField);
+    const customerOption = await waitFor(() =>
+      screen.getByRole("option", {
+        name: /medhurst/i,
+      }),
+    );
+    await user.click(customerOption);
+
+    // Add a product
+    await user.click(addProductButton);
+    const productTitleField = screen.getByRole("textbox", { name: /product/i });
+    await user.type(productTitleField, "screwdriver");
+
+    const productsList = screen.getAllByRole("textbox", { name: /product/i });
+
+    // Form fields are not empty
+    expect(customerField).not.toHaveValue("");
+    expect(productsList.length).toBeGreaterThan(0);
+
+    // Submit the form
+    await user.click(submitButton);
+
+    // Form reset to default after submit
+    await waitFor(() => {
+      expect(customerField).toHaveValue("");
+      expect(() => screen.getAllByRole("textbox")).toThrow();
+    });
+  });
 });
