@@ -170,6 +170,7 @@ export const CartForm = () => {
       <Typography variant="h4">Array Form</Typography>
       <Button
         onClick={fillWithRandomData}
+        disabled={loading || isLoading || isSubmitting}
         type="button"
         variant="outlined"
         size="small"

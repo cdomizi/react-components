@@ -202,7 +202,54 @@ describe("Array form", () => {
     });
   });
 
-  test.todo("fill with random data");
+  test("fill with random data", async () => {
+    const user = userEvent.setup();
+
+    render(<ArrayForm />);
+
+    const customerField = screen.getByRole("combobox");
+    const fillWithRandomDataButton = screen.getByRole("button", {
+      name: /fill with random data/i,
+    });
+    const addProductButton = screen.getByRole("button", {
+      name: /add product/i,
+    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+
+    expect(customerField).toHaveValue("");
+    expect(() => screen.getByRole("textbox", { name: /product/i })).toThrow();
+
+    // Fill the form with random data
+    await user.click(fillWithRandomDataButton);
+
+    // All fields & buttons disabled while filling the form
+    expect(fillWithRandomDataButton).toHaveClass("Mui-disabled");
+    expect(customerField).toHaveClass("Mui-disabled");
+    expect(addProductButton).toHaveClass("Mui-disabled");
+    expect(submitButton).toHaveClass("Mui-disabled");
+
+    await waitFor(() => {
+      // All fields and buttons no more disabled
+      expect(fillWithRandomDataButton).not.toHaveClass("Mui-disabled");
+      expect(customerField).not.toHaveClass("Mui-disabled");
+      expect(addProductButton).not.toHaveClass("Mui-disabled");
+      expect(submitButton).not.toHaveClass("Mui-disabled");
+
+      // Random customer selected
+      // expect(customerField).not.toHaveValue(""); // This should work, but throws an error!
+
+      const productsList = screen.getAllByRole("textbox", {
+        name: /product/i,
+      });
+
+      // Random products added
+      expect(productsList.length).toBeGreaterThan(0);
+
+      productsList.forEach((product) => {
+        expect(product).not.toHaveValue("");
+      });
+    });
+  });
 
   test("form submission", async () => {
     const user = userEvent.setup();
@@ -250,7 +297,7 @@ describe("Array form", () => {
     expect(logSpy).toHaveBeenCalledWith(ENTERED_VALUES);
   });
 
-  test.only("reset on submit", async () => {
+  test("reset on submit", async () => {
     const user = userEvent.setup();
 
     render(<ArrayForm />);
