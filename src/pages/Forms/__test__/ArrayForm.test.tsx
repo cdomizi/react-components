@@ -204,7 +204,51 @@ describe("Array form", () => {
 
   test.todo("fill with random data");
 
-  test.todo("form submission");
+  test("form submission", async () => {
+    const user = userEvent.setup();
+    const logSpy = vi.spyOn(console, "log");
+
+    render(<ArrayForm />);
+
+    const customerField = screen.getByRole("combobox");
+    const addProductButton = screen.getByRole("button", {
+      name: /add product/i,
+    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+
+    const ENTERED_VALUES = {
+      customer: { id: 1, firstName: "Terry", lastName: "Medhurst" },
+      products: [
+        {
+          product: "screwdriver",
+          quantity: 1,
+        },
+      ],
+    };
+
+    // Select a customer
+    await user.click(customerField);
+    const customerOption = await waitFor(() =>
+      screen.getByRole("option", {
+        name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
+      }),
+    );
+    await user.click(customerOption);
+
+    // Add a product
+    await user.click(addProductButton);
+    const productTitleField = screen.getByRole("textbox", { name: /product/i });
+    await user.type(productTitleField, `${ENTERED_VALUES.products[0].product}`);
+
+    expect(logSpy).not.toHaveBeenCalled();
+
+    // Submit the form
+    await user.click(submitButton);
+
+    // Check form submitted values to match entered values
+    expect(logSpy).toHaveBeenCalledOnce();
+    expect(logSpy).toHaveBeenCalledWith(ENTERED_VALUES);
+  });
 
   test.todo("reset on submit");
 });
