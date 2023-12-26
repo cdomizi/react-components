@@ -119,7 +119,7 @@ export const CartForm = () => {
     const submitData = {
       customer: formData.customer,
       products: formData.products?.map((product: ProductType) => ({
-        product,
+        product: product.product,
         quantity:
           typeof product.quantity === "string"
             ? parseInt(product.quantity, 10)
