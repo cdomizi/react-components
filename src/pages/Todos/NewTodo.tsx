@@ -24,6 +24,7 @@ export const NewTodo = ({
   return (
     <Box my={3}>
       <TextField
+        name="new=todo"
         placeholder="New todo"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
