@@ -1,6 +1,6 @@
+import { ColorModeSwitch } from "./ColorModeSwitch";
 import { HomeButton } from "./HomeButton";
 import { MenuItemsList } from "./MenuItemsList";
-import { ColorModeSwitch } from "./ColorModeSwitch";
 
 import { AppBar, Stack, Toolbar } from "@mui/material";
 

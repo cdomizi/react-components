@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useCallback, useMemo, useState } from "react";
 
 import { Product, ProductQuery } from "../../types";
 
+import { Logger } from "../../components/Logger";
 import { axiosErrorHandler } from "../../utils/axiosErrorHandler";
 import { delayAxiosRequest } from "../../utils/delay";
-import { Logger } from "../../components/Logger";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 

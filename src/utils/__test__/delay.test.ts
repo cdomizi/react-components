@@ -1,10 +1,10 @@
+import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import {
+  delayAxiosRequest,
   delayCallback,
   delayFunc,
-  delayAxiosRequest,
   delayRequest,
 } from "../delay";
-import axios, { AxiosResponse, AxiosHeaders } from "axios";
 
 // Mocks
 const func = vi.fn();

@@ -1,7 +1,7 @@
-import { SimpleFetch } from "./SimpleFetch";
-import { Axios } from "./Axios";
-import { TanstackQuery } from "./TanstackQuery";
 import { ContentCard } from "../../components/ContentCard";
+import { Axios } from "./Axios";
+import { SimpleFetch } from "./SimpleFetch";
+import { TanstackQuery } from "./TanstackQuery";
 
 import { Box, Stack } from "@mui/material";
 

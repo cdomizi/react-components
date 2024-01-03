@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { UncontrolledForm } from "../UncontrolledForm";
 import userEvent from "@testing-library/user-event";
+import { UncontrolledForm } from "../UncontrolledForm";
 
 describe("Uncontrolled Form", () => {
   test("component renders correctly", () => {

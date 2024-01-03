@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 // Project import
-import { todosReducer } from "./todosReducer";
-import { NewTodo } from "./NewTodo";
-import { Todo } from "./Todo";
-import { TodoType } from "./Todo";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { NewTodo } from "./NewTodo";
+import { Todo, TodoType } from "./Todo";
+import { todosReducer } from "./todosReducer";
 
 // MUI import
-import { Box, Stack } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 const Todos = () => {
   const [error, setError] = useState<string | null>(null);

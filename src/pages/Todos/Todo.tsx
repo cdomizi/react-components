@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpDownArrows } from "./UpDownArrows";
 
 // MUI components & icons
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import {
   Checkbox,
   IconButton,
@@ -10,7 +11,6 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
 
 export type TodoType = {
   id: string;

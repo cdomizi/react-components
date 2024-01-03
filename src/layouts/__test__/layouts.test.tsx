@@ -3,14 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
+import { AppBar } from "@mui/material";
+import Posts from "../../pages/Posts";
+import Todos from "../../pages/Todos";
 import RootLayout from "../RootLayout";
 import { ThemeCustomization } from "../ThemeCustomization";
 import { TopBar } from "../TopBar";
-import { MenuItem } from "../TopBar/MenuItem";
 import { ColorModeSwitch } from "../TopBar/ColorModeSwitch";
-import Todos from "../../pages/Todos";
-import Posts from "../../pages/Posts";
-import { AppBar } from "@mui/material";
+import { MenuItem } from "../TopBar/MenuItem";
 
 vi.mock("../RootLayout", () => ({
   default: () => (

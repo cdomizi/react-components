@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 
 import { Product, ProductQuery } from "../../types";
 
-import { delayRequest } from "../../utils/delay";
 import { Logger } from "../../components/Logger";
+import { delayRequest } from "../../utils/delay";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 

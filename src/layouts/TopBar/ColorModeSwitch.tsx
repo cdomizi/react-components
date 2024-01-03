@@ -2,11 +2,11 @@ import { useContext } from "react";
 import { ColorModeContext } from "../../contexts/ColorModeContext";
 
 // MUI components & icons
-import { IconButton, Tooltip, useTheme } from "@mui/material";
 import {
   Brightness7 as DarkModeIcon,
   Brightness4 as LightModeIcon,
 } from "@mui/icons-material";
+import { IconButton, Tooltip, useTheme } from "@mui/material";
 
 export const ColorModeSwitch = () => {
   const theme = useTheme();

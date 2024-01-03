@@ -1,4 +1,4 @@
-import { PostType } from "./index";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
+import { PostType } from "./index";
 
 export const Post = ({
   post,

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 // Project import
+import { Logger } from "../../components/Logger";
 import { userSchema, UserType } from "../../types";
 import { getRandomData } from "../../utils/getRandomData";
-import { Logger } from "../../components/Logger";
 
 // MUI import
 import {

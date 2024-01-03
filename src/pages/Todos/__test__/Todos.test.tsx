@@ -1,10 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import Todos from "..";
-import { todosReducer } from "../todosReducer";
 
 describe("Todos", () => {
   describe("todosReducer", () => {
-    test.todo("add", () => {});
+    test.todo("add");
 
     test.todo("edit");
 

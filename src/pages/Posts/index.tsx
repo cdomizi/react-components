@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useCallback, useMemo } from "react";
 
 // Project import
-import { getRandomData } from "../../utils/getRandomData";
 import { delayAxiosRequest } from "../../utils/delay";
+import { getRandomData } from "../../utils/getRandomData";
 import { Post } from "./Post";
 
 // MUI components

@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
 
 // Project import
-import { getRandomData, getProductsArray } from "../../utils/getRandomData";
 import { Logger } from "../../components/Logger";
+import { getProductsArray, getRandomData } from "../../utils/getRandomData";
 
 // MUI import
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import {
   Autocomplete,
   Button,
@@ -19,7 +20,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
 
 const productsSchema = z.object({
   customer: z

@@ -40,4 +40,4 @@ const getProductsArray = async () => {
   return productsArray;
 };
 
-export { getRandomData, getRandomInt, getProductsArray };
+export { getProductsArray, getRandomData, getRandomInt };

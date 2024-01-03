@@ -24,4 +24,4 @@ const delayAxiosRequest = async <TData>(
     setTimeout(() => resolve(value), ms);
   });
 
-export { delayCallback, delayFunc, delayRequest, delayAxiosRequest };
+export { delayAxiosRequest, delayCallback, delayFunc, delayRequest };
