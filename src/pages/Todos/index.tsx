@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 // Project import
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useLocalStorage } from "hooks/useLocalStorage";
 import { NewTodo } from "./NewTodo";
 import { Todo, TodoType } from "./Todo";
 import { todosReducer } from "./todosReducer";

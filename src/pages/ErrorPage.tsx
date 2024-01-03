@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate, useRouteError } from "react-router-dom";
-import { CustomError } from "../types";
+import { CustomError } from "types";
 
 const ErrorInfo = () => {
   const error = useRouteError() as CustomError;

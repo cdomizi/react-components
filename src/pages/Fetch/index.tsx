@@ -1,4 +1,4 @@
-import { ContentCard } from "../../components/ContentCard";
+import { ContentCard } from "components/ContentCard";
 import { Axios } from "./Axios";
 import { SimpleFetch } from "./SimpleFetch";
 import { TanstackQuery } from "./TanstackQuery";

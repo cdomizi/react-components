@@ -4,8 +4,8 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 // Project import
-import { Logger } from "../../components/Logger";
-import { getProductsArray, getRandomData } from "../../utils/getRandomData";
+import { Logger } from "components/Logger";
+import { getProductsArray, getRandomData } from "utils/getRandomData";
 
 // MUI import
 import { Delete as DeleteIcon } from "@mui/icons-material";

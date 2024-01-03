@@ -1,5 +1,5 @@
+import { ColorModeContext } from "contexts/ColorModeContext";
 import { useContext } from "react";
-import { ColorModeContext } from "../../contexts/ColorModeContext";
 
 // MUI components & icons
 import {

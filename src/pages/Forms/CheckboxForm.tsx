@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Logger } from "../../components/Logger";
+import { Logger } from "components/Logger";
 
 // MUI import
 import {

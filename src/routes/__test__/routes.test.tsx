@@ -3,12 +3,12 @@ import userEvent from "@testing-library/user-event";
 import { Link, MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
-import RootLayout from "../../layouts/RootLayout";
-import { TopBar } from "../../layouts/TopBar";
-import Home from "../../pages/Home";
-import Todos from "../../pages/Todos";
+import Todos from "@Todos/index";
+import RootLayout from "layouts/RootLayout";
+import { TopBar } from "layouts/TopBar";
+import Home from "pages/Home";
 
-vi.mock("../../layouts/TopBar", () => ({
+vi.mock("layouts/TopBar", () => ({
   TopBar: () => (
     <header>
       <Link to="/">myApp</Link>
@@ -17,7 +17,7 @@ vi.mock("../../layouts/TopBar", () => ({
   ),
 }));
 
-vi.mock("../../layouts/RootLayout", () => ({
+vi.mock("layouts/RootLayout", () => ({
   default: () => (
     <div>
       <TopBar />
@@ -26,7 +26,7 @@ vi.mock("../../layouts/RootLayout", () => ({
   ),
 }));
 
-vi.mock("../../pages/Home", () => ({
+vi.mock("pages/Home", () => ({
   default: () => (
     <div>
       <h2>Home</h2>
@@ -34,7 +34,7 @@ vi.mock("../../pages/Home", () => ({
   ),
 }));
 
-vi.mock("../../pages/Todos", () => ({
+vi.mock("@Todos/index", () => ({
   default: () => (
     <div>
       <h2>Todo List</h2>

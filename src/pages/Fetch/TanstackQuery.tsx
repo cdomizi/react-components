@@ -2,10 +2,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMemo, useState } from "react";
 
-import { Product } from "../../types";
+import { Product } from "types";
 
-import { Logger } from "../../components/Logger";
-import { delayAxiosRequest } from "../../utils/delay";
+import { Logger } from "components/Logger";
+import { delayAxiosRequest } from "utils/delay";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 

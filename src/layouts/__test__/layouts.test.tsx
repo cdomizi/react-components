@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 
 // Project import
+import Posts from "@Posts/index";
+import Todos from "@Todos/index";
 import { AppBar } from "@mui/material";
-import Posts from "../../pages/Posts";
-import Todos from "../../pages/Todos";
 import RootLayout from "../RootLayout";
 import { ThemeCustomization } from "../ThemeCustomization";
 import { TopBar } from "../TopBar";
@@ -24,7 +24,7 @@ vi.mock("../RootLayout", () => ({
   ),
 }));
 
-vi.mock("../../pages/Todos", () => ({
+vi.mock("@Todos/index", () => ({
   default: () => (
     <div>
       <h2>Todo List</h2>
@@ -32,7 +32,7 @@ vi.mock("../../pages/Todos", () => ({
   ),
 }));
 
-vi.mock("../../pages/Posts", () => ({
+vi.mock("@Posts/index", () => ({
   default: () => (
     <div>
       <h2>Posts</h2>

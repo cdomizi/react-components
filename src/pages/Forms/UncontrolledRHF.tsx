@@ -3,9 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 // Project import
-import { Logger } from "../../components/Logger";
-import { userSchema, UserType } from "../../types";
-import { getRandomData } from "../../utils/getRandomData";
+import { Logger } from "components/Logger";
+import { userSchema, UserType } from "types";
+import { getRandomData } from "utils/getRandomData";
 
 // MUI import
 import {

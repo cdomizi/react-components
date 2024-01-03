@@ -1,6 +1,6 @@
+import { ColorModeContext } from "contexts/ColorModeContext";
+import { useLocalStorage } from "hooks/useLocalStorage";
 import { ReactElement, useLayoutEffect, useMemo, useState } from "react";
-import { ColorModeContext } from "../contexts/ColorModeContext";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 
 // MUI components
 import {
