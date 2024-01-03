@@ -1,7 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import Todos from "..";
+import { todosReducer } from "../todosReducer";
 
 describe("Todos", () => {
+  describe("todosReducer", () => {
+    test.todo("add", () => {});
+
+    test.todo("edit");
+
+    test.todo("delete");
+
+    test.todo("toggle");
+
+    test.todo("move");
+  });
+
   test("component renders correctly", () => {
     render(<Todos />);
 
@@ -19,8 +32,6 @@ describe("Todos", () => {
       screen.getByRole("listitem");
     }).toThrow();
   });
-
-  test.todo("todosReducer");
 
   test.todo("add and delete todo");
 

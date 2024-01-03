@@ -14,12 +14,14 @@ const TODO_ACTIONS = {
   DELETE: "delete",
   TOGGLE: "toggle",
   MOVE: "move",
-};
+} as const;
+
+type TAction = (typeof TODO_ACTIONS)[keyof typeof TODO_ACTIONS];
 
 export const todosReducer = (
   todos: TodoType[],
   action: {
-    type: "add" | "edit" | "delete" | "toggle" | "move";
+    type: TAction;
     payload: TodoPayload;
   },
 ) => {
