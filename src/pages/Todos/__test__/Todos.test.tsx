@@ -2,6 +2,20 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Todos from "..";
 
+const initialTodos = [
+  { id: "UsXKZeUBML3s", title: "first", done: false },
+  { id: "ZznrF4j0KOhe", title: "second", done: false },
+  { id: "oaPE6xV6fBFX", title: "third", done: false },
+  { id: "63ThxbhB5fRA", title: "fourth", done: false },
+];
+const setInitialTodos = () => {
+  localStorage.setItem("todos", JSON.stringify(initialTodos));
+};
+
+afterEach(() => {
+  localStorage.clear();
+});
+
 describe("Todos", () => {
   test("component renders correctly", () => {
     render(<Todos />);
@@ -22,7 +36,7 @@ describe("Todos", () => {
   });
 
   test("add and delete todo", async () => {
-    const textContent = "New todo";
+    const todoTitle = "New todo";
 
     const user = userEvent.setup();
 
@@ -44,14 +58,14 @@ describe("Todos", () => {
     expect(newTodo.parentElement).toHaveClass("Mui-error");
 
     // Add new todo
-    await user.type(newTodo, textContent);
+    await user.type(newTodo, todoTitle);
     await user.click(addButton);
 
     const todoList = screen.getByRole("list");
     const listItems = screen.getAllByRole("listitem");
     const doneCheckbox = screen.getByRole("checkbox");
     const deleteButton = screen.getByRole("link", { name: "delete" });
-    const todo = screen.getByText(textContent);
+    const todo = screen.getByText(todoTitle);
 
     // New todo displays correctly
     expect(() => screen.getByText(/your list is empty/i)).toThrow();
@@ -61,7 +75,7 @@ describe("Todos", () => {
     expect(doneCheckbox).not.toBeChecked();
     expect(deleteButton).toBeInTheDocument();
     expect(todo).toBeInTheDocument();
-    expect(todo).toBeInTheDocument();
+    expect(todo).toHaveTextContent(todoTitle);
 
     // Delete todo
     await user.click(deleteButton);
@@ -71,7 +85,51 @@ describe("Todos", () => {
     expect(todo).not.toBeInTheDocument();
   });
 
-  test.todo("check and uncheck todo");
+  test.only("check and uncheck todo", async () => {
+    const user = userEvent.setup();
+
+    setInitialTodos();
+
+    render(<Todos />);
+
+    const todoList = screen.getByRole("list");
+    const listItems = screen.getAllByRole("listitem");
+
+    // Initial todo list renders correctly
+    expect(todoList).toBeInTheDocument();
+    expect(listItems).toHaveLength(4);
+    listItems.forEach((todo, index) => {
+      expect(todo).toHaveTextContent(initialTodos[index].title);
+    });
+
+    const firstTodoCheckbox = screen.getAllByRole("checkbox")[0];
+    const firstTodo = firstTodoCheckbox.closest("li");
+
+    // First todo's checkbox initially unchecked
+    expect(firstTodoCheckbox).not.toBeChecked();
+    expect(firstTodo).toHaveTextContent(initialTodos[0].title);
+
+    // Mark first todo as done
+    await user.click(firstTodoCheckbox);
+
+    const lastTodoCheckbox =
+      screen.getAllByRole("checkbox")[initialTodos.length - 1];
+    const lastTodo = lastTodoCheckbox.closest("li");
+
+    // Done todo moved to the bottom of the list
+    expect(firstTodoCheckbox).not.toBeChecked();
+    expect(firstTodo).not.toHaveTextContent(initialTodos[0].title);
+    // Done todo displayed correctly
+    expect(lastTodoCheckbox).toBeChecked();
+    expect(lastTodo).toHaveTextContent(initialTodos[0].title);
+
+    // Uncheck done todo
+    await user.click(lastTodoCheckbox);
+
+    // Unchecked todo still at the bottom of the list, checkbox now unchecked
+    expect(lastTodoCheckbox).not.toBeChecked();
+    expect(lastTodo).toHaveTextContent(initialTodos[0].title);
+  });
 
   test.todo("edit todo");
 
