@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import * as utils from "utils/getRandomData";
 import { ControlledForm } from "../ControlledForm";
 
 describe("Controlled form", () => {
@@ -106,6 +107,21 @@ describe("Controlled form", () => {
   });
 
   test("fill with random data", async () => {
+    // Mock random data
+    const randomUserData = {
+      username: "johnDoe",
+      email: "john.doe@example.com",
+    };
+
+    vi.spyOn(utils, "getRandomData").mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(randomUserData);
+          }, 50);
+        }),
+    );
+
     const user = userEvent.setup();
 
     render(<ControlledForm />);
@@ -130,10 +146,10 @@ describe("Controlled form", () => {
     expect(fillWithRandomDataButton).toBeDisabled();
     expect(submitButton).toBeDisabled();
 
-    // Form fields are filled after loading
+    // Form fields are filled with random data after loading
     await waitFor(() => {
-      expect(usernameField).not.toHaveValue("");
-      expect(emailField).not.toHaveValue("");
+      expect(usernameField).toHaveValue(randomUserData.username);
+      expect(emailField).toHaveValue(randomUserData.email);
     });
   });
 

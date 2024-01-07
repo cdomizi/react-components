@@ -1,5 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import * as arrayUtils from "utils/getRandomData";
+import * as utils from "utils/getRandomData";
 import { CartForm as ArrayForm } from "../ArrayForm";
 
 describe("Array form", () => {
@@ -202,7 +204,31 @@ describe("Array form", () => {
     });
   });
 
-  test("fill with random data", async () => {
+  test.only("fill with random data", async () => {
+    // Mock random data
+    const productsArray = [
+      { product: "screwdriver", quantity: 2 },
+      { product: "hammer", quantity: 1 },
+      { product: "helmet", quantity: 1 },
+    ];
+
+    vi.spyOn(utils, "getRandomData").mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ id: 1 });
+          }, 50);
+        }),
+    );
+    vi.spyOn(arrayUtils, "getProductsArray").mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(productsArray);
+          }, 50);
+        }),
+    );
+
     const user = userEvent.setup();
 
     render(<ArrayForm />);
@@ -236,17 +262,23 @@ describe("Array form", () => {
       expect(submitButton).not.toHaveClass("Mui-disabled");
 
       // Random customer selected
-      // expect(customerField).not.toHaveValue(""); // This should work, but throws an error!
+      // expect(customerField).toHaveTextContent(/terry/i); // This should work, but throws an error!
 
       const productsList = screen.getAllByRole("textbox", {
         name: /product/i,
+      });
+      const quantitiesList = screen.getAllByRole("spinbutton", {
+        name: /quantity/i,
       });
 
       // Random products added
       expect(productsList.length).toBeGreaterThan(0);
 
-      productsList.forEach((product) => {
-        expect(product).not.toHaveValue("");
+      productsList.forEach((product, index) => {
+        expect(product).toHaveValue(productsArray[index].product);
+      });
+      quantitiesList.forEach((quantity, index) => {
+        expect(quantity).toHaveValue(productsArray[index].quantity);
       });
     });
   });
