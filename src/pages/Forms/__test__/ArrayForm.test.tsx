@@ -204,7 +204,7 @@ describe("Array form", () => {
     });
   });
 
-  test.only("fill with random data", async () => {
+  test("fill with random data", async () => {
     // Mock random data
     const productsArray = [
       { product: "screwdriver", quantity: 2 },

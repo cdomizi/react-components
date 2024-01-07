@@ -141,10 +141,12 @@ describe("Controlled form", () => {
     await user.click(fillWithRandomDataButton);
 
     // Form fields and buttons are disabled while loading
-    expect(usernameField.parentElement).toHaveClass("Mui-disabled");
-    expect(emailField.parentElement).toHaveClass("Mui-disabled");
-    expect(fillWithRandomDataButton).toBeDisabled();
-    expect(submitButton).toBeDisabled();
+    await waitFor(() => {
+      expect(usernameField.parentElement).toHaveClass("Mui-disabled");
+      expect(emailField.parentElement).toHaveClass("Mui-disabled");
+      expect(fillWithRandomDataButton).toBeDisabled();
+      expect(submitButton).toBeDisabled();
+    });
 
     // Form fields are filled with random data after loading
     await waitFor(() => {
