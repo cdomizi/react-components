@@ -41,22 +41,26 @@ describe("Controlled RHF", () => {
     await user.click(submitButton);
 
     // Error displayed in the UI
-    expect(usernameFieldLabel).toHaveClass("Mui-error");
-    expect(usernameField).toHaveFocus();
+    await waitFor(() => {
+      expect(usernameFieldLabel).toHaveClass("Mui-error");
+      expect(usernameField).toHaveFocus();
 
-    const errorHelperText = screen.getByText(
-      /username must be at least 3 characters long/i,
-    );
+      const errorHelperText = screen.getByText(
+        /username must be at least 3 characters long/i,
+      );
 
-    // Error helper text displayed
-    expect(errorHelperText).toBeInTheDocument();
+      // Error helper text displayed
+      expect(errorHelperText).toBeInTheDocument();
+    });
 
     // Enter two characters in the `Username` field
     await user.type(usernameField, "Jo");
 
-    // UI still displays error
-    expect(usernameFieldLabel).toHaveClass("Mui-error");
-    expect(usernameField).toHaveFocus();
+    await waitFor(() => {
+      // UI still displays error
+      expect(usernameFieldLabel).toHaveClass("Mui-error");
+      expect(usernameField).toHaveFocus();
+    });
 
     // Enter more characters in the username field
     await user.type(usernameField, "hn");
@@ -68,10 +72,12 @@ describe("Controlled RHF", () => {
     // Delete some characters from the `Username` to trigger the error again
     await user.type(usernameField, "{backspace}{backspace}");
 
-    // UI displays error again
-    expect(usernameField).toHaveValue("Jo");
-    expect(usernameFieldLabel).toHaveClass("Mui-error");
-    expect(usernameField).toHaveFocus();
+    await waitFor(() => {
+      // UI displays error again
+      expect(usernameField).toHaveValue("Jo");
+      expect(usernameFieldLabel).toHaveClass("Mui-error");
+      expect(usernameField).toHaveFocus();
+    });
   });
 
   test("email field validation", async () => {
@@ -92,11 +98,13 @@ describe("Controlled RHF", () => {
 
     await user.click(submitButton);
 
-    // UI displays error
-    expect(emailField).toHaveValue("john.doe@example");
-    expect(emailFieldLabel).toHaveClass("Mui-error");
-    // When more fields have errors, focus is on the first one
-    expect(usernameField).toHaveFocus();
+    await waitFor(() => {
+      // UI displays error
+      expect(emailField).toHaveValue("john.doe@example");
+      expect(emailFieldLabel).toHaveClass("Mui-error");
+      // When more fields have errors, focus is on the first one
+      expect(usernameField).toHaveFocus();
+    });
 
     // Enter an email address with the correct format
     await user.type(emailField, ".com");

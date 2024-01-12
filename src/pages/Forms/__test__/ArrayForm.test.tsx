@@ -46,20 +46,24 @@ describe("Array form", () => {
     // Submit the form with empty required field
     await user.click(submitButton);
 
-    // Error displayed in the UI
-    expect(customerFieldLabel).toHaveClass("Mui-error");
-    expect(customerField).toHaveFocus();
+    await waitFor(() => {
+      // Error displayed in the UI
+      expect(customerFieldLabel).toHaveClass("Mui-error");
+      expect(customerField).toHaveFocus();
 
-    const productErrorHelperText = screen.getByText(
-      /please add at least one product/i,
-    );
+      const productErrorHelperText = screen.getByText(
+        /please add at least one product/i,
+      );
 
-    // Product error helper text displayed
-    expect(productErrorHelperText).toBeInTheDocument();
+      // Product error helper text displayed
+      expect(productErrorHelperText).toBeInTheDocument();
+    });
 
     // Select a customer
     await user.click(customerField);
-    const customerList = await waitFor(() => screen.getAllByRole("option"));
+    const customerList = await waitFor(() => screen.getAllByRole("option"), {
+      timeout: 2000,
+    });
     await user.click(customerList[0]);
 
     // Customer field error disappeared
@@ -69,13 +73,17 @@ describe("Array form", () => {
     // Add a product
     await user.click(addProductButton);
 
-    // Product error helper text disappeared
-    expect(() =>
-      screen.getByText(/please add at least one product/i),
-    ).toThrow();
+    await waitFor(() => {
+      // Product error helper text disappeared
+      expect(() =>
+        screen.getByText(/please add at least one product/i),
+      ).toThrow();
+    });
 
     // Product field renders correctly
-    const productTitleField = screen.getByRole("textbox", { name: /product/i });
+    const productTitleField = screen.getByRole("textbox", {
+      name: /product/i,
+    });
     const productTitleFieldLabel = productTitleField.parentElement;
 
     // Error displayed in the product title field
@@ -307,10 +315,12 @@ describe("Array form", () => {
 
     // Select a customer
     await user.click(customerField);
-    const customerOption = await waitFor(() =>
-      screen.getByRole("option", {
-        name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
-      }),
+    const customerOption = await waitFor(
+      () =>
+        screen.getByRole("option", {
+          name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
+        }),
+      { timeout: 2000 },
     );
     await user.click(customerOption);
 

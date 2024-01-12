@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Todos from "..";
 
@@ -268,13 +268,16 @@ describe("Todos", () => {
 
     const newTodoList = screen.getAllByRole("listitem");
 
-    // First two elements swapped in the list
-    expect(newTodoList).toHaveLength(4);
-    expect(newTodoList[0]).toHaveTextContent(initialTodos[1].title);
-    expect(newTodoList[1]).toHaveTextContent(initialTodos[0].title);
-    // Rest of the list stays the same
-    newTodoList.forEach((todo, index) => {
-      if (index > 1) expect(todo).toHaveTextContent(initialTodos[index].title);
+    await waitFor(() => {
+      // First two elements swapped in the list
+      expect(newTodoList).toHaveLength(4);
+      expect(newTodoList[0]).toHaveTextContent(initialTodos[1].title);
+      expect(newTodoList[1]).toHaveTextContent(initialTodos[0].title);
+      // Rest of the list stays the same
+      newTodoList.forEach((todo, index) => {
+        if (index > 1)
+          expect(todo).toHaveTextContent(initialTodos[index].title);
+      });
     });
 
     // Move second element up one position
