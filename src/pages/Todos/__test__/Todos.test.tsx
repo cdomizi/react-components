@@ -82,16 +82,18 @@ describe("Todos", () => {
     const moveUpArrows = screen.getAllByTestId(/ArrowDropUpIcon/i);
     const moveDownArrows = screen.getAllByTestId(/ArrowDropDownIcon/i);
 
-    // New todo appears first in the list
-    expect(newListItems).toHaveLength(2);
-    expect(firstTodo).toHaveTextContent(newTodoTitle);
-    expect(secondTodo).toBeInTheDocument();
-    expect(secondTodo).toHaveTextContent(initialTodos[0].title);
-    // External move up/down arrows disabled, internal enabled
-    expect(moveUpArrows[0].parentElement).toHaveClass("Mui-disabled");
-    expect(moveUpArrows[1].parentElement).not.toHaveClass("Mui-disabled");
-    expect(moveDownArrows[0].parentElement).not.toHaveClass("Mui-disabled");
-    expect(moveDownArrows[1].parentElement).toHaveClass("Mui-disabled");
+    await waitFor(() => {
+      // New todo appears first in the list
+      expect(newListItems).toHaveLength(2);
+      expect(firstTodo).toHaveTextContent(newTodoTitle);
+      expect(secondTodo).toBeInTheDocument();
+      expect(secondTodo).toHaveTextContent(initialTodos[0].title);
+      // External move up/down arrows disabled, internal enabled
+      expect(moveUpArrows[0].parentElement).toHaveClass("Mui-disabled");
+      expect(moveUpArrows[1].parentElement).not.toHaveClass("Mui-disabled");
+      expect(moveDownArrows[0].parentElement).not.toHaveClass("Mui-disabled");
+      expect(moveDownArrows[1].parentElement).toHaveClass("Mui-disabled");
+    });
 
     // Delete todo
     await user.click(firstTodoDeleteButton);
@@ -155,27 +157,29 @@ describe("Todos", () => {
     const newMoveUpArrows = screen.getAllByTestId(/ArrowDropUpIcon/i);
     const newMoveDownArrows = screen.getAllByTestId(/ArrowDropDownIcon/i);
 
-    // Done todo moved to the bottom of the list
-    expect(newTodoCheckboxes[0]).not.toBeChecked();
-    expect(newFirstTodo).not.toHaveTextContent(initialTodos[0].title);
-    expect(newFirstTodo).toHaveTextContent(initialTodos[1].title);
-    // Done todo displayed correctly
-    expect(newTodoCheckboxes[newTodoCheckboxes.length - 1]).toBeChecked();
-    expect(newLastTodo).not.toHaveTextContent(initialTodos[3].title);
-    expect(newLastTodo).toHaveTextContent(initialTodos[0].title);
-    // Move up/down arrows disabled for done todos
-    newMoveUpArrows.forEach((arrow, index) => {
-      if (index === 0 || index === moveUpArrows.length - 1)
-        expect(arrow.parentElement).toHaveClass("Mui-disabled");
-      else expect(arrow.parentElement).not.toHaveClass("Mui-disabled");
-    });
-    newMoveDownArrows.forEach((arrow, index) => {
-      if (
-        index === moveDownArrows.length - 1 ||
-        index === moveDownArrows.length - 2
-      )
-        expect(arrow.parentElement).toHaveClass("Mui-disabled");
-      else expect(arrow.parentElement).not.toHaveClass("Mui-disabled");
+    await waitFor(() => {
+      // Done todo moved to the bottom of the list
+      expect(newTodoCheckboxes[0]).not.toBeChecked();
+      expect(newFirstTodo).not.toHaveTextContent(initialTodos[0].title);
+      expect(newFirstTodo).toHaveTextContent(initialTodos[1].title);
+      // Done todo displayed correctly
+      expect(newTodoCheckboxes[newTodoCheckboxes.length - 1]).toBeChecked();
+      expect(newLastTodo).not.toHaveTextContent(initialTodos[3].title);
+      expect(newLastTodo).toHaveTextContent(initialTodos[0].title);
+      // Move up/down arrows disabled for done todos
+      newMoveUpArrows.forEach((arrow, index) => {
+        if (index === 0 || index === moveUpArrows.length - 1)
+          expect(arrow.parentElement).toHaveClass("Mui-disabled");
+        else expect(arrow.parentElement).not.toHaveClass("Mui-disabled");
+      });
+      newMoveDownArrows.forEach((arrow, index) => {
+        if (
+          index === moveDownArrows.length - 1 ||
+          index === moveDownArrows.length - 2
+        )
+          expect(arrow.parentElement).toHaveClass("Mui-disabled");
+        else expect(arrow.parentElement).not.toHaveClass("Mui-disabled");
+      });
     });
 
     // Uncheck done todo
