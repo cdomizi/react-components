@@ -1,82 +1,91 @@
+import { allProducts, allUsers } from "mocks/data";
 import { UserType } from "types";
-import {
-  getProductsArray,
-  getRandomData,
-  getRandomInt,
-} from "../getRandomData";
+import * as getProductsArray from "utils/getProductsArray";
+import * as getRandomData from "utils/getRandomData";
+import * as getRandomInt from "utils/getRandomInt";
 
 describe("getRandomInt", () => {
   test("return random integer between 1 and 10 with no arguments", () => {
-    expect(getRandomInt()).toBeGreaterThanOrEqual(1);
-    expect(getRandomInt()).toBeLessThanOrEqual(10);
+    expect(getRandomInt.getRandomInt()).toBeGreaterThanOrEqual(1);
+    expect(getRandomInt.getRandomInt()).toBeLessThanOrEqual(10);
   });
 
   test("return random integer between 1 and provided argument", () => {
-    expect(getRandomInt()).toBeGreaterThanOrEqual(1);
-    expect(getRandomInt(8)).toBeLessThanOrEqual(8);
+    expect(getRandomInt.getRandomInt()).toBeGreaterThanOrEqual(1);
+    expect(getRandomInt.getRandomInt(8)).toBeLessThanOrEqual(8);
   });
 
-  test("return random integer between provided arguments", () => {
-    expect(getRandomInt(12, 5)).toBeGreaterThanOrEqual(5);
-    expect(getRandomInt(12, 5)).toBeLessThanOrEqual(12);
+  test("return random integer in the provided range", () => {
+    expect(getRandomInt.getRandomInt(12, 5)).toBeGreaterThanOrEqual(5);
+    expect(getRandomInt.getRandomInt(12, 5)).toBeLessThanOrEqual(12);
   });
 });
 
 describe("getRandomData", () => {
+  const expectedRandomUser = allUsers[0];
+
   test("returns object with expected properties", async () => {
-    const randomUser = await getRandomData<UserType>(
-      "https://dummyjson.com/users/",
+    vi.spyOn(getRandomInt, "getRandomInt").mockReturnValue(1);
+
+    const randomUser = await getRandomData.getRandomData<UserType>(
+      "https://dummyjson.com/users",
     );
 
-    expect(randomUser).toHaveProperty("username");
-    expect(randomUser).toHaveProperty("email");
+    expect(randomUser).toStrictEqual(expectedRandomUser);
   });
 
   test("returns expected data if provided with second argument", async () => {
-    const getUser = async () => {
-      const response = await fetch("https://dummyjson.com/users/1");
-      const data = (await response.json()) as Promise<UserType>;
-      return data;
-    };
-    const expectedUser = await getUser();
-    const user = await getRandomData<UserType>(
-      "https://dummyjson.com/users/",
-      1,
+    const user = await getRandomData.getRandomData<UserType>(
+      "https://dummyjson.com/users",
+      expectedRandomUser.id,
     );
 
-    expect(user).toEqual(expectedUser);
+    expect(user).toStrictEqual(expectedRandomUser);
   });
 
   describe("getProductsArray", () => {
-    test("returns a array of length between 1 and 3", async () => {
-      const products = await getProductsArray();
+    test("returns an array of length between 1 and 3", async () => {
+      const products = await getProductsArray.getProductsArray();
 
       expect(products.length).toBeGreaterThan(0);
       expect(products.length).toBeLessThanOrEqual(3);
     });
 
-    test("array items to have the expected properties", async () => {
-      const products = await getProductsArray();
-      const randomProduct = products[0];
+    test("array contains random products", async () => {
+      const expectedProductsArray = [allProducts[0], allProducts[1]];
 
-      expect(randomProduct).toHaveProperty("product");
-      expect(randomProduct).toHaveProperty("quantity");
+      vi.spyOn(getRandomInt, "getRandomInt")
+        .mockReturnValueOnce(expectedProductsArray.length)
+        .mockReturnValueOnce(expectedProductsArray[0].id)
+        .mockReturnValueOnce(expectedProductsArray[1].id);
+
+      const randomProducts = await getProductsArray.getProductsArray();
+
+      randomProducts.forEach((item, index) => {
+        expect(item.product).toEqual(expectedProductsArray[index].title);
+      });
     });
 
-    test("array items properties to be of the expected type", async () => {
-      const products = await getProductsArray();
-      const randomProduct = products[0];
+    test("array does not contain duplicate products", async () => {
+      // Provided mock array contains the same element twice
+      const expectedProductsArray = [
+        allProducts[0],
+        allProducts[1],
+        allProducts[1],
+      ];
 
-      expect(randomProduct.product).toBeTypeOf("string");
-      expect(randomProduct.quantity).toBeTypeOf("number");
+      vi.spyOn(getRandomInt, "getRandomInt")
+        .mockReturnValueOnce(expectedProductsArray.length)
+        .mockReturnValueOnce(expectedProductsArray[0].id)
+        .mockReturnValueOnce(expectedProductsArray[1].id)
+        .mockReturnValueOnce(expectedProductsArray[2].id);
+
+      const productsArray = await getProductsArray.getProductsArray();
+      const products = productsArray.map((product) => product.product);
+      const uniqueProducts = new Set(products);
+
+      // The final array only contains unique products
+      expect(uniqueProducts.size).toBe(productsArray.length);
     });
-  });
-
-  test("array does not contain duplicate products", async () => {
-    const productsArray = await getProductsArray();
-    const products = productsArray.map((product) => product.product);
-    const uniqueProducts = new Set(products);
-
-    expect(uniqueProducts.size).toBe(productsArray.length);
   });
 });

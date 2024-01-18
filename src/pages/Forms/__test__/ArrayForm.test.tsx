@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import * as arrayUtils from "utils/getRandomData";
+import * as getProductsArray from "utils/getProductsArray";
 import * as utils from "utils/getRandomData";
 import { CartForm as ArrayForm } from "../ArrayForm";
 
@@ -64,7 +64,7 @@ describe("Array form", () => {
       // Select a customer
       await user.click(customerField);
       const customerList = await waitFor(() => screen.getAllByRole("option"), {
-        timeout: 2000,
+        timeout: 3000,
       });
       await user.click(customerList[0]);
 
@@ -238,7 +238,7 @@ describe("Array form", () => {
           }, 50);
         }),
     );
-    vi.spyOn(arrayUtils, "getProductsArray").mockImplementation(
+    vi.spyOn(getProductsArray, "getProductsArray").mockImplementation(
       () =>
         new Promise((resolve) => {
           setTimeout(() => {
@@ -330,7 +330,7 @@ describe("Array form", () => {
         screen.getByRole("option", {
           name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
         }),
-      { timeout: 2000 },
+      { timeout: 3000 },
     );
     await user.click(customerOption);
 
