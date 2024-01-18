@@ -106,7 +106,7 @@ export const Axios = () => {
       <Stack direction="row" mt={1} gap={1}>
         <Button
           // Provide wrong URL to produce an error
-          onClick={() => getProduct("https://dummyjson.com/not-found")}
+          onClick={() => getProduct("https://dummyjson.com/NOT_FOUND")}
           variant="outlined"
           size="small"
           color="error"
@@ -116,7 +116,7 @@ export const Axios = () => {
         <Button
           // Provide wrong URL to produce an error
           onClick={() =>
-            addProduct("https://dummyjson.com/products/add/not-found")
+            addProduct("https://dummyjson.com/products/add/NOT_FOUND")
           }
           variant="outlined"
           size="small"

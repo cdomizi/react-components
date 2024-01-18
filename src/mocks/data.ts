@@ -1,11 +1,8 @@
-export const getProductResponseData = {
-  method: "GET",
-  data: {
-    id: 1,
-    title: "iPhone 9",
-    price: 549,
-    brand: "Apple",
-  },
+export const createProduct = {
+  id: 101,
+  title: "Ethernet Cable",
+  price: 12,
+  brand: "genTech",
 };
 
 export const allUsers = [

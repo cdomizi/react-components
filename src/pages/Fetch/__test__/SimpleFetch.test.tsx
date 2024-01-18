@@ -1,7 +1,7 @@
 import { SimpleFetch } from "@Fetch/SimpleFetch";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { getResponseData } from "mocks/data";
+import { allProducts, createProduct } from "mocks/data";
 
 describe("SimpleFetch", () => {
   test("component renders correctly", () => {
@@ -28,7 +28,12 @@ describe("SimpleFetch", () => {
     expect(addProductErrorButton).toBeInTheDocument();
   });
 
-  test("get product", async () => {
+  test.only("get product", async () => {
+    const productId = 1;
+    const expectedProduct = allProducts.find(
+      (product) => product.id === productId,
+    );
+
     const user = userEvent.setup();
 
     const fetchSpy = vi.spyOn(globalThis, "fetch");
@@ -51,11 +56,38 @@ describe("SimpleFetch", () => {
 
     // Response data fetched correctly
     expect(fetchSpy).toHaveBeenCalledOnce();
-    expect(fetchSpy).toHaveBeenCalledWith("https://dummyjson.com/product/1");
-    expect(await responseData.json()).toStrictEqual(getResponseData);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      `https://dummyjson.com/product/${productId}`,
+    );
+
+    expect(await responseData.json()).toStrictEqual(expectedProduct);
   });
 
-  test.todo("add product");
+  test("add product", async () => {
+    const user = userEvent.setup();
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+    render(<SimpleFetch />);
+
+    const addProductButton = screen.getByRole("button", {
+      name: /^add product$/i,
+    });
+
+    // Get product data
+    await user.click(addProductButton);
+
+    const loadingText = screen.getByText(/loading/i);
+
+    // Loading text being displayed
+    expect(loadingText).toBeInTheDocument();
+
+    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+
+    // Response data fetched correctly
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    expect(await responseData.json()).toStrictEqual(createProduct);
+  });
 
   test.todo("get product error");
 
