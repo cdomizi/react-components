@@ -28,7 +28,7 @@ describe("SimpleFetch", () => {
     expect(addProductErrorButton).toBeInTheDocument();
   });
 
-  test.only("get product", async () => {
+  test("get product", async () => {
     const productId = 1;
     const expectedProduct = allProducts.find(
       (product) => product.id === productId,
@@ -89,7 +89,59 @@ describe("SimpleFetch", () => {
     expect(await responseData.json()).toStrictEqual(createProduct);
   });
 
-  test.todo("get product error");
+  test("get product error", async () => {
+    const user = userEvent.setup();
 
-  test.todo("add product error");
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+    render(<SimpleFetch />);
+
+    const getErrorButton = screen.getByRole("button", {
+      name: /^get product error$/i,
+    });
+
+    // Trigger error while getting product data
+    await user.click(getErrorButton);
+
+    const loadingText = screen.getByText(/loading/i);
+
+    // Loading text being displayed
+    expect(loadingText).toBeInTheDocument();
+
+    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+
+    // Get 404 response
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    expect(responseData.ok).toBe(false);
+    expect(responseData.status).toBe(404);
+    expect(responseData.statusText).toMatch(/not found/i);
+  });
+
+  test("add product error", async () => {
+    const user = userEvent.setup();
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+    render(<SimpleFetch />);
+
+    const addErrorButton = screen.getByRole("button", {
+      name: /^add product error$/i,
+    });
+
+    // Trigger error while getting product data
+    await user.click(addErrorButton);
+
+    const loadingText = screen.getByText(/loading/i);
+
+    // Loading text being displayed
+    expect(loadingText).toBeInTheDocument();
+
+    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+
+    // Get 404 response
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    expect(responseData.ok).toBe(false);
+    expect(responseData.status).toBe(404);
+    expect(responseData.statusText).toMatch(/not found/i);
+  });
 });

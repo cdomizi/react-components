@@ -2,9 +2,12 @@ import { http, HttpResponse } from "msw";
 import { allPosts, allProducts, allUsers, createProduct } from "./data";
 
 export const handlers = [
+  /* === PRODUCTS === */
+  // GET all products
   http.get("https://dummyjson.com/products", () =>
     HttpResponse.json(allProducts),
   ),
+  // GET product by Id
   http.get("https://dummyjson.com/product/:id", ({ params }) => {
     const { id } = params;
 
@@ -12,7 +15,14 @@ export const handlers = [
 
     return HttpResponse.json(product);
   }),
+  // POST new product
+  http.post("https://dummyjson.com/products/add", () =>
+    HttpResponse.json(createProduct),
+  ),
+  /* === USERS === */
+  // GET all users
   http.get("https://dummyjson.com/users", () => HttpResponse.json(allUsers)),
+  // GET user by Id
   http.get("https://dummyjson.com/user/:id", ({ params }) => {
     const { id } = params;
 
@@ -20,8 +30,16 @@ export const handlers = [
 
     return HttpResponse.json(user);
   }),
+  /* === POSTS === */
+  // GET all posts
   http.get("https://dummyjson.com/posts", () => HttpResponse.json(allPosts)),
-  http.post("https://dummyjson.com/products/add", () =>
-    HttpResponse.json(createProduct),
+  /* ERRORS */
+  // GET error
+  http.get("https://dummyjson.com/NOT_FOUND", () =>
+    HttpResponse.json({ error: "Not found" }, { status: 404 }),
+  ),
+  // POST error
+  http.post("https://dummyjson.com/products/add/NOT_FOUND", () =>
+    HttpResponse.json({ error: "Not found" }, { status: 404 }),
   ),
 ];

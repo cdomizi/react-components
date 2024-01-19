@@ -27,7 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.3",
-    "react-router-dom": "^6.21.2",
+    "react-router-dom": "^6.21.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -54,7 +54,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-vitest": "^0.3.20",
-    "happy-dom": "^13.1.4",
+    "happy-dom": "^13.2.0",
     "msw": "^2.1.2",
     "prettier": "3.2.4",
     "typescript": "^5.3.3",
