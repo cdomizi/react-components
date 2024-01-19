@@ -1,4 +1,4 @@
-export const createProduct = {
+export const newProduct = {
   id: 101,
   title: "Ethernet Cable",
   price: 12,

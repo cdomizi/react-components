@@ -1,6 +1,25 @@
 import { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
 import { axiosErrorHandler } from "../axiosErrorHandler";
 
+export const notFoundErrorResponse: AxiosResponse = {
+  data: "not found!",
+  status: 404,
+  statusText: "",
+  config: {
+    headers: new AxiosHeaders(),
+  },
+  headers: {},
+};
+
+export const notFoundError: AxiosError = {
+  isAxiosError: true,
+  config: { headers: new AxiosHeaders() },
+  toJSON: () => ({}),
+  name: "",
+  message: "404: Product with id '101' not found",
+  response: notFoundErrorResponse,
+};
+
 describe("axiosErrorHandler", () => {
   test("returns generic error message", () => {
     const genericErrorResponse: AxiosResponse = {
@@ -27,24 +46,7 @@ describe("axiosErrorHandler", () => {
   });
 
   test("returns expected error message", () => {
-    const specificErrorResponse: AxiosResponse = {
-      data: {},
-      status: 404,
-      statusText: "Not Found",
-      config: {
-        headers: new AxiosHeaders(),
-      },
-      headers: {},
-    };
-    const specificError: AxiosError = {
-      isAxiosError: true,
-      config: { headers: new AxiosHeaders() },
-      toJSON: () => ({}),
-      name: "",
-      message: "404: Product with id '101' not found",
-      response: specificErrorResponse,
-    };
-    const errorMessage = axiosErrorHandler(specificError) ?? null;
+    const errorMessage = axiosErrorHandler(notFoundError) ?? null;
     const expectedErrorMessage = "404: Product with id '101' not found";
 
     expect(errorMessage).toMatch(expectedErrorMessage);

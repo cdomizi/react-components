@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { allPosts, allProducts, allUsers, createProduct } from "./data";
+import { allPosts, allProducts, allUsers, newProduct } from "./data";
 
 export const handlers = [
   /* === PRODUCTS === */
@@ -17,7 +17,7 @@ export const handlers = [
   }),
   // POST new product
   http.post("https://dummyjson.com/products/add", () =>
-    HttpResponse.json(createProduct),
+    HttpResponse.json(newProduct),
   ),
   /* === USERS === */
   // GET all users

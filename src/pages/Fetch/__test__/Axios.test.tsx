@@ -1,13 +1,15 @@
-import { SimpleFetch } from "@Fetch/SimpleFetch";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axios, { AxiosResponse } from "axios";
 import { allProducts, newProduct } from "mocks/data";
+import { notFoundError } from "utils/__test__/axiosErrorHandler.test";
+import { Axios } from "../Axios";
 
-describe("SimpleFetch", () => {
+describe("Axios", () => {
   test("component renders correctly", () => {
-    render(<SimpleFetch />);
+    render(<Axios />);
 
-    const heading = screen.getByText(/simple fetch/i);
+    const heading = screen.getByText(/axios/i);
     const getProductButton = screen.getByRole("button", {
       name: /^get product$/i,
     });
@@ -36,9 +38,11 @@ describe("SimpleFetch", () => {
 
     const user = userEvent.setup();
 
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const axiosGetSpy = vi
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ data: expectedProduct });
 
-    render(<SimpleFetch />);
+    render(<Axios />);
 
     const getProductButton = screen.getByRole("button", {
       name: /^get product$/i,
@@ -52,22 +56,25 @@ describe("SimpleFetch", () => {
     // Loading text being displayed
     expect(loadingText).toBeInTheDocument();
 
-    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+    const responseData = (await axiosGetSpy.mock.results[0]
+      .value) as AxiosResponse;
 
     // Response data fetched correctly
-    expect(fetchSpy).toHaveBeenCalledOnce();
-    expect(fetchSpy).toHaveBeenCalledWith(
+    expect(axiosGetSpy).toHaveBeenCalledOnce();
+    expect(axiosGetSpy).toHaveBeenCalledWith(
       `https://dummyjson.com/product/${productId}`,
     );
-    expect(await responseData.json()).toStrictEqual(expectedProduct);
+    expect(await responseData.data).toStrictEqual(expectedProduct);
   });
 
   test("add product", async () => {
     const user = userEvent.setup();
 
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const axiosPostSpy = vi
+      .spyOn(axios, "post")
+      .mockResolvedValueOnce({ data: newProduct });
 
-    render(<SimpleFetch />);
+    render(<Axios />);
 
     const addProductButton = screen.getByRole("button", {
       name: /^add product$/i,
@@ -81,19 +88,22 @@ describe("SimpleFetch", () => {
     // Loading text being displayed
     expect(loadingText).toBeInTheDocument();
 
-    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+    const responseData = (await axiosPostSpy.mock.results[0]
+      .value) as AxiosResponse;
 
     // New product created correctly
-    expect(fetchSpy).toHaveBeenCalledOnce();
-    expect(await responseData.json()).toStrictEqual(newProduct);
+    expect(axiosPostSpy).toHaveBeenCalledOnce();
+    expect(await responseData.data).toStrictEqual(newProduct);
   });
 
   test("get product error", async () => {
     const user = userEvent.setup();
 
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const axiosGetSpy = vi
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce(notFoundError);
 
-    render(<SimpleFetch />);
+    render(<Axios />);
 
     const getErrorButton = screen.getByRole("button", {
       name: /^get product error$/i,
@@ -107,21 +117,22 @@ describe("SimpleFetch", () => {
     // Loading text being displayed
     expect(loadingText).toBeInTheDocument();
 
-    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+    const responseData = (await axiosGetSpy.mock.results[0]
+      .value) as AxiosResponse;
 
     // Get 404 response
-    expect(fetchSpy).toHaveBeenCalledOnce();
-    expect(responseData.ok).toBe(false);
-    expect(responseData.status).toBe(404);
-    expect(responseData.statusText).toMatch(/not found/i);
+    expect(axiosGetSpy).toHaveBeenCalledOnce();
+    expect(responseData).toStrictEqual(notFoundError);
   });
 
   test("add product error", async () => {
     const user = userEvent.setup();
 
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const axiosPostSpy = vi
+      .spyOn(axios, "post")
+      .mockResolvedValueOnce(notFoundError);
 
-    render(<SimpleFetch />);
+    render(<Axios />);
 
     const addErrorButton = screen.getByRole("button", {
       name: /^add product error$/i,
@@ -135,12 +146,11 @@ describe("SimpleFetch", () => {
     // Loading text being displayed
     expect(loadingText).toBeInTheDocument();
 
-    const responseData = (await fetchSpy.mock.results[0].value) as Response;
+    const responseData = (await axiosPostSpy.mock.results[0]
+      .value) as AxiosResponse;
 
     // Get 404 response
-    expect(fetchSpy).toHaveBeenCalledOnce();
-    expect(responseData.ok).toBe(false);
-    expect(responseData.status).toBe(404);
-    expect(responseData.statusText).toMatch(/not found/i);
+    expect(axiosPostSpy).toHaveBeenCalledOnce();
+    expect(responseData).toStrictEqual(notFoundError);
   });
 });
