@@ -1,6 +1,6 @@
 import { ColorModeContext } from "contexts/ColorModeContext";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { ReactElement, useLayoutEffect, useMemo, useState } from "react";
+import { ReactNode, useLayoutEffect, useMemo, useState } from "react";
 
 // MUI components
 import {
@@ -11,11 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-export const ThemeCustomization = ({
-  children,
-}: {
-  children: ReactElement;
-}) => {
+export const ThemeCustomization = ({ children }: { children: ReactNode }) => {
   const { currentValue: initialState, setValue: setColorMode } =
     useLocalStorage<PaletteMode>("colorMode");
 

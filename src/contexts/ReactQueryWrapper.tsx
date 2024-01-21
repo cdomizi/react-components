@@ -1,10 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ReactElement } from "react";
 
 const queryClient = new QueryClient();
 
-export const ReactQueryWrapper = ({ children }: { children: ReactElement }) => {
+export const ReactQueryWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
