@@ -40,7 +40,7 @@ export const UncontrolledRHF = () => {
     setLoading(true);
 
     const { username, email } = await getRandomData<UserType>(
-      "https://dummyjson.com/users/",
+      "https://dummyjson.com/users",
     );
     reset({ username, email });
 

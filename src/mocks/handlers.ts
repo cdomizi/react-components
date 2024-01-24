@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { allPosts, allProducts, allUsers, newProduct } from "./data";
+import { allPosts, allProducts, allUsers, newPost, newProduct } from "./data";
 
 export const handlers = [
   /* === PRODUCTS === */
@@ -8,7 +8,7 @@ export const handlers = [
     HttpResponse.json(allProducts),
   ),
   // GET product by Id
-  http.get("https://dummyjson.com/product/:id", ({ params }) => {
+  http.get("https://dummyjson.com/products/:id", ({ params }) => {
     const { id } = params;
 
     const product = allProducts.find((product) => id === product.id.toString());
@@ -21,9 +21,11 @@ export const handlers = [
   ),
   /* === USERS === */
   // GET all users
-  http.get("https://dummyjson.com/users", () => HttpResponse.json(allUsers)),
+  http.get("https://dummyjson.com/users", () =>
+    HttpResponse.json({ users: allUsers }),
+  ),
   // GET user by Id
-  http.get("https://dummyjson.com/user/:id", ({ params }) => {
+  http.get("https://dummyjson.com/users/:id", ({ params }) => {
     const { id } = params;
 
     const user = allUsers.find((user) => id === user.id.toString());
@@ -33,8 +35,34 @@ export const handlers = [
   /* === POSTS === */
   // GET all posts
   http.get("https://dummyjson.com/posts", () => HttpResponse.json(allPosts)),
+  http.get("http://localhost:4000/posts", () => HttpResponse.json(allPosts)),
   // GET post by Id
   http.get("https://dummyjson.com/posts/:id", ({ params }) => {
+    const { id } = params;
+
+    const post = allPosts.find((post) => id === post.id.toString());
+
+    return HttpResponse.json(post);
+  }),
+  http.get("http://localhost:4000/posts/:id", ({ params }) => {
+    const { id } = params;
+
+    const post = allPosts.find((post) => id === post.id.toString());
+
+    return HttpResponse.json(post);
+  }),
+  // POST new post
+  http.post("http://localhost:4000/posts", () => HttpResponse.json(newPost)),
+  // PUT post by Id
+  http.put("http://localhost:4000/posts/:id", ({ params }) => {
+    const { id } = params;
+
+    const post = allPosts.find((post) => id === post.id.toString());
+
+    return HttpResponse.json(post);
+  }),
+  // DELETE post by Id
+  http.delete("http://localhost:4000/posts/:id", ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());

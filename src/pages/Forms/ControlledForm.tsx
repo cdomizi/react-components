@@ -70,7 +70,7 @@ export const ControlledForm = () => {
     });
     try {
       const randomUser = await getRandomData<UserType>(
-        "https://dummyjson.com/users/",
+        "https://dummyjson.com/users",
       );
       setUserData({
         ...userData,

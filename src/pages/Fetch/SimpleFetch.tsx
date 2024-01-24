@@ -27,7 +27,7 @@ export const SimpleFetch = () => {
       setError(null);
 
       try {
-        const response = await fetch(url || "https://dummyjson.com/product/1");
+        const response = await fetch(url || "https://dummyjson.com/products/1");
         // Artificially delay response to show loading state
         const delayedResponse = await delayRequest(response);
         const { id, title, price, brand } =

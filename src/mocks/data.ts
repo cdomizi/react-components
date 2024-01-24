@@ -5,6 +5,12 @@ export const newProduct = {
   brand: "genTech",
 };
 
+export const newPost = {
+  id: "31",
+  title: "Lorem ipsum dolor sit amet",
+  body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit justo vel tincidunt scelerisque. Morbi turpis purus, fermentum.",
+};
+
 export const allUsers = [
   {
     id: 1,

@@ -145,9 +145,7 @@ export const CartForm = () => {
     const products = await getProductsArray();
 
     // Get a random customer
-    const { id } = await getRandomData<UserType>(
-      "https://dummyjson.com/users/",
-    );
+    const { id } = await getRandomData<UserType>("https://dummyjson.com/users");
     const customer = customers?.find(
       (customer: CustomerType) => customer.id === id,
     );

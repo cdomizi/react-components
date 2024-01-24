@@ -57,7 +57,7 @@ describe("SimpleFetch", () => {
     // Response data fetched correctly
     expect(fetchSpy).toHaveBeenCalledOnce();
     expect(fetchSpy).toHaveBeenCalledWith(
-      `https://dummyjson.com/product/${productId}`,
+      `https://dummyjson.com/products/${productId}`,
     );
     expect(await responseData.json()).toStrictEqual(expectedProduct);
   });

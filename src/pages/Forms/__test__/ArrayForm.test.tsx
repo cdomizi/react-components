@@ -25,137 +25,125 @@ describe("Array form", () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test(
-    "required field validation",
-    async () => {
-      const user = userEvent.setup();
+  test("required field validation", async () => {
+    const user = userEvent.setup();
 
-      render(<ArrayForm />);
+    render(<ArrayForm />);
 
-      const customerField = screen.getByRole("combobox");
-      const customerFieldLabel = customerField.parentElement;
-      const addProductButton = screen.getByRole("button", {
-        name: /add product/i,
-      });
-      const submitButton = screen.getByRole("button", { name: /submit/i });
+    const customerField = screen.getByRole("combobox");
+    const customerFieldLabel = customerField.parentElement;
+    const addProductButton = screen.getByRole("button", {
+      name: /add product/i,
+    });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
 
-      // No error displayed in the UI
-      expect(customerFieldLabel).not.toHaveClass("Mui-error");
+    // No error displayed in the UI
+    expect(customerFieldLabel).not.toHaveClass("Mui-error");
+    expect(() =>
+      screen.getByText(/please add at least one product/i),
+    ).toThrow();
+
+    // Submit the form with empty required field
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      // Error displayed in the UI
+      expect(customerFieldLabel).toHaveClass("Mui-error");
+      expect(customerField).toHaveFocus();
+
+      const productErrorHelperText = screen.getByText(
+        /please add at least one product/i,
+      );
+
+      // Product error helper text displayed
+      expect(productErrorHelperText).toBeInTheDocument();
+    });
+
+    // Select a customer
+    await user.click(customerField);
+    const customerList = await waitFor(() => screen.getAllByRole("option"), {});
+    await user.click(customerList[0]);
+
+    // Customer field error disappeared
+    await waitFor(() => expect(customerField).not.toHaveValue(""));
+    expect(customerFieldLabel).not.toHaveClass("Mui-error");
+
+    // Add a product
+    await user.click(addProductButton);
+
+    await waitFor(() => {
+      // Product error helper text disappeared
       expect(() =>
         screen.getByText(/please add at least one product/i),
       ).toThrow();
+    });
 
-      // Submit the form with empty required field
-      await user.click(submitButton);
+    // Product field renders correctly
+    const productTitleField = screen.getByRole("textbox", {
+      name: /product/i,
+    });
+    const productTitleFieldLabel = productTitleField.parentElement;
 
-      await waitFor(() => {
-        // Error displayed in the UI
-        expect(customerFieldLabel).toHaveClass("Mui-error");
-        expect(customerField).toHaveFocus();
+    // Error displayed in the product title field
+    expect(productTitleFieldLabel).toHaveClass("Mui-error");
 
-        const productErrorHelperText = screen.getByText(
-          /please add at least one product/i,
-        );
+    // Enter a product title
+    await user.type(productTitleField, "screwdriver");
 
-        // Product error helper text displayed
-        expect(productErrorHelperText).toBeInTheDocument();
-      });
+    // Product title field error disappeared
+    expect(productTitleFieldLabel).not.toHaveClass("Mui-error");
+  });
 
-      // Select a customer
-      await user.click(customerField);
-      const customerList = await waitFor(() => screen.getAllByRole("option"), {
-        timeout: 3000,
-      });
-      await user.click(customerList[0]);
+  test("select and deselect customer", async () => {
+    const user = userEvent.setup();
 
-      // Customer field error disappeared
-      await waitFor(() => expect(customerField).not.toHaveValue(""));
-      expect(customerFieldLabel).not.toHaveClass("Mui-error");
+    render(<ArrayForm />);
 
-      // Add a product
-      await user.click(addProductButton);
+    const customerField = screen.getByRole("combobox");
 
-      await waitFor(() => {
-        // Product error helper text disappeared
-        expect(() =>
-          screen.getByText(/please add at least one product/i),
-        ).toThrow();
-      });
+    // Field is empty by default
+    expect(customerField).toHaveValue("");
 
-      // Product field renders correctly
-      const productTitleField = screen.getByRole("textbox", {
-        name: /product/i,
-      });
-      const productTitleFieldLabel = productTitleField.parentElement;
+    // Open the dropdown
+    await user.click(customerField);
 
-      // Error displayed in the product title field
-      expect(productTitleFieldLabel).toHaveClass("Mui-error");
+    const customersList = await waitFor(() => screen.getAllByRole("option"));
+    const firstCustomer = customersList[0];
 
-      // Enter a product title
-      await user.type(productTitleField, "screwdriver");
+    // Customers' list is not empty
+    expect(customersList.length).toBeGreaterThan(0);
 
-      // Product title field error disappeared
-      expect(productTitleFieldLabel).not.toHaveClass("Mui-error");
-    },
-    { timeout: 5000 },
-  );
+    // Select the first customer
+    await user.click(firstCustomer);
 
-  test(
-    "select and deselect customer",
-    async () => {
-      const user = userEvent.setup();
+    expect(customerField).toHaveValue(firstCustomer.textContent);
 
-      render(<ArrayForm />);
+    const clearButton = screen.getByRole("button", { name: /clear/i });
 
-      const customerField = screen.getByRole("combobox");
+    // Clear the selection
+    await user.click(clearButton);
 
-      // Field is empty by default
-      expect(customerField).toHaveValue("");
+    // The field is now empty again
+    expect(customerField).toHaveValue("");
 
-      // Open the dropdown
-      await user.click(customerField);
+    // Enter a customer name
+    await user.type(customerField, "terry");
 
-      const customersList = await waitFor(() => screen.getAllByRole("option"));
-      const firstCustomer = customersList[0];
+    // Get displayed options
+    const matchingCustomers = screen.getAllByRole("option");
 
-      // Customers' list is not empty
-      expect(customersList.length).toBeGreaterThan(0);
+    // All displayed options match the entered text
+    matchingCustomers.forEach((customer) => expect(customer).toMatch(/terry/i));
 
-      // Select the first customer
-      await user.click(firstCustomer);
+    // Enter an unexisting customer name
+    await user.type(customerField, "###");
 
-      expect(customerField).toHaveValue(firstCustomer.textContent);
-
-      const clearButton = screen.getByRole("button", { name: /clear/i });
-
-      // Clear the selection
-      await user.click(clearButton);
-
-      // The field is now empty again
-      expect(customerField).toHaveValue("");
-
-      // Enter a customer name
-      await user.type(customerField, "terry");
-
-      // Get displayed options
-      const matchingCustomers = screen.getAllByRole("option");
-
-      // All displayed options match the entered text
-      matchingCustomers.forEach((customer) =>
-        expect(customer).toMatch(/terry/i),
-      );
-
-      // Enter an unexisting customer name
-      await user.type(customerField, "###");
-
-      // No options are displayed
-      expect(() => screen.getAllByRole("option")).toThrow();
-      expect(screen.getAllByRole("presentation")[0]).toHaveTextContent(
-        /no customers/i,
-      );
-    },
-    { timeout: 5000 },
-  );
+    // No options are displayed
+    expect(() => screen.getAllByRole("option")).toThrow();
+    expect(screen.getAllByRole("presentation")[0]).toHaveTextContent(
+      /no customers/i,
+    );
+  });
 
   test("add and remove product", async () => {
     const user = userEvent.setup();
@@ -325,12 +313,10 @@ describe("Array form", () => {
 
     // Select a customer
     await user.click(customerField);
-    const customerOption = await waitFor(
-      () =>
-        screen.getByRole("option", {
-          name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
-        }),
-      { timeout: 3000 },
+    const customerOption = await waitFor(() =>
+      screen.getByRole("option", {
+        name: `#${ENTERED_VALUES.customer.id} ${ENTERED_VALUES.customer.firstName} ${ENTERED_VALUES.customer.lastName}`,
+      }),
     );
     await user.click(customerOption);
 

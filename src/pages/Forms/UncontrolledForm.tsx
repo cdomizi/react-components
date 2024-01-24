@@ -57,7 +57,7 @@ export const UncontrolledForm = () => {
   const fillWithRandomData = useCallback(async () => {
     setFormErrors({ ...formErrors, username: undefined, email: undefined });
     const randomUser = await getRandomData<UserType>(
-      "https://dummyjson.com/users/",
+      "https://dummyjson.com/users",
     );
     const formElement = Object.values(formRef.current);
     const formInputs = formElement.filter(
