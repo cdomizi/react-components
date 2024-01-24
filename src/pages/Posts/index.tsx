@@ -11,7 +11,7 @@ import { Post } from "./Post";
 import { Box, Button, capitalize, Stack, Typography } from "@mui/material";
 
 export type PostType = {
-  id: number;
+  id: string;
   title: string;
   body: string;
 };
@@ -28,7 +28,8 @@ const Posts = () => {
       return res?.data;
     },
     // Order by descending id (new to old)
-    select: (post) => post.sort((current, next) => next.id - current.id),
+    select: (post) =>
+      post.sort((current, next) => parseInt(next.id) - parseInt(current.id)),
   });
 
   const randomPost = useMemo(async (): Promise<PostType> => {
@@ -44,8 +45,9 @@ const Posts = () => {
       " " +
       body.split(" ").slice(30, 56).join(" ") +
       ".";
+    const id = getPosts.isSuccess ? getPosts.data?.length + 1 : 1;
     const randomPost = {
-      id: getPosts.isSuccess ? getPosts.data?.length + 1 : 1,
+      id: id.toString(),
       title,
       body: formatBody,
     };
@@ -114,7 +116,7 @@ const Posts = () => {
   });
 
   const onEditPost = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       const newPost = await randomPost;
       editPost.mutate({ ...newPost, id });
     },

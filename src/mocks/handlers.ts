@@ -33,6 +33,14 @@ export const handlers = [
   /* === POSTS === */
   // GET all posts
   http.get("https://dummyjson.com/posts", () => HttpResponse.json(allPosts)),
+  // GET post by Id
+  http.get("https://dummyjson.com/posts/:id", ({ params }) => {
+    const { id } = params;
+
+    const post = allPosts.find((post) => id === post.id.toString());
+
+    return HttpResponse.json(post);
+  }),
   /* ERRORS */
   // GET error
   http.get("https://dummyjson.com/NOT_FOUND", () =>
