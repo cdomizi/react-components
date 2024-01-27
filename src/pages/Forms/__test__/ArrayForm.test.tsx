@@ -1,7 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { allUsers } from "mocks/data";
 import * as getProductsArray from "utils/getProductsArray";
-import * as utils from "utils/getRandomData";
+import * as getRandomData from "utils/getRandomData";
 import { CartForm as ArrayForm } from "../ArrayForm";
 
 describe("Array form", () => {
@@ -30,7 +31,7 @@ describe("Array form", () => {
 
     render(<ArrayForm />);
 
-    const customerField = screen.getByRole("combobox");
+    const customerField: HTMLInputElement = screen.getByRole("combobox");
     const customerFieldLabel = customerField.parentElement;
     const addProductButton = screen.getByRole("button", {
       name: /add product/i,
@@ -99,7 +100,7 @@ describe("Array form", () => {
 
     render(<ArrayForm />);
 
-    const customerField = screen.getByRole("combobox");
+    const customerField: HTMLInputElement = screen.getByRole("combobox");
 
     // Field is empty by default
     expect(customerField).toHaveValue("");
@@ -212,17 +213,18 @@ describe("Array form", () => {
 
   test("fill with random data", async () => {
     // Mock random data
+    const randomCustomer = allUsers[0];
     const productsArray = [
       { product: "screwdriver", quantity: 2 },
       { product: "hammer", quantity: 1 },
       { product: "helmet", quantity: 1 },
     ];
 
-    vi.spyOn(utils, "getRandomData").mockImplementation(
+    vi.spyOn(getRandomData, "getRandomData").mockImplementation(
       () =>
         new Promise((resolve) => {
           setTimeout(() => {
-            resolve({ id: 1 });
+            resolve(randomCustomer);
           }, 50);
         }),
     );
@@ -239,7 +241,7 @@ describe("Array form", () => {
 
     render(<ArrayForm />);
 
-    const customerField = screen.getByRole("combobox");
+    const customerField: HTMLInputElement = screen.getByRole("combobox");
     const fillWithRandomDataButton = screen.getByRole("button", {
       name: /fill with random data/i,
     });
@@ -268,7 +270,9 @@ describe("Array form", () => {
       expect(submitButton).not.toHaveClass("Mui-disabled");
 
       // Random customer selected
-      // expect(customerField).toHaveTextContent(/terry/i); // This should work, but throws an error!
+      expect(customerField).toHaveValue(
+        `#${randomCustomer.id} ${randomCustomer.firstName} ${randomCustomer.lastName}`,
+      );
 
       const productsList = screen.getAllByRole("textbox", {
         name: /product/i,
@@ -295,7 +299,7 @@ describe("Array form", () => {
 
     render(<ArrayForm />);
 
-    const customerField = screen.getByRole("combobox");
+    const customerField: HTMLInputElement = screen.getByRole("combobox");
     const addProductButton = screen.getByRole("button", {
       name: /add product/i,
     });

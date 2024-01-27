@@ -32,27 +32,31 @@ const Posts = () => {
       post.sort((current, next) => parseInt(next.id) - parseInt(current.id)),
   });
 
-  const randomPost = useMemo(async (): Promise<PostType> => {
-    const { body } = await getRandomData<PostType>(
-      "https://dummyjson.com/posts",
-    );
-    const title =
-      capitalize(body.split(" ")[19]) +
-      " " +
-      body.split(" ").slice(20, 26).join(" ");
-    const formatBody =
-      capitalize(body.split(" ")[29]) +
-      " " +
-      body.split(" ").slice(30, 56).join(" ") +
-      ".";
-    const id = getPosts.isSuccess ? getPosts.data?.length + 1 : 1;
-    const randomPost = {
-      id: id.toString(),
-      title,
-      body: formatBody,
-    };
-
-    return randomPost;
+  const randomPost = useMemo(async (): Promise<PostType | null> => {
+    try {
+      const { body } = await getRandomData<PostType>(
+        "https://dummyjson.com/posts",
+      );
+      const title =
+        capitalize(body.split(" ")[19]) +
+        " " +
+        body.split(" ").slice(20, 26).join(" ");
+      const formatBody =
+        capitalize(body.split(" ")[29]) +
+        " " +
+        body.split(" ").slice(30, 56).join(" ") +
+        ".";
+      const id = getPosts.isSuccess ? getPosts.data?.length + 1 : 1;
+      const randomPost = {
+        id: id.toString(),
+        title,
+        body: formatBody,
+      };
+      return randomPost;
+    } catch (err) {
+      console.error("Error while getting random post data", err);
+      return null;
+    }
   }, [getPosts.data, getPosts.isSuccess]);
 
   const addPost = useMutation<PostType, AxiosError<PostType>, PostType>({
@@ -91,7 +95,7 @@ const Posts = () => {
 
   const onAddRandomPost = useCallback(async () => {
     const newPost = await randomPost;
-    addPost.mutate(newPost);
+    if (newPost) addPost.mutate(newPost);
   }, [addPost, randomPost]);
 
   const editPost = useMutation<PostType, AxiosError<PostType>, PostType>({
@@ -118,7 +122,7 @@ const Posts = () => {
   const onEditPost = useCallback(
     async (id: string) => {
       const newPost = await randomPost;
-      editPost.mutate({ ...newPost, id });
+      if (newPost) editPost.mutate({ ...newPost, id });
     },
     [editPost, randomPost],
   );

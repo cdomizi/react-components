@@ -76,24 +76,32 @@ export const CartForm = () => {
 
   // Get customers list
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let ignore = false;
+
     const getUsers = async () => {
-      try {
-        const data = await fetch("https://dummyjson.com/users");
-        const json = (await data.json()) as { users: CustomerType[] };
-        const customerNames = json?.users.map((user) => ({
-          id: user?.id,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
-        }));
-        return customerNames;
-      } catch (err) {
-        console.error("Error while getting users data:", err);
-      }
+      const data = await fetch("https://dummyjson.com/users");
+      const json = (await data.json()) as { users: CustomerType[] };
+      const customerNames = json?.users.map((user) => ({
+        id: user?.id,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+      }));
+      return customerNames;
     };
 
-    void getUsers().then((customersData) => {
-      setCustomers(customersData ?? null);
-    });
+    getUsers()
+      .then((customersData) => {
+        setCustomers(customersData ?? null);
+      })
+      .catch((err) => {
+        console.error("Error while getting users data", err);
+      });
+
+    // Cleanup function
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const {

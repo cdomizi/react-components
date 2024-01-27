@@ -5,6 +5,12 @@ export const newProduct = {
   brand: "genTech",
 };
 
+export const randomPost = {
+  id: "31",
+  title: "Lorem ipsum dolor sit amet",
+  body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt ante tortor, consequat gravida enim elementum eu. Donec cursus lacus a ullamcorper laoreet. Aliquam erat volutpat. Ut egestas ac ligula id porttitor. In hac habitasse platea dictumst. Curabitur pellentesque quis justo eget dictum. Aliquam mattis orci luctus sagittis dictum. Nulla venenatis lorem purus, at congue massa rhoncus ut. Mauris ut.",
+};
+
 export const newPost = {
   id: "31",
   title: "Lorem ipsum dolor sit amet",
