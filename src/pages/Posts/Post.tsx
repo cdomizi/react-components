@@ -27,6 +27,7 @@ export const Post = ({
 }) => {
   return (
     <Card
+      component="li"
       raised={true}
       sx={{
         ...(isPending && { opacity: "0.5" }),
@@ -37,14 +38,10 @@ export const Post = ({
       variant={error ? "outlined" : "elevation"}
     >
       <CardHeader
+        component="h5"
         title={post?.title ?? ""}
-        subheader={
-          error ? (
-            <Typography color="error">Error: Could not add post</Typography>
-          ) : (
-            `#${post?.id ?? ""}`
-          )
-        }
+        subheader={error ? "Error: Could not add post" : `#${post?.id ?? ""}`}
+        subheaderTypographyProps={{ ...(error && { color: "error" }) }}
         action={
           error ? (
             <Button
@@ -57,17 +54,28 @@ export const Post = ({
             </Button>
           ) : (
             <Stack>
-              <IconButton size="small" onClick={onEdit}>
+              <IconButton
+                data-testid={`edit-button-${post?.id}`}
+                size="small"
+                onClick={onEdit}
+              >
                 <EditIcon color="primary" />
               </IconButton>
-              <IconButton size="small" onClick={onDelete}>
+              <IconButton
+                data-testid={`delete-button-${post?.id}`}
+                size="small"
+                onClick={onDelete}
+              >
                 <DeleteIcon color="error" />
               </IconButton>
             </Stack>
           )
         }
       />
-      <CardContent sx={{ ...(error && { opacity: "0.5" }) }}>
+      <CardContent
+        data-testid={`post-body-${post?.id}`}
+        sx={{ ...(error && { opacity: "0.5" }) }}
+      >
         <Typography display="block" paragraph>
           {post?.body ?? ""}
         </Typography>

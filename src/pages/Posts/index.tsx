@@ -148,6 +148,7 @@ const Posts = () => {
         Add random post
       </Button>
       <Stack
+        component="ul"
         direction={{ xs: "column", sm: "row" }}
         spacing={5}
         justifyContent="center"
