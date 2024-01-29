@@ -90,13 +90,14 @@ export const CartForm = () => {
       return customerNames;
     };
 
-    getUsers()
-      .then((customersData) => {
-        setCustomers(customersData ?? null);
-      })
-      .catch((err) => {
-        console.error("Error while getting users data", err);
-      });
+    if (!ignore)
+      getUsers()
+        .then((customersData) => {
+          setCustomers(customersData ?? null);
+        })
+        .catch((err) => {
+          console.error("Error while getting users data", err);
+        });
 
     // Cleanup function
     return () => {
