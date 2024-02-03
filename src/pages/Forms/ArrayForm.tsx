@@ -77,7 +77,6 @@ export const CartForm = () => {
 
   // Get customers list
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let ignore = false;
 
     const getUsers = async () => {

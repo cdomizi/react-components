@@ -1,14 +1,17 @@
 import { http, HttpResponse } from "msw";
 import { allPosts, allProducts, allUsers, newPost, newProduct } from "./data";
 
+const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
+const PRODUCTS_MOCK_API_ENDPOINT = "https://dummyjson.com/products";
+const USERS_MOCK_API_ENDPOINT = "https://dummyjson.com/users";
+const POSTS_MOCK_API_ENDPOINT = "https://dummyjson.com/posts";
+
 export const handlers = [
   /* === PRODUCTS === */
   // GET all products
-  http.get("https://dummyjson.com/products", () =>
-    HttpResponse.json(allProducts),
-  ),
+  http.get(PRODUCTS_MOCK_API_ENDPOINT, () => HttpResponse.json(allProducts)),
   // GET product by Id
-  http.get("https://dummyjson.com/products/:id", ({ params }) => {
+  http.get(`${PRODUCTS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const product = allProducts.find((product) => id === product.id.toString());
@@ -16,16 +19,16 @@ export const handlers = [
     return HttpResponse.json(product);
   }),
   // POST new product
-  http.post("https://dummyjson.com/products/add", () =>
+  http.post(`${PRODUCTS_MOCK_API_ENDPOINT}/add`, () =>
     HttpResponse.json(newProduct),
   ),
   /* === USERS === */
   // GET all users
-  http.get("https://dummyjson.com/users", () =>
+  http.get(USERS_MOCK_API_ENDPOINT, () =>
     HttpResponse.json({ users: allUsers }),
   ),
   // GET user by Id
-  http.get("https://dummyjson.com/users/:id", ({ params }) => {
+  http.get(`${USERS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const user = allUsers.find((user) => id === user.id.toString());
@@ -34,17 +37,17 @@ export const handlers = [
   }),
   /* === POSTS === */
   // GET all posts
-  http.get("https://dummyjson.com/posts", () => HttpResponse.json(allPosts)),
-  http.get("http://localhost:4000/posts", () => HttpResponse.json(allPosts)),
+  http.get(`${POSTS_MOCK_API_ENDPOINT}`, () => HttpResponse.json(allPosts)),
+  http.get(API_ENDPOINT, () => HttpResponse.json(allPosts)),
   // GET post by Id
-  http.get("https://dummyjson.com/posts/:id", ({ params }) => {
+  http.get(`${POSTS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
 
     return HttpResponse.json(post);
   }),
-  http.get("http://localhost:4000/posts/:id", ({ params }) => {
+  http.get(`${API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
@@ -52,9 +55,9 @@ export const handlers = [
     return HttpResponse.json(post);
   }),
   // POST new post
-  http.post("http://localhost:4000/posts", () => HttpResponse.json(newPost)),
+  http.post(API_ENDPOINT, () => HttpResponse.json(newPost)),
   // PUT post by Id
-  http.put("http://localhost:4000/posts/:id", ({ params }) => {
+  http.put(`${API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
@@ -62,7 +65,7 @@ export const handlers = [
     return HttpResponse.json(post);
   }),
   // DELETE post by Id
-  http.delete("http://localhost:4000/posts/:id", ({ params }) => {
+  http.delete(`${API_ENDPOINT}/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());

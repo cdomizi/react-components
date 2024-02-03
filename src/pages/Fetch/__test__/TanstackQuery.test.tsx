@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios, { AxiosResponse } from "axios";
 import { allProducts, newProduct } from "mocks/data";
-import { ReactNode } from "react";
 import { notFoundError } from "utils/__test__/axiosErrorHandler.test";
 import { TanstackQuery } from "../TanstackQuery";
 
@@ -15,7 +14,7 @@ const queryClient = new QueryClient({
     },
   },
 });
-const wrapper = ({ children }: { children: ReactNode }) => (
+const wrapper = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
