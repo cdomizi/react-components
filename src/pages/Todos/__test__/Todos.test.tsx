@@ -24,6 +24,7 @@ describe("Todos", () => {
     expect(newTodoField).toHaveValue("");
     // Todos list is empty dy default
     expect(screen.getByText(/your list is empty/i)).toBeInTheDocument();
+    expect(() => screen.getByRole("list")).toThrow();
     expect(() => {
       screen.getByRole("listitem");
     }).toThrow();

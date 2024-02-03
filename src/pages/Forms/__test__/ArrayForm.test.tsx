@@ -17,11 +17,15 @@ describe("Array form", () => {
     const addProductButton = screen.getByRole("button", {
       name: /add product/i,
     });
+    const productsList = screen.getByRole("list");
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
     expect(title).toMatch(/array form/i);
     expect(customerField).toBeInTheDocument();
     expect(fillWithRandomDataButton).toBeInTheDocument();
+    expect(productsList).toBeInTheDocument();
+    // Products list is empty by default
+    expect(() => screen.getByRole("listitem")).toThrow();
     expect(addProductButton).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
   });
@@ -83,11 +87,13 @@ describe("Array form", () => {
     );
 
     // Product field renders correctly
+    const productField = screen.getByRole("listitem");
     const productTitleField = screen.getByRole("textbox", {
       name: /product/i,
     });
     const productTitleFieldLabel = productTitleField.parentElement;
 
+    expect(productField).toBeInTheDocument();
     // Error displayed in the product title field
     expect(productTitleFieldLabel).toHaveClass("Mui-error");
 
@@ -165,6 +171,7 @@ describe("Array form", () => {
     });
 
     // No products being shown
+    expect(() => screen.getByRole("listitem")).toThrow();
     expect(() => screen.getByRole("textbox", { name: /product/i })).toThrow();
     expect(() =>
       screen.getByRole("spinbutton", { name: /quantity/i }),
@@ -174,45 +181,54 @@ describe("Array form", () => {
     // Add product
     await user.click(addProductButton);
 
-    const productField = screen.getByRole("textbox", { name: /product/i });
-    const quantityField = screen.getByRole("spinbutton", { name: /quantity/i });
+    const productField = screen.getByRole("listitem");
+    const productTitleField = screen.getByRole("textbox", { name: /product/i });
+    const productQuantityField = screen.getByRole("spinbutton", {
+      name: /quantity/i,
+    });
     const deleteButton = screen.getByRole("button", { name: /delete/i });
 
     // Product fields displayed correctly with default values
     expect(productField).toBeInTheDocument();
-    expect(productField).toHaveValue("");
-    expect(quantityField).toBeInTheDocument();
-    expect(quantityField).toHaveValue(1);
+    expect(productTitleField).toBeInTheDocument();
+    expect(productTitleField).toHaveValue("");
+    expect(productQuantityField).toBeInTheDocument();
+    expect(productQuantityField).toHaveValue(1);
     expect(deleteButton).toBeInTheDocument();
 
     // Cannot set product quantity below 1
-    await user.click(quantityField);
+    await user.click(productQuantityField);
 
     // Remove product
     await user.click(deleteButton);
 
     // No products being shown
+    expect(() => screen.getByRole("listitem")).toThrow();
     expect(() => screen.getByRole("textbox", { name: /product/i })).toThrow();
     expect(() =>
       screen.getByRole("spinbutton", { name: /quantity/i }),
     ).toThrow();
     expect(() => screen.getByRole("button", { name: /delete/i })).toThrow();
 
-    // Add multiple products
+    // Add two products
     await user.click(addProductButton);
     await user.click(addProductButton);
 
-    const productFields = screen.getAllByRole("textbox", { name: /product/i });
-    const quantityFields = screen.getAllByRole("spinbutton", {
+    const productFields = screen.getAllByRole("listitem");
+    const productTitleFields = screen.getAllByRole("textbox", {
+      name: /product/i,
+    });
+    const productQuantityFields = screen.getAllByRole("spinbutton", {
       name: /quantity/i,
     });
     const deleteButtons = screen.getAllByRole("button", { name: /delete/i });
 
     // Each product is displayed correctly
-    productFields.forEach((productField) => {
+    expect(productFields).toHaveLength(2);
+    productTitleFields.forEach((productField) => {
       expect(productField).toBeInTheDocument();
     });
-    quantityFields.forEach((quantityField) => {
+    productQuantityFields.forEach((quantityField) => {
       expect(quantityField).toBeInTheDocument();
     });
     deleteButtons.forEach((deleteButton) => {
@@ -260,7 +276,7 @@ describe("Array form", () => {
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
     expect(customerField).toHaveValue("");
-    expect(() => screen.getByRole("textbox", { name: /product/i })).toThrow();
+    expect(() => screen.getByRole("listitem")).toThrow();
 
     // Fill the form with random data
     await user.click(fillWithRandomDataButton);
@@ -283,20 +299,21 @@ describe("Array form", () => {
         `#${randomCustomer.id} ${randomCustomer.firstName} ${randomCustomer.lastName}`,
       );
 
-      const productsList = screen.getAllByRole("textbox", {
+      const productFields = screen.getAllByRole("listitem");
+      const productTitles = screen.getAllByRole("textbox", {
         name: /product/i,
       });
-      const quantitiesList = screen.getAllByRole("spinbutton", {
+      const productQuantities = screen.getAllByRole("spinbutton", {
         name: /quantity/i,
       });
 
       // Random products added
-      expect(productsList.length).toBeGreaterThan(0);
+      expect(productFields).toHaveLength(productsArray.length);
 
-      productsList.forEach((product, index) => {
+      productTitles.forEach((product, index) => {
         expect(product).toHaveValue(productsArray[index].product);
       });
-      quantitiesList.forEach((quantity, index) => {
+      productQuantities.forEach((quantity, index) => {
         expect(quantity).toHaveValue(productsArray[index].quantity);
       });
     });

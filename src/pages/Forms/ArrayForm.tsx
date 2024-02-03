@@ -12,6 +12,7 @@ import { getRandomData } from "utils/getRandomData";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import {
   Autocomplete,
+  Box,
   Button,
   CircularProgress,
   IconButton,
@@ -231,75 +232,83 @@ export const CartForm = () => {
           />
         )}
       />
-      {fields.map((item, index) => (
-        <Stack key={item.id} direction="row" spacing={1}>
-          <Controller
-            control={control}
-            name={`products.${index}.product`}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="product"
-                label="Product"
-                InputLabelProps={{ shrink: true }}
-                autoFocus={!!errors.products?.[index]?.product}
-                error={!!errors.products?.[index]?.product}
-                helperText={errors.products?.[index]?.product?.message}
+      <Box id="products-list" component="ul" m={0} p={0}>
+        {fields.map((item, index) => (
+          <Stack
+            component="li"
+            id={`products.${index}`}
+            key={item.id}
+            direction="row"
+            spacing={1}
+          >
+            <Controller
+              control={control}
+              name={`products.${index}.product`}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  id="product"
+                  label="Product"
+                  InputLabelProps={{ shrink: true }}
+                  autoFocus={!!errors.products?.[index]?.product}
+                  error={!!errors.products?.[index]?.product}
+                  helperText={errors.products?.[index]?.product?.message}
+                  disabled={loading || isLoading || isSubmitting}
+                  InputProps={{
+                    endAdornment: (
+                      <>
+                        {(loading || isLoading || isSubmitting) && (
+                          <InputAdornment position="end">
+                            <CircularProgress color="inherit" size={20} />
+                          </InputAdornment>
+                        )}
+                      </>
+                    ),
+                  }}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name={`products.${index}.quantity`}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  id="quantity"
+                  label="Quantity"
+                  InputLabelProps={{ shrink: true }}
+                  type="number"
+                  autoFocus={!!errors.products?.[index]?.quantity}
+                  error={!!errors.products?.[index]?.quantity}
+                  helperText={errors.products?.[index]?.quantity?.message}
+                  disabled={loading || isLoading || isSubmitting}
+                  InputProps={{
+                    inputProps: { min: 1 },
+                    endAdornment: (
+                      <>
+                        {(loading || isLoading || isSubmitting) && (
+                          <InputAdornment position="end">
+                            <CircularProgress color="inherit" size={20} />
+                          </InputAdornment>
+                        )}
+                      </>
+                    ),
+                  }}
+                  sx={{ maxWidth: "5rem" }}
+                />
+              )}
+            />
+            <Tooltip title="Delete">
+              <IconButton
+                onClick={() => remove(index)}
                 disabled={loading || isLoading || isSubmitting}
-                InputProps={{
-                  endAdornment: (
-                    <>
-                      {(loading || isLoading || isSubmitting) && (
-                        <InputAdornment position="end">
-                          <CircularProgress color="inherit" size={20} />
-                        </InputAdornment>
-                      )}
-                    </>
-                  ),
-                }}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name={`products.${index}.quantity`}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="quantity"
-                label="Quantity"
-                InputLabelProps={{ shrink: true }}
-                type="number"
-                autoFocus={!!errors.products?.[index]?.quantity}
-                error={!!errors.products?.[index]?.quantity}
-                helperText={errors.products?.[index]?.quantity?.message}
-                disabled={loading || isLoading || isSubmitting}
-                InputProps={{
-                  inputProps: { min: 1 },
-                  endAdornment: (
-                    <>
-                      {(loading || isLoading || isSubmitting) && (
-                        <InputAdornment position="end">
-                          <CircularProgress color="inherit" size={20} />
-                        </InputAdornment>
-                      )}
-                    </>
-                  ),
-                }}
-                sx={{ maxWidth: "5rem" }}
-              />
-            )}
-          />
-          <Tooltip title="Delete">
-            <IconButton
-              onClick={() => remove(index)}
-              disabled={loading || isLoading || isSubmitting}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Stack>
-      ))}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        ))}
+      </Box>
       <Typography color="error.main">{errors?.products?.message}</Typography>
       <Button
         type="button"
