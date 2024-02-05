@@ -1,6 +1,6 @@
 import { allUsers } from "mocks/data";
 import { UserType } from "types";
-import * as getRandomData from "utils/getRandomData";
+import { getRandomData } from "utils/getRandomData";
 import * as getRandomInt from "utils/getRandomInt";
 
 describe("getRandomInt", () => {
@@ -26,7 +26,7 @@ describe("getRandomData", () => {
   test("returns object with expected properties", async () => {
     vi.spyOn(getRandomInt, "getRandomInt").mockReturnValue(1);
 
-    const randomUser = await getRandomData.getRandomData<UserType>(
+    const randomUser = await getRandomData<UserType>(
       "https://dummyjson.com/users",
     );
 
@@ -34,7 +34,7 @@ describe("getRandomData", () => {
   });
 
   test("returns expected data if provided with second argument", async () => {
-    const user = await getRandomData.getRandomData<UserType>(
+    const user = await getRandomData<UserType>(
       "https://dummyjson.com/users",
       expectedRandomUser.id,
     );

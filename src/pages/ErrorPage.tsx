@@ -4,7 +4,9 @@ import { CustomError } from "types";
 
 const ErrorInfo = () => {
   const error = useRouteError() as CustomError;
-  console.error(error);
+
+  // Only log errors in development mode
+  import.meta.env.DEV && console.error(error);
 
   return (
     <>

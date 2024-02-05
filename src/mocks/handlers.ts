@@ -2,16 +2,16 @@ import { http, HttpResponse } from "msw";
 import { allPosts, allProducts, allUsers, newPost, newProduct } from "./data";
 
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
-const PRODUCTS_MOCK_API_ENDPOINT = "https://dummyjson.com/products";
-const USERS_MOCK_API_ENDPOINT = "https://dummyjson.com/users";
-const POSTS_MOCK_API_ENDPOINT = "https://dummyjson.com/posts";
+const BASE_MOCK_API_URL = "https://dummyjson.com";
 
 export const handlers = [
   /* === PRODUCTS === */
   // GET all products
-  http.get(PRODUCTS_MOCK_API_ENDPOINT, () => HttpResponse.json(allProducts)),
+  http.get(`${BASE_MOCK_API_URL}/products`, () =>
+    HttpResponse.json(allProducts),
+  ),
   // GET product by Id
-  http.get(`${PRODUCTS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
+  http.get(`${BASE_MOCK_API_URL}/product/:id`, ({ params }) => {
     const { id } = params;
 
     const product = allProducts.find((product) => id === product.id.toString());
@@ -19,16 +19,16 @@ export const handlers = [
     return HttpResponse.json(product);
   }),
   // POST new product
-  http.post(`${PRODUCTS_MOCK_API_ENDPOINT}/add`, () =>
+  http.post(`${BASE_MOCK_API_URL}/products/add`, () =>
     HttpResponse.json(newProduct),
   ),
   /* === USERS === */
   // GET all users
-  http.get(USERS_MOCK_API_ENDPOINT, () =>
+  http.get(`${BASE_MOCK_API_URL}/users`, () =>
     HttpResponse.json({ users: allUsers }),
   ),
   // GET user by Id
-  http.get(`${USERS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
+  http.get(`${BASE_MOCK_API_URL}/users/:id`, ({ params }) => {
     const { id } = params;
 
     const user = allUsers.find((user) => id === user.id.toString());
@@ -37,10 +37,10 @@ export const handlers = [
   }),
   /* === POSTS === */
   // GET all posts
-  http.get(`${POSTS_MOCK_API_ENDPOINT}`, () => HttpResponse.json(allPosts)),
+  http.get(`${BASE_MOCK_API_URL}/posts`, () => HttpResponse.json(allPosts)),
   http.get(API_ENDPOINT, () => HttpResponse.json(allPosts)),
   // GET post by Id
-  http.get(`${POSTS_MOCK_API_ENDPOINT}/:id`, ({ params }) => {
+  http.get(`${BASE_MOCK_API_URL}/post/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
@@ -74,11 +74,11 @@ export const handlers = [
   }),
   /* ERRORS */
   // GET error
-  http.get("https://dummyjson.com/NOT_FOUND", () =>
+  http.get(`${BASE_MOCK_API_URL}/NOT_FOUND`, () =>
     HttpResponse.json({ error: "Not found" }, { status: 404 }),
   ),
   // POST error
-  http.post("https://dummyjson.com/products/add/NOT_FOUND", () =>
+  http.post(`${BASE_MOCK_API_URL}/products/add/NOT_FOUND`, () =>
     HttpResponse.json({ error: "Not found" }, { status: 404 }),
   ),
 ];

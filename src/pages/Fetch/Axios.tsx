@@ -63,7 +63,7 @@ export const Axios = () => {
 
       try {
         const response: AxiosResponse<Product> = await axios.post(
-          url || "https://dummyjson.com/product/add",
+          url || "https://dummyjson.com/products/add",
           newProduct,
         );
         // Artificially delay response to show loading state

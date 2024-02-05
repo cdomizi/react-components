@@ -14,7 +14,7 @@ export const getProductsArray = async () => {
   while (i < randomProductsCount) {
     const randomId = getRandomInt();
     const { title } = await getRandomData<ProductType>(
-      "https://dummyjson.com/products",
+      "https://dummyjson.com/product",
       randomId,
     );
     title?.length && products.set(title, randomProductsCount);

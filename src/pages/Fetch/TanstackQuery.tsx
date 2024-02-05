@@ -67,8 +67,8 @@ export const TanstackQuery = () => {
         await axios.post(
           // Provide wrong URL if `error` is set to true, else provide valid URL
           error
-            ? "https://dummyjson.com/product/add/NOT_FOUND"
-            : "https://dummyjson.com/product/add",
+            ? "https://dummyjson.com/products/add/NOT_FOUND"
+            : "https://dummyjson.com/products/add",
           product,
         ),
       ),

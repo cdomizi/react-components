@@ -234,6 +234,8 @@ export const allProducts = [
   {
     id: 1,
     title: "iPhone 9",
+    brand: "Apple",
+    price: 549,
   },
   {
     id: 2,
