@@ -15,7 +15,7 @@ describe("logger", () => {
     render(<Logger value={expectedValue} />);
 
     await waitFor(() => {
-      const value = screen.getByText(formattedText, {
+      const logValue = screen.getByText(formattedText, {
         normalizer: getDefaultNormalizer({
           trim: false,
           collapseWhitespace: false,
@@ -23,7 +23,7 @@ describe("logger", () => {
       });
 
       // eslint-disable-next-line jest-dom/prefer-to-have-text-content
-      expect(value.textContent).toMatch(formattedText);
+      expect(logValue.textContent).toMatch(formattedText);
     });
   });
 });

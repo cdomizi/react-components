@@ -20,12 +20,14 @@ describe("SimpleFetch", () => {
     const addProductErrorButton = screen.getByRole("button", {
       name: /^add product error$/i,
     });
+    const defaultLogValue = screen.getByText(/null/i);
 
     expect(heading).toBeInTheDocument();
     expect(getProductButton).toBeInTheDocument();
     expect(getProductErrorButton).toBeInTheDocument();
     expect(addProductButton).toBeInTheDocument();
     expect(addProductErrorButton).toBeInTheDocument();
+    expect(defaultLogValue).toBeInTheDocument();
   });
 
   test("get product", async () => {
