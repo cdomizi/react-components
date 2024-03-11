@@ -17,6 +17,7 @@ export type PostType = {
 };
 
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
+const POSTS_URL = `${API_ENDPOINT}posts`;
 
 const Posts = () => {
   const postQueryClient = useQueryClient();
@@ -25,7 +26,7 @@ const Posts = () => {
     queryKey: ["posts"],
     queryFn: async () => {
       const res = await delayAxiosRequest<AxiosResponse<PostType[]>>(
-        await axios.get(API_ENDPOINT),
+        await axios.get(POSTS_URL),
       );
       return res?.data;
     },
@@ -64,7 +65,7 @@ const Posts = () => {
   const addPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) => {
       const res = await delayAxiosRequest<AxiosResponse<PostType>>(
-        await axios.post(API_ENDPOINT, post),
+        await axios.post(POSTS_URL, post),
       );
       return res?.data;
     },
@@ -103,7 +104,7 @@ const Posts = () => {
   const editPost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) => {
       const res = await delayAxiosRequest<AxiosResponse<PostType>>(
-        await axios.put(`${API_ENDPOINT}/${post.id}`, post),
+        await axios.put(`${POSTS_URL}/${post.id}`, post),
       );
       return res?.data;
     },
@@ -132,7 +133,7 @@ const Posts = () => {
   const deletePost = useMutation<PostType, AxiosError<PostType>, PostType>({
     mutationFn: async (post) => {
       const res = await delayAxiosRequest<AxiosResponse<PostType>>(
-        await axios.delete(`${API_ENDPOINT}/${post.id}`),
+        await axios.delete(`${POSTS_URL}/${post.id}`),
       );
       return res?.data;
     },
