@@ -29,12 +29,11 @@ describe("Uncontrolled Form", () => {
     const usernameField = screen.getByRole("textbox", { name: /username/i });
     const usernameFieldLabel = usernameField.parentElement;
     const submitButton = screen.getByRole("button", { name: /submit/i });
+    const errorHelperTextContent = /username is required/i;
 
     // No error displayed in the UI
     expect(usernameFieldLabel).not.toHaveClass("Mui-error");
-    expect(() =>
-      screen.getByText(/username must be at least 3 characters long/i),
-    ).toThrow();
+    expect(() => screen.getByText(errorHelperTextContent)).toThrow();
 
     // Submit the form with empty required field
     await user.click(submitButton);
@@ -43,9 +42,7 @@ describe("Uncontrolled Form", () => {
     expect(usernameFieldLabel).toHaveClass("Mui-error");
     expect(usernameField).toHaveFocus();
 
-    const errorHelperText = screen.getByText(
-      /username must be at least 3 characters long/i,
-    );
+    const errorHelperText = screen.getByText(errorHelperTextContent);
 
     // Error helper text displayed
     expect(errorHelperText).toBeInTheDocument();

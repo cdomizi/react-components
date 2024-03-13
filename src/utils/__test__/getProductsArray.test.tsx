@@ -3,7 +3,7 @@ import * as getProductsArray from "utils/getProductsArray";
 import * as getRandomInt from "utils/getRandomInt";
 
 describe("getProductsArray", () => {
-  test.only("returns an array of length between 1 and 3", async () => {
+  test("returns an array of length between 1 and 3", async () => {
     const products = await getProductsArray.getProductsArray();
 
     expect(products.length).toBeGreaterThan(0);
