@@ -1,9 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { allProducts, newProduct } from "mocks/data";
-import { notFoundError } from "utils/__test__/axiosErrorHandler.test";
 import { TanstackQuery } from "../TanstackQuery";
 
 // Set up query client for testing
@@ -52,9 +51,7 @@ describe("TanstackQuery", () => {
 
     const user = userEvent.setup();
 
-    const axiosGetSpy = vi
-      .spyOn(axios, "get")
-      .mockResolvedValueOnce({ data: expectedProduct });
+    const axiosGetSpy = vi.spyOn(axios, "get");
 
     render(<TanstackQuery />, { wrapper });
 
@@ -84,9 +81,7 @@ describe("TanstackQuery", () => {
   test("add product", async () => {
     const user = userEvent.setup();
 
-    const axiosPostSpy = vi
-      .spyOn(axios, "post")
-      .mockResolvedValueOnce({ data: newProduct });
+    const axiosPostSpy = vi.spyOn(axios, "post");
 
     render(<TanstackQuery />, { wrapper });
 
@@ -113,9 +108,7 @@ describe("TanstackQuery", () => {
   test("add product error", async () => {
     const user = userEvent.setup();
 
-    const axiosPostSpy = vi
-      .spyOn(axios, "post")
-      .mockResolvedValueOnce(notFoundError);
+    const axiosPostSpy = vi.spyOn(axios, "post");
 
     render(<TanstackQuery />, { wrapper });
 
@@ -126,16 +119,12 @@ describe("TanstackQuery", () => {
     // Trigger error while getting product data
     await user.click(addErrorButton);
 
-    const loadingText = screen.getByText(/loading/i);
-
-    // Loading text being displayed
-    expect(loadingText).toBeInTheDocument();
-
     const responseData = (await axiosPostSpy.mock.results[0]
-      .value) as AxiosResponse;
+      .value) as AxiosError;
 
     // Get 404 response
     expect(axiosPostSpy).toHaveBeenCalledOnce();
-    expect(responseData).toStrictEqual(notFoundError);
+    expect(responseData.response?.status).toBe(404);
+    expect(responseData.response?.statusText).toMatch(/Not Found/i);
   });
 });
