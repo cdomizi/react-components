@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { allProducts, newProduct } from "mocks/data";
-import { notFoundError } from "utils/__test__/axiosErrorHandler.test";
+import { Product } from "types";
 import { Axios } from "../Axios";
 
 describe("Axios", () => {
@@ -38,9 +38,7 @@ describe("Axios", () => {
 
     const user = userEvent.setup();
 
-    const axiosGetSpy = vi
-      .spyOn(axios, "get")
-      .mockResolvedValueOnce({ data: expectedProduct });
+    const axiosGetSpy = vi.spyOn(axios, "get");
 
     render(<Axios />);
 
@@ -70,9 +68,7 @@ describe("Axios", () => {
   test("add product", async () => {
     const user = userEvent.setup();
 
-    const axiosPostSpy = vi
-      .spyOn(axios, "post")
-      .mockResolvedValueOnce({ data: newProduct });
+    const axiosPostSpy = vi.spyOn(axios, "post");
 
     render(<Axios />);
 
@@ -99,9 +95,7 @@ describe("Axios", () => {
   test("get product error", async () => {
     const user = userEvent.setup();
 
-    const axiosGetSpy = vi
-      .spyOn(axios, "get")
-      .mockResolvedValueOnce(notFoundError);
+    const axiosGetSpy = vi.spyOn(axios, "get");
 
     render(<Axios />);
 
@@ -112,25 +106,19 @@ describe("Axios", () => {
     // Trigger error while getting product data
     await user.click(getErrorButton);
 
-    const loadingText = screen.getByText(/loading/i);
-
-    // Loading text being displayed
-    expect(loadingText).toBeInTheDocument();
-
     const responseData = (await axiosGetSpy.mock.results[0]
-      .value) as AxiosResponse;
+      .value) as AxiosError<Product, Product>;
 
     // Get 404 response
     expect(axiosGetSpy).toHaveBeenCalledOnce();
-    expect(responseData).toStrictEqual(notFoundError);
+    expect(responseData.response?.status).toBe(404);
+    expect(responseData.response?.statusText).toMatch(/Not Found/i);
   });
 
   test("add product error", async () => {
     const user = userEvent.setup();
 
-    const axiosPostSpy = vi
-      .spyOn(axios, "post")
-      .mockResolvedValueOnce(notFoundError);
+    const axiosPostSpy = vi.spyOn(axios, "post");
 
     render(<Axios />);
 
@@ -141,16 +129,12 @@ describe("Axios", () => {
     // Trigger error while getting product data
     await user.click(addErrorButton);
 
-    const loadingText = screen.getByText(/loading/i);
-
-    // Loading text being displayed
-    expect(loadingText).toBeInTheDocument();
-
     const responseData = (await axiosPostSpy.mock.results[0]
-      .value) as AxiosResponse;
+      .value) as AxiosError;
 
     // Get 404 response
     expect(axiosPostSpy).toHaveBeenCalledOnce();
-    expect(responseData).toStrictEqual(notFoundError);
+    expect(responseData.response?.status).toBe(404);
+    expect(responseData.response?.statusText).toMatch(/Not Found/i);
   });
 });

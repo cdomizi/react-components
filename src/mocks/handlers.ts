@@ -75,10 +75,10 @@ export const handlers = [
   /* ERRORS */
   // GET error
   http.get(`${BASE_MOCK_API_URL}/NOT_FOUND`, () =>
-    HttpResponse.json({ error: "Not found" }, { status: 404 }),
+    HttpResponse.json({ error: "Not Found" }, { status: 404 }),
   ),
   // POST error
   http.post(`${BASE_MOCK_API_URL}/products/add/NOT_FOUND`, () =>
-    HttpResponse.json({ error: "Not found" }, { status: 404 }),
+    HttpResponse.json({ error: "Not Found" }, { status: 404 }),
   ),
 ];
