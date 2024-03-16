@@ -5,26 +5,26 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { allProducts, newProduct } from "mocks/data";
 import { TanstackQuery } from "../TanstackQuery";
 
-// Set up query client for testing
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
-
-// Clear query client after each test
-afterEach(() => {
-  queryClient.clear();
-});
+// Render function to set up a new client for each test
+export const renderWithClient = (client: QueryClient, ui: React.ReactNode) => {
+  const { rerender, ...result } = render(
+    <QueryClientProvider client={client}>{ui}</QueryClientProvider>,
+  );
+  return {
+    ...result,
+    rerender: (rerenderUi: React.ReactNode) =>
+      rerender(
+        <QueryClientProvider client={client}>{rerenderUi}</QueryClientProvider>,
+      ),
+  };
+};
 
 describe("TanstackQuery", () => {
   test("component renders correctly", () => {
-    render(<TanstackQuery />, { wrapper });
+    renderWithClient(
+      new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+      <TanstackQuery />,
+    );
 
     const heading = screen.getByText(/tanstack query/i);
     const getProductButton = screen.getByRole("button", {
@@ -53,7 +53,10 @@ describe("TanstackQuery", () => {
 
     const axiosGetSpy = vi.spyOn(axios, "get");
 
-    render(<TanstackQuery />, { wrapper });
+    renderWithClient(
+      new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+      <TanstackQuery />,
+    );
 
     const getProductButton = screen.getByRole("button", {
       name: /^get product$/i,
@@ -83,7 +86,10 @@ describe("TanstackQuery", () => {
 
     const axiosPostSpy = vi.spyOn(axios, "post");
 
-    render(<TanstackQuery />, { wrapper });
+    renderWithClient(
+      new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+      <TanstackQuery />,
+    );
 
     const addProductButton = screen.getByRole("button", {
       name: /^add product$/i,
@@ -110,7 +116,10 @@ describe("TanstackQuery", () => {
 
     const axiosPostSpy = vi.spyOn(axios, "post");
 
-    render(<TanstackQuery />, { wrapper });
+    renderWithClient(
+      new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+      <TanstackQuery />,
+    );
 
     const addErrorButton = screen.getByRole("button", {
       name: /^add product error$/i,

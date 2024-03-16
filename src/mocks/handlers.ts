@@ -1,5 +1,12 @@
 import { http, HttpResponse } from "msw";
-import { allPosts, allProducts, allUsers, newPost, newProduct } from "./data";
+import {
+  allPosts,
+  allProducts,
+  allUsers,
+  newPost,
+  newProduct,
+  randomPost,
+} from "./data";
 
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
 const BASE_MOCK_API_URL = "https://dummyjson.com";
@@ -38,34 +45,25 @@ export const handlers = [
   /* === POSTS === */
   // GET all posts
   http.get(`${BASE_MOCK_API_URL}/posts`, () => HttpResponse.json(allPosts)),
-  http.get(API_ENDPOINT, () => HttpResponse.json(allPosts)),
+  http.get(`${API_ENDPOINT}posts`, () => HttpResponse.json(allPosts)),
   // GET post by Id
-  http.get(`${BASE_MOCK_API_URL}/post/:id`, ({ params }) => {
+  http.get(`${API_ENDPOINT}:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
 
     return HttpResponse.json(post);
   }),
-  http.get(`${API_ENDPOINT}/:id`, ({ params }) => {
-    const { id } = params;
-
-    const post = allPosts.find((post) => id === post.id.toString());
-
-    return HttpResponse.json(post);
-  }),
+  // GET random post by Id
+  http.get(`${BASE_MOCK_API_URL}/posts/:id`, () =>
+    HttpResponse.json(randomPost),
+  ),
   // POST new post
-  http.post(API_ENDPOINT, () => HttpResponse.json(newPost)),
+  http.post(`${API_ENDPOINT}posts`, () => HttpResponse.json(newPost)),
   // PUT post by Id
-  http.put(`${API_ENDPOINT}/:id`, ({ params }) => {
-    const { id } = params;
-
-    const post = allPosts.find((post) => id === post.id.toString());
-
-    return HttpResponse.json(post);
-  }),
+  http.put(`${API_ENDPOINT}posts/:id`, () => HttpResponse.json(randomPost)),
   // DELETE post by Id
-  http.delete(`${API_ENDPOINT}/:id`, ({ params }) => {
+  http.delete(`${API_ENDPOINT}posts/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());
