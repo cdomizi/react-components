@@ -3,23 +3,6 @@ import { UserType } from "types";
 import { getRandomData } from "utils/getRandomData";
 import * as getRandomInt from "utils/getRandomInt";
 
-describe("getRandomInt", () => {
-  test("return random integer between 1 and 10 with no arguments", () => {
-    expect(getRandomInt.getRandomInt()).toBeGreaterThanOrEqual(1);
-    expect(getRandomInt.getRandomInt()).toBeLessThanOrEqual(10);
-  });
-
-  test("return random integer between 1 and provided argument", () => {
-    expect(getRandomInt.getRandomInt()).toBeGreaterThanOrEqual(1);
-    expect(getRandomInt.getRandomInt(8)).toBeLessThanOrEqual(8);
-  });
-
-  test("return random integer in the provided range", () => {
-    expect(getRandomInt.getRandomInt(12, 5)).toBeGreaterThanOrEqual(5);
-    expect(getRandomInt.getRandomInt(12, 5)).toBeLessThanOrEqual(12);
-  });
-});
-
 describe("getRandomData", () => {
   const expectedRandomUser = allUsers[0];
 

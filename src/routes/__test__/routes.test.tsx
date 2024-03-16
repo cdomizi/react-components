@@ -63,7 +63,7 @@ describe("router", () => {
 
     const pageTitle = screen.getByRole("heading");
 
-    expect(pageTitle).toMatch(/home/i);
+    expect(pageTitle).toHaveTextContent(/home/i);
   });
 
   test("render page component for specific route", () => {
@@ -71,7 +71,7 @@ describe("router", () => {
 
     const pageTitle = screen.getByRole("heading");
 
-    expect(pageTitle).toMatch(/todo list/i);
+    expect(pageTitle).toHaveTextContent(/todo list/i);
   });
 
   test("navigation from the top bar's home button", async () => {
@@ -87,7 +87,7 @@ describe("router", () => {
 
     const pageTitle = screen.getByRole("heading");
 
-    expect(pageTitle).toMatch(/home/i);
+    expect(pageTitle).toHaveTextContent(/home/i);
   });
 
   test("navigation from the topbar links", async () => {
@@ -103,6 +103,6 @@ describe("router", () => {
 
     const pageTitle = screen.getByRole("heading");
 
-    expect(pageTitle).toMatch(/todo list/i);
+    expect(pageTitle).toHaveTextContent(/todo list/i);
   });
 });

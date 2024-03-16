@@ -12,7 +12,7 @@ describe("Checkbox form", () => {
     });
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
-    expect(title).toMatch(/checkbox form/i);
+    expect(title).toHaveTextContent(/checkbox form/i);
     expect(checkbox).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
   });

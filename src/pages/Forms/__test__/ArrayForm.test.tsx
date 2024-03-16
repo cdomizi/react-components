@@ -20,7 +20,7 @@ describe("Array form", () => {
     const productsList = screen.getByRole("list");
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
-    expect(title).toMatch(/array form/i);
+    expect(title).toHaveTextContent(/array form/i);
     expect(customerField).toBeInTheDocument();
     expect(fillWithRandomDataButton).toBeInTheDocument();
     expect(productsList).toBeInTheDocument();
@@ -140,7 +140,9 @@ describe("Array form", () => {
     const matchingCustomers = screen.getAllByRole("option");
 
     // All displayed options match the entered text
-    matchingCustomers.forEach((customer) => expect(customer).toMatch(/terry/i));
+    matchingCustomers.forEach((customer) =>
+      expect(customer).toHaveTextContent(/terry/i),
+    );
 
     // Enter an unexisting customer name
     await user.type(customerField, "###");

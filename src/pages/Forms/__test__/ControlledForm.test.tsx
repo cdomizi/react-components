@@ -15,7 +15,7 @@ describe("Controlled form", () => {
     });
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
-    expect(title).toMatch(/controlled form/i);
+    expect(title).toHaveTextContent(/controlled form/i);
     expect(usernameField).toBeInTheDocument();
     expect(emailField).toBeInTheDocument();
     expect(fillWithRandomDataButton).toBeInTheDocument();

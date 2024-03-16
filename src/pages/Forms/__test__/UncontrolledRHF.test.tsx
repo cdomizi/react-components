@@ -15,7 +15,7 @@ describe("Controlled RHF", () => {
     });
     const submitButton = screen.getByRole("button", { name: /submit/i });
 
-    expect(title).toMatch(/uncontrolled rhf/i);
+    expect(title).toHaveTextContent(/uncontrolled rhf/i);
     expect(usernameField).toBeInTheDocument();
     expect(emailField).toBeInTheDocument();
     expect(fillWithRandomDataButton).toBeInTheDocument();
