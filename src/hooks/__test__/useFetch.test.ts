@@ -42,7 +42,7 @@ describe("useFetch", () => {
     });
   });
 
-  test("data fetched and stored in the cache", async () => {
+  test("fetches data successfully", async () => {
     const userId = "1";
     const USER_ENDPOINT = `https://dummyjson.com/users/${userId}`;
     const expectedUser = allUsers.find((user) => user.id.toString() === userId);
@@ -58,5 +58,53 @@ describe("useFetch", () => {
       expect(result.current.error).toBeUndefined();
       expect(result.current.data).toStrictEqual(expectedUser);
     });
+  });
+
+  test("return cached data if available", async () => {
+    const userId = "1";
+    const USER_ENDPOINT = `https://dummyjson.com/users/${userId}`;
+    const expectedUser = allUsers.find((user) => user.id.toString() === userId);
+
+    const { rerender, result } = renderHook(() => useFetch(USER_ENDPOINT));
+
+    expect(result.current.loading).toBe(true);
+    expect(result.current.error).toBeUndefined();
+    expect(result.current.data).toBeUndefined();
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeUndefined();
+      expect(result.current.data).toStrictEqual(expectedUser);
+    });
+
+    rerender();
+
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeUndefined();
+    expect(result.current.data).toStrictEqual(expectedUser);
+  });
+
+  test("force reload", async () => {
+    const userId = "1";
+    const USER_ENDPOINT = `https://dummyjson.com/users/${userId}`;
+    const expectedUser = allUsers.find((user) => user.id.toString() === userId);
+
+    const { rerender, result } = renderHook(() => useFetch(USER_ENDPOINT));
+
+    expect(result.current.loading).toBe(true);
+    expect(result.current.error).toBeUndefined();
+    expect(result.current.data).toBeUndefined();
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeUndefined();
+      expect(result.current.data).toStrictEqual(expectedUser);
+    });
+
+    rerender({ reload: true });
+
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeUndefined();
+    expect(result.current.data).toStrictEqual(expectedUser);
   });
 });
