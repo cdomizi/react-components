@@ -5,30 +5,33 @@ export type ProductType = {
   title?: string;
 };
 
-export const getProductsArray = async () => {
-  const randomProductsCount = getRandomInt(3);
+export const getProductArray = async () => {
+  const maxProductCount = 3;
+  const randomProductCount = getRandomInt(maxProductCount);
+  const maxQuantity = 3;
 
   // Randomly set between 1 and 3 unique product IDs
   const products = new Map<string, number>();
   let i = 0;
-  while (i < randomProductsCount) {
+  while (i < randomProductCount) {
     const randomId = getRandomInt();
     const { title } = await getRandomData<ProductType>(
       "https://dummyjson.com/product",
       randomId,
     );
-    title?.length && products.set(title, randomProductsCount);
+    const randomQuantity = getRandomInt(maxQuantity);
+    title?.length && products.set(title, randomQuantity);
     i++;
   }
 
   // Format output as an array
-  const productsArray: { product: string; quantity: number }[] = [];
+  const productArray: { product: string; quantity: number }[] = [];
   products.forEach((items, title) =>
-    productsArray.push({
+    productArray.push({
       product: title,
       quantity: items,
     }),
   );
 
-  return productsArray;
+  return productArray;
 };

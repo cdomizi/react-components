@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { allUsers } from "mocks/data";
-import * as getProductsArray from "utils/getProductsArray";
+import * as getProductArray from "utils/getProductArray";
 import * as getRandomData from "utils/getRandomData";
 import { CartForm as ArrayForm } from "../ArrayForm";
 
@@ -246,7 +246,7 @@ describe("Array form", () => {
           }, 50);
         }),
     );
-    vi.spyOn(getProductsArray, "getProductsArray").mockImplementation(
+    vi.spyOn(getProductArray, "getProductArray").mockImplementation(
       () =>
         new Promise((resolve) => {
           setTimeout(() => {

@@ -29,7 +29,7 @@ describe("delay helper functions", () => {
     expect(mockCallback).toHaveBeenCalledOnce();
   });
 
-  test("resolves promise with value after specified time", async () => {
+  test("resolves Promise with value after specified time", async () => {
     // const delayedData = delayRequest(true, 1000).then((resolved) => {
     //   expect(resolved).toBe(true);
     // });

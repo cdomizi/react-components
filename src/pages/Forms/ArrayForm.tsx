@@ -5,7 +5,7 @@ import { z } from "zod";
 
 // Project import
 import { Logger } from "components/Logger";
-import { getProductsArray } from "utils/getProductsArray";
+import { getProductArray } from "utils/getProductArray";
 import { getRandomData } from "utils/getRandomData";
 
 // MUI import
@@ -151,7 +151,7 @@ export const CartForm = () => {
     setLoading(true);
 
     // Get an array of random products
-    const products = await getProductsArray();
+    const products = await getProductArray();
 
     // Get a random customer
     const { id } = await getRandomData<UserType>("https://dummyjson.com/users");

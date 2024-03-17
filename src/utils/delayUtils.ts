@@ -1,21 +1,21 @@
-// Execute a function after a specified time
+// Execute callback after specified time
 const delayFunc = (callback: () => void, ms = 2000) => {
   setTimeout(callback, ms);
 };
 
-// Execute a function wrapped in a Promise after a specified time
+// Resolve Promise with callback result after specified time
 const delayCallback = async (callback: () => void, ms = 2000) =>
   new Promise((resolve) => {
     setTimeout(() => resolve(callback()), ms);
   });
 
-// Resolve a Promise after a specified time
+// Resolve Promise with value after specified time
 const delayRequest = async <TData>(value: TData, ms = 2000) =>
   new Promise<TData>((resolve) => {
     setTimeout(() => resolve(value), ms);
   });
 
-// Delay an Axios request with a specified timeout
+// Delay Axios request with a specified timeout
 const delayAxiosRequest = async <TData>(
   value: TData | PromiseLike<TData>,
   ms = 2000,
