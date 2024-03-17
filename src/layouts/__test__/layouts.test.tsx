@@ -64,7 +64,7 @@ const MockLayout = () => (
 );
 
 describe("navbar", () => {
-  test("active links on navbar", async () => {
+  test("navbar shows active link for current page", async () => {
     render(
       <MemoryRouter initialEntries={["/todos"]}>
         <MockRoutes />

@@ -66,7 +66,7 @@ describe("router", () => {
     expect(pageTitle).toHaveTextContent(/home/i);
   });
 
-  test("render page component for specific route", () => {
+  test("render appropriate page for specific route", () => {
     render(<MockRouter initialEntries={["/todos"]} />);
 
     const pageTitle = screen.getByRole("heading");
@@ -74,7 +74,7 @@ describe("router", () => {
     expect(pageTitle).toHaveTextContent(/todo list/i);
   });
 
-  test("navigation from the top bar's home button", async () => {
+  test("navigate to home page from the top bar's home button", async () => {
     const user = userEvent.setup();
 
     // Start on Todos page
@@ -90,7 +90,7 @@ describe("router", () => {
     expect(pageTitle).toHaveTextContent(/home/i);
   });
 
-  test("navigation from the topbar links", async () => {
+  test("navigate to the appropriate page from the top bar links", async () => {
     const user = userEvent.setup();
 
     // Start on Home page

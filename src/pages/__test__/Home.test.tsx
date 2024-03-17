@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import Home from "../Home";
 
 describe("Home page", () => {
-  test("page title rendered correctly", () => {
+  test("render Home component", () => {
     render(<Home />);
     const heading = screen.getByRole("heading");
 
