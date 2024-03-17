@@ -63,6 +63,10 @@ const MockLayout = () => (
   </ThemeCustomization>
 );
 
+// Header background colors for light and dark mode
+const lightThemeBackgroundColor = "#1976d2";
+const darkThemeBackgroundColor = "#121212";
+
 describe("navbar", () => {
   test("navbar shows active link for current page", async () => {
     render(
@@ -80,7 +84,7 @@ describe("navbar", () => {
 });
 
 describe("color mode", () => {
-  test("default color mode", () => {
+  test("default color mode set based on browser preference", () => {
     render(<MockLayout />);
 
     // Header background color and toggle button for default theme (light)
@@ -89,7 +93,9 @@ describe("color mode", () => {
       name: /dark mode/i,
     });
 
-    expect(getComputedStyle(header).backgroundColor).toBe("#1976d2");
+    expect(getComputedStyle(header).backgroundColor).toBe(
+      lightThemeBackgroundColor,
+    );
     expect(themeToggle).toBeInTheDocument();
   });
 
@@ -100,14 +106,27 @@ describe("color mode", () => {
 
     const header = screen.getByRole("banner");
     const themeToggle = screen.getByRole("button", { name: /dark mode/i });
+    const lightThemeIcon = screen.getByTestId("light-mode-icon");
 
-    // Check default header background color (light theme)
-    expect(getComputedStyle(header).backgroundColor).toBe("#1976d2");
+    // Header has light background color by default
+    expect(getComputedStyle(header).backgroundColor).toBe(
+      lightThemeBackgroundColor,
+    );
+    // Color switch has dark mode icon
+    expect(lightThemeIcon).toBeInTheDocument();
+    expect(() => screen.getByTestId("dark-mode-icon")).toThrow();
 
     // Toggle dark theme
     await user.click(themeToggle);
 
-    // Check dark header background color after theme toggle
-    expect(getComputedStyle(header).backgroundColor).toBe("#121212");
+    const darkThemeIcon = screen.getByTestId("dark-mode-icon");
+
+    // Header has dark background color after toggling color mode
+    expect(getComputedStyle(header).backgroundColor).toBe(
+      darkThemeBackgroundColor,
+    );
+    // Color switch has light mode icon
+    expect(darkThemeIcon).toBeInTheDocument();
+    expect(() => screen.getByTestId("light-mode-icon")).toThrow();
   });
 });

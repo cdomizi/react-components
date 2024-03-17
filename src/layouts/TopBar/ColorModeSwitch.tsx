@@ -15,7 +15,11 @@ export const ColorModeSwitch = () => {
   return (
     <Tooltip title={theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"}>
       <IconButton onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
+        {theme.palette.mode === "dark" ? (
+          <DarkModeIcon data-testid="dark-mode-icon" />
+        ) : (
+          <LightModeIcon data-testid="light-mode-icon" />
+        )}
       </IconButton>
     </Tooltip>
   );
