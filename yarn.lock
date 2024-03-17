@@ -3738,14 +3738,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^13.8.6":
-  version: 13.8.6
-  resolution: "happy-dom@npm:13.8.6"
+"happy-dom@npm:^13.9.0":
+  version: 13.9.0
+  resolution: "happy-dom@npm:13.9.0"
   dependencies:
     entities: "npm:^4.5.0"
     webidl-conversions: "npm:^7.0.0"
     whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10/c40e79e77a554d14032f077612561f98418210a033e008ce1b3912410c24fd74bc28525632d26e4e97c05ef45e4886712301a59fe73554bf7f96f5cbdaaae8ef
+  checksum: 10/44f2c34610ed051eaf03e3a6478704e73a06f8c00625b03b70a79fb83cb922a76473b3d415705a1ffa51fb64e84b79eb4fec09ab7b934fb2a9d298f64d82062b
   languageName: node
   linkType: hard
 
@@ -4816,9 +4816,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "msw@npm:2.2.4"
+"msw@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "msw@npm:2.2.6"
   dependencies:
     "@bundled-es-modules/cookie": "npm:^2.0.0"
     "@bundled-es-modules/statuses": "npm:^1.0.1"
@@ -4844,7 +4844,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10/6b7f50ad4067db36397674de00942075cb8f840fdcd0ea5f31849ca5e3a585f86ac78581e77904b25b980ddc41de580ef8d48f21223326b5b54ad21c8db2c851
+  checksum: 10/fd5c2973a92ae80d01a047bfd3c19605a05e6bf88cbde169bb0d54bbc53eea1f969315c2561fe087df2e194887f49c0931a6c31ff627cdd8b3cfb402fbbeb4d0
   languageName: node
   linkType: hard
 
@@ -5362,14 +5362,14 @@ __metadata:
     eslint-plugin-react: "npm:^7.34.1"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-vitest: "npm:^0.3.26"
-    happy-dom: "npm:^13.8.6"
+    happy-dom: "npm:^13.9.0"
     json-server: "npm:^1.0.0-alpha.23"
-    msw: "npm:^2.2.4"
+    msw: "npm:^2.2.6"
     nanoid: "npm:^5.0.6"
     prettier: "npm:3.2.5"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.51.0"
+    react-hook-form: "npm:^7.51.1"
     react-router-dom: "npm:^6.22.3"
     typescript: "npm:^5.4.2"
     vite: "npm:^5.1.6"
@@ -5391,12 +5391,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.51.0":
-  version: 7.51.0
-  resolution: "react-hook-form@npm:7.51.0"
+"react-hook-form@npm:^7.51.1":
+  version: 7.51.1
+  resolution: "react-hook-form@npm:7.51.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 10/2697e2b56afca36098aed04d187e9756641e1f61e1a29c566b7bba0899c885fc5f995219a29a9535db748bd55e186cdf95ff8af546247a4bf3418a00863cbd24
+  checksum: 10/eecc48d505687ae7ed7793c102a3ca2d548a09ec404258f32a8de88c5234ba470f108836797dcd70a7375501ec7a96e5f795b1e98d8c19c5f7fb87f64109bda1
   languageName: node
   linkType: hard
 

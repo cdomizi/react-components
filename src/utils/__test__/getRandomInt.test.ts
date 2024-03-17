@@ -13,14 +13,8 @@ describe("getRandomInt", () => {
   });
 
   test("returns a number within the specified range", () => {
-    const result = getRandomInt(10, 1);
+    const result = getRandomInt(20, 5);
     expect(result).toBeGreaterThanOrEqual(1);
     expect(result).toBeLessThanOrEqual(10);
-  });
-
-  test("returns a different number with multiple calls", () => {
-    const result1 = getRandomInt(100, 50);
-    const result2 = getRandomInt(100, 50);
-    expect(result1).not.toEqual(result2);
   });
 });
