@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Product, ProductQuery } from "types";
 
 import { Logger } from "components/Logger";
-import { delayRequest } from "utils/delay";
+import { delayRequest } from "utils/delayUtils";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 

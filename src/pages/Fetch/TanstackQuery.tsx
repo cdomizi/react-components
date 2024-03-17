@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { Product } from "types";
 
 import { Logger } from "components/Logger";
-import { delayAxiosRequest } from "utils/delay";
+import { delayAxiosRequest } from "utils/delayUtils";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 

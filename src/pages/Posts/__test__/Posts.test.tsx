@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import axios, { AxiosResponse } from "axios";
 import { allPosts, newPost, randomPost } from "mocks/data";
 import { renderWithClient } from "pages/Fetch/__test__/TanstackQuery.test";
-import * as delayUtils from "utils/delay";
+import * as delayUtils from "utils/delayUtils";
 import Posts from "..";
 
 beforeEach(() => {

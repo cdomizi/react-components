@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useMemo } from "react";
 
 // Project import
-import { delayAxiosRequest } from "utils/delay";
+import { delayAxiosRequest } from "utils/delayUtils";
 import { getRandomData } from "utils/getRandomData";
 import { Post } from "./Post";
 
