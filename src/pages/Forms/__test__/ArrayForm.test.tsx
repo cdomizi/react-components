@@ -30,7 +30,7 @@ describe("Array form", () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test("required field validation", async () => {
+  test("displays error on missing required field", async () => {
     const user = userEvent.setup();
 
     render(<ArrayForm />);
@@ -229,7 +229,7 @@ describe("Array form", () => {
     });
   });
 
-  test("fill with random data", async () => {
+  test("fills form fields with random data", async () => {
     // Mock random data
     const randomCustomer = allUsers[0];
     const productsArray = [
@@ -312,7 +312,7 @@ describe("Array form", () => {
     });
   });
 
-  test("form submission", async () => {
+  test("submits form when submit button is clicked", async () => {
     const user = userEvent.setup();
     const logSpy = vi.spyOn(console, "log");
 
@@ -358,7 +358,7 @@ describe("Array form", () => {
     expect(logSpy).toHaveBeenCalledWith(ENTERED_VALUES);
   });
 
-  test("reset on submit", async () => {
+  test("resets all form fields on submit", async () => {
     const user = userEvent.setup();
 
     render(<ArrayForm />);

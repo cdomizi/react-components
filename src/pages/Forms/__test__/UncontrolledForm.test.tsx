@@ -21,7 +21,7 @@ describe("Uncontrolled Form", () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test("required field validation", async () => {
+  test("displays error on missing required field", async () => {
     const user = userEvent.setup();
 
     render(<UncontrolledForm />);
@@ -70,7 +70,7 @@ describe("Uncontrolled Form", () => {
     expect(usernameField).toHaveFocus();
   });
 
-  test("email field validation", async () => {
+  test("validates email field correctly", async () => {
     const user = userEvent.setup();
 
     render(<UncontrolledForm />);
@@ -102,7 +102,7 @@ describe("Uncontrolled Form", () => {
     expect(emailFieldLabel).not.toHaveClass("Mui-error");
   });
 
-  test("form submission", async () => {
+  test("submits form when submit button is clicked", async () => {
     const user = userEvent.setup();
     const logSpy = vi.spyOn(console, "log");
 

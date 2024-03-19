@@ -22,7 +22,7 @@ describe("Controlled RHF", () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test("required field validation", async () => {
+  test("displays error on missing required field", async () => {
     const user = userEvent.setup();
 
     render(<UncontrolledRHF />);
@@ -78,7 +78,7 @@ describe("Controlled RHF", () => {
     });
   });
 
-  test("email field validation", async () => {
+  test("validates email field correctly", async () => {
     const user = userEvent.setup();
 
     render(<UncontrolledRHF />);
@@ -112,7 +112,7 @@ describe("Controlled RHF", () => {
     expect(emailFieldLabel).not.toHaveClass("Mui-error");
   });
 
-  test("fill with random data", async () => {
+  test("fills form fields with random data", async () => {
     // Mock random data
     const randomUserData = {
       username: "johnDoe",
@@ -159,7 +159,7 @@ describe("Controlled RHF", () => {
     });
   });
 
-  test("form submission", async () => {
+  test("submits form when submit button is clicked", async () => {
     const user = userEvent.setup();
     const logSpy = vi.spyOn(console, "log");
 
@@ -187,7 +187,7 @@ describe("Controlled RHF", () => {
     });
   });
 
-  test("reset on submit", async () => {
+  test("resets all form fields on submit", async () => {
     const user = userEvent.setup();
 
     render(<UncontrolledRHF />);

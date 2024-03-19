@@ -30,7 +30,7 @@ describe("SimpleFetch", () => {
     expect(defaultLogValue).toBeInTheDocument();
   });
 
-  test("get product", async () => {
+  test("fetches product data successfully", async () => {
     const productId = 1;
     const expectedProduct = allProducts.find(
       (product) => product.id === productId,
@@ -64,7 +64,7 @@ describe("SimpleFetch", () => {
     expect(await responseData.json()).toStrictEqual(expectedProduct);
   });
 
-  test("add product", async () => {
+  test("adds new product successfully", async () => {
     const user = userEvent.setup();
 
     const fetchSpy = vi.spyOn(globalThis, "fetch");
@@ -90,7 +90,7 @@ describe("SimpleFetch", () => {
     expect(await responseData.json()).toStrictEqual(newProduct);
   });
 
-  test("get product error", async () => {
+  test("displays error message for failed product fetch", async () => {
     const user = userEvent.setup();
 
     const fetchSpy = vi.spyOn(globalThis, "fetch");
@@ -118,7 +118,7 @@ describe("SimpleFetch", () => {
     expect(responseData.statusText).toMatch(/not found/i);
   });
 
-  test("add product error", async () => {
+  test("displays error message for failed product addition", async () => {
     const user = userEvent.setup();
 
     const fetchSpy = vi.spyOn(globalThis, "fetch");

@@ -30,7 +30,7 @@ describe("Axios", () => {
     expect(addProductErrorButton).toBeInTheDocument();
   });
 
-  test("get product", async () => {
+  test("fetches product data successfully", async () => {
     const productId = 1;
     const expectedProduct = allProducts.find(
       (product) => product.id === productId,
@@ -65,7 +65,7 @@ describe("Axios", () => {
     expect(await responseData.data).toStrictEqual(expectedProduct);
   });
 
-  test("add product", async () => {
+  test("adds new product successfully", async () => {
     const user = userEvent.setup();
 
     const axiosPostSpy = vi.spyOn(axios, "post");
@@ -92,7 +92,7 @@ describe("Axios", () => {
     expect(await responseData.data).toStrictEqual(newProduct);
   });
 
-  test("get product error", async () => {
+  test("displays error message for failed product fetch", async () => {
     const user = userEvent.setup();
 
     const axiosGetSpy = vi.spyOn(axios, "get");
@@ -115,7 +115,7 @@ describe("Axios", () => {
     expect(responseData.response?.statusText).toMatch(/Not Found/i);
   });
 
-  test("add product error", async () => {
+  test("displays error message for failed product addition", async () => {
     const user = userEvent.setup();
 
     const axiosPostSpy = vi.spyOn(axios, "post");

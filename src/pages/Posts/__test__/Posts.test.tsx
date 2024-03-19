@@ -129,7 +129,7 @@ describe("Posts", () => {
     });
   });
 
-  test("add new post", async () => {
+  test("adds new post successfully", async () => {
     const user = userEvent.setup();
 
     // Mock initial post list
@@ -167,7 +167,7 @@ describe("Posts", () => {
     });
   });
 
-  test("edit post", async () => {
+  test("edits post successfully", async () => {
     const user = userEvent.setup();
 
     const postId = 1;
@@ -220,7 +220,7 @@ describe("Posts", () => {
     });
   });
 
-  test("delete post", async () => {
+  test("deletes post successfully", async () => {
     const user = userEvent.setup();
 
     const postId = 1;

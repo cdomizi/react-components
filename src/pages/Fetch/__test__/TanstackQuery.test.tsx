@@ -43,7 +43,7 @@ describe("TanstackQuery", () => {
     expect(addProductErrorButton).toBeInTheDocument();
   });
 
-  test("get product", async () => {
+  test("fetches product data successfully", async () => {
     const productId = 1;
     const expectedProduct = allProducts.find(
       (product) => product.id === productId,
@@ -81,7 +81,7 @@ describe("TanstackQuery", () => {
     expect(await responseData.data).toStrictEqual(expectedProduct);
   });
 
-  test("add product", async () => {
+  test("adds new product successfully", async () => {
     const user = userEvent.setup();
 
     const axiosPostSpy = vi.spyOn(axios, "post");
@@ -111,7 +111,7 @@ describe("TanstackQuery", () => {
     expect(await responseData.data).toStrictEqual(newProduct);
   });
 
-  test("add product error", async () => {
+  test("displays error message for failed product addition", async () => {
     const user = userEvent.setup();
 
     const axiosPostSpy = vi.spyOn(axios, "post");

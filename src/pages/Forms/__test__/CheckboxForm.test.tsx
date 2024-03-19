@@ -17,7 +17,7 @@ describe("Checkbox form", () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test("checkbox default status", () => {
+  test("checkbox default status is correct", () => {
     render(<CheckboxForm />);
 
     const checkbox = screen.getByRole("checkbox", {
@@ -27,7 +27,7 @@ describe("Checkbox form", () => {
     expect(checkbox).not.toBeChecked();
   });
 
-  test("checkbox toggling", async () => {
+  test("checkbox can be toggled", async () => {
     const user = userEvent.setup();
 
     render(<CheckboxForm />);
@@ -52,7 +52,7 @@ describe("Checkbox form", () => {
     expect(checkbox).not.toBeChecked();
   });
 
-  test("form submission", async () => {
+  test("submits form when submit button is clicked", async () => {
     const user = userEvent.setup();
     const logSpy = vi.spyOn(console, "log");
 
@@ -69,7 +69,7 @@ describe("Checkbox form", () => {
     expect(logSpy).toHaveBeenCalledWith(expectedOutput);
   });
 
-  test("reset on submit", async () => {
+  test("resets all form fields on submit", async () => {
     const user = userEvent.setup();
 
     render(<CheckboxForm />);
