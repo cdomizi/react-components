@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export type AuthData = {
+  username: string;
+  password: string;
+  confirmPassword?: string;
+};
+
+export type AuthDataType = {
+  id: number;
+  username: string;
+  isAdmin: boolean;
+  accessToken: string;
+};
+
 export type CustomError = Error & {
   data?: string;
   status?: number;

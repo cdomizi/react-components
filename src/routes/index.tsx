@@ -9,6 +9,8 @@ import {
 const RootLayout = loadable(() => import("layouts/RootLayout"));
 const Home = loadable(() => import("pages/Home"));
 const ErrorPage = loadable(() => import("pages/ErrorPage"));
+const Login = loadable(() => import("@Auth/Login"));
+const Signup = loadable(() => import("@Auth/Signup"));
 const Forms = loadable(() => import("@Forms/index"));
 const Fetch = loadable(() => import("@Fetch/index"));
 const Todos = loadable(() => import("@Todos/index"));
@@ -18,6 +20,8 @@ const MainRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
       <Route index element={<Home />} />
+      <Route path="login" element={<Login />} />
+      <Route path="signup" element={<Signup />} />
       <Route path="forms" element={<Forms />} />
       <Route path="fetch" element={<Fetch />} />
       <Route path="todos" element={<Todos />} />
