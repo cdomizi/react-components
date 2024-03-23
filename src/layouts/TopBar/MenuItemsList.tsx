@@ -1,18 +1,13 @@
+import { Box } from "@mui/material";
+import { MenuItemType } from "layouts/menuItems";
 import { MenuItem } from "./MenuItem";
 
-const menuItems = [
-  { id: "forms", title: "forms", url: "/forms" },
-  { id: "fetch", title: "fetch", url: "/fetch" },
-  { id: "todos", title: "todos", url: "/todos" },
-  { id: "posts", title: "posts", url: "/posts" },
-];
-
-export const MenuItemsList = () => {
+export const MenuItemsList = ({ menuItems }: { menuItems: MenuItemType[] }) => {
   return (
-    <>
+    <Box sx={{ display: { xs: "none", sm: "flex" } }}>
       {menuItems.map((item) => (
         <MenuItem key={item.id} title={item.title} url={item.url} />
       ))}
-    </>
+    </Box>
   );
 };

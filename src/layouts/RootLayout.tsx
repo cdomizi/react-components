@@ -1,16 +1,44 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { TopBar } from "./TopBar";
+import { menuItems } from "./menuItems";
 
-import { Box, Toolbar } from "@mui/material";
+import { Box, Container, Toolbar } from "@mui/material";
+import Navbar from "./NavBar";
 
-const RootLayout = () => (
-  <>
-    <TopBar />
-    <Box component="main">
-      <Toolbar />
-      <Outlet />
+const RootLayout = () => {
+  const [drawerState, setDrawerState] = useState(false);
+
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (event instanceof KeyboardEvent) {
+        if (
+          event.type === "keydown" &&
+          (event?.key === "Tab" || event?.key === "Shift")
+        ) {
+          return;
+        }
+      }
+
+      setDrawerState(open);
+    };
+
+  return (
+    <Box id="root-layout-container">
+      <TopBar onToggle={toggleDrawer} menuItems={menuItems} />
+      <Navbar
+        open={drawerState}
+        onToggle={toggleDrawer}
+        menuItems={menuItems}
+      />
+      <Container maxWidth="xl">
+        <Box component="main" flexGrow={1} p={3}>
+          <Toolbar />
+          <Outlet />
+        </Box>
+      </Container>
     </Box>
-  </>
-);
+  );
+};
 
 export default RootLayout;
