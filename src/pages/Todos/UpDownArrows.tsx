@@ -20,6 +20,7 @@ export const UpDownArrows = ({
   return (
     <Stack direction="column" spacing={-1}>
       <IconButton
+        title="todo-move-up-button"
         onClick={() => moveUp(true)}
         sx={{ p: 0, m: 0, mt: 0.3 }}
         // Move up disabled on the first element of the list
@@ -28,6 +29,7 @@ export const UpDownArrows = ({
         <ArrowDropUpIcon />
       </IconButton>
       <IconButton
+        title="todo-move-down-button"
         onClick={() => moveUp(false)}
         sx={{ p: 0, m: 0 }}
         // Move down disabled on the last element of the list

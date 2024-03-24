@@ -46,8 +46,12 @@ describe("Todos", () => {
     const firstTodo = initialListItems[0];
     const firstTodoDoneCheckbox = screen.getByRole("checkbox");
     const firstTodoDeleteButton = screen.getByRole("link", { name: "delete" });
-    const firstTodoMoveUpArrow = screen.getByTestId(/ArrowDropUpIcon/i);
-    const firstTodoMoveDownArrow = screen.getByTestId(/ArrowDropDownIcon/i);
+    const firstTodoMoveUpButton = screen.getByRole("button", {
+      name: "todo-move-up-button",
+    });
+    const firstTodoMoveDownButton = screen.getByRole("button", {
+      name: "todo-move-down-button",
+    });
 
     // Todos list initially contains one item
     expect(todoList).toBeInTheDocument();
@@ -58,9 +62,9 @@ describe("Todos", () => {
     // Checkbox unchecked by default
     expect(firstTodoDoneCheckbox).not.toBeChecked();
     expect(firstTodoDeleteButton).toBeInTheDocument();
-    // Move up/down arrows buth disabled, as the list only contains one element
-    expect(firstTodoMoveUpArrow.parentElement).toHaveClass("Mui-disabled");
-    expect(firstTodoMoveDownArrow.parentElement).toHaveClass("Mui-disabled");
+    // Move up/down arrows both disabled, as the list only contains one element
+    expect(firstTodoMoveUpButton).toHaveClass("Mui-disabled");
+    expect(firstTodoMoveDownButton).toHaveClass("Mui-disabled");
 
     const addButton = screen.getByRole("button", { name: /add/i });
 
