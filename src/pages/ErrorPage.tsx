@@ -12,9 +12,11 @@ const ErrorInfo = () => {
     <>
       <Typography variant="h2" gutterBottom>
         {(error.status && `${error.status}`) || "Unexpected Error"}
-        {error.statusText && `: ${error.statusText}`}
+        {error.statusText && `: ${error.statusText}hi`}
       </Typography>
-      <Typography>{`${error.data}` || "Sorry, an error occurred."}</Typography>
+      <Typography>
+        {error?.data ? `${error.data}` : "Sorry, an error occurred."}
+      </Typography>
     </>
   );
 };
