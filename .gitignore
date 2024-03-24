@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-# Yarn 3
+# Yarn
 .pnp.*
 .yarn/*
 !.yarn/patches
