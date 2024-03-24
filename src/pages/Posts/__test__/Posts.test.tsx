@@ -49,9 +49,12 @@ describe("Posts", () => {
           .textContent?.slice(1);
         const postTitle = within(post).getByRole("heading");
         const postBody = within(post).getByTestId(/^post-body-\d+/i);
-        const postEditButton = within(post).getByTestId(/^edit-button-\d+$/i);
-        const postDeleteButton =
-          within(post).getByTestId(/^delete-button-\d+$/i);
+        const postEditButton = within(post).getByRole("button", {
+          name: /^edit-button-\d+$/i,
+        });
+        const postDeleteButton = within(post).getByRole("button", {
+          name: /^delete-button-\d+$/i,
+        });
 
         const expectedValues = allPosts.find(
           (expectedPost) => expectedPost.id === postId,
@@ -114,12 +117,12 @@ describe("Posts", () => {
       const postList = screen.getAllByRole("listitem");
       const postTitle = within(postList[0]).getByRole("heading");
       const postBody = screen.getByTestId(`post-body-${initialPost?.id}`);
-      const postEditButton = screen.getByTestId(
-        `edit-button-${initialPost?.id}`,
-      );
-      const postDeleteButton = screen.getByTestId(
-        `delete-button-${initialPost?.id}`,
-      );
+      const postEditButton = screen.getByRole("button", {
+        name: `edit-button-${initialPost?.id}`,
+      });
+      const postDeleteButton = screen.getByRole("button", {
+        name: `delete-button-${initialPost?.id}`,
+      });
 
       expect(postList).toHaveLength(1);
       expect(postTitle).toBeInTheDocument();
@@ -196,7 +199,9 @@ describe("Posts", () => {
       );
     });
 
-    const postEditButton = screen.getByTestId(`edit-button-${initialPost?.id}`);
+    const postEditButton = screen.getByRole("button", {
+      name: `edit-button-${initialPost?.id}`,
+    });
 
     await user.click(postEditButton);
 
@@ -245,9 +250,9 @@ describe("Posts", () => {
       expect(postList).toHaveLength(1);
     });
 
-    const deleteEditButton = screen.getByTestId(
-      `delete-button-${initialPost?.id}`,
-    );
+    const deleteEditButton = screen.getByRole("button", {
+      name: `delete-button-${initialPost?.id}`,
+    });
 
     // Delete the post
     await user.click(deleteEditButton);

@@ -55,14 +55,14 @@ export const Post = ({
           ) : (
             <Stack>
               <IconButton
-                data-testid={`edit-button-${post?.id}`}
+                title={`edit-button-${post?.id}`}
                 size="small"
                 onClick={onEdit}
               >
                 <EditIcon color="primary" />
               </IconButton>
               <IconButton
-                data-testid={`delete-button-${post?.id}`}
+                title={`delete-button-${post?.id}`}
                 size="small"
                 onClick={onDelete}
               >
