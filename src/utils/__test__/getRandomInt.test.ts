@@ -2,7 +2,7 @@ import { getRandomInt } from "utils/getRandomInt";
 
 describe("getRandomInt", () => {
   test("returns an integer", () => {
-    const result = getRandomInt(20, 5);
+    const result = getRandomInt(10, 5);
     expect(Number.isInteger(result)).toBe(true);
   });
 
@@ -13,7 +13,7 @@ describe("getRandomInt", () => {
   });
 
   test("returns a number within the specified range", () => {
-    const result = getRandomInt(20, 5);
+    const result = getRandomInt(10, 5);
     expect(result).toBeGreaterThanOrEqual(1);
     expect(result).toBeLessThanOrEqual(10);
   });
