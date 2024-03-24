@@ -56,3 +56,5 @@ export const userSchema = z
   .strict();
 
 export type UserType = z.infer<typeof userSchema>;
+
+export type BreakpointType = "xs" | "sm" | "md" | "lg" | "xl";

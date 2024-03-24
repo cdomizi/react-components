@@ -1681,6 +1681,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/css-mediaquery@npm:^0":
+  version: 0.1.4
+  resolution: "@types/css-mediaquery@npm:0.1.4"
+  checksum: 10/d5b23a093d5dde31729b392e19e98b1060273c2d4a36bfb8e5b679f1c3c7b62e45a99d1be0e57b7ed375e4f313e9acecbe51f875d742e3283cc876adb9f333c9
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
   version: 1.0.5
   resolution: "@types/estree@npm:1.0.5"
@@ -2801,6 +2808,13 @@ __metadata:
     shebang-command: "npm:^2.0.0"
     which: "npm:^2.0.1"
   checksum: 10/e1a13869d2f57d974de0d9ef7acbf69dc6937db20b918525a01dacb5032129bd552d290d886d981e99f1b624cb03657084cc87bd40f115c07ecf376821c729ce
+  languageName: node
+  linkType: hard
+
+"css-mediaquery@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "css-mediaquery@npm:0.1.2"
+  checksum: 10/f2f7512daa015f98b82bd65bbdd7c2100b16dddf22784bde2a8085f10f11e8775da57108016fe767f5e400afe64581c15d4e649c47725af7eac5f4094fa7ae43
   languageName: node
   linkType: hard
 
@@ -5661,6 +5675,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@testing-library/user-event": "npm:^14.5.2"
+    "@types/css-mediaquery": "npm:^0"
     "@types/loadable__component": "npm:^5.13.9"
     "@types/react": "npm:^18.2.69"
     "@types/react-dom": "npm:^18.2.22"
@@ -5670,6 +5685,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^1.4.0"
     "@vitest/ui": "npm:1.4.0"
     axios: "npm:^1.6.8"
+    css-mediaquery: "npm:^0.1.2"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-jest-dom: "npm:^5.2.0"

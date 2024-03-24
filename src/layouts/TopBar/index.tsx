@@ -6,7 +6,14 @@ import { HomeButton } from "./HomeButton";
 import { MenuButton } from "./MenuButton";
 import { MenuItemsList } from "./MenuItemsList";
 
-import { AppBar, Container, Stack, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Container,
+  Stack,
+  Toolbar,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 
 type TopBarProps = {
   onToggle: (open: boolean) => React.MouseEventHandler<HTMLButtonElement>;
@@ -19,6 +26,9 @@ export const TopBar = ({
   menuItems,
   mobileBp = "sm",
 }: TopBarProps) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up(mobileBp));
+
   return (
     <AppBar>
       <Container maxWidth="xl">
@@ -29,7 +39,7 @@ export const TopBar = ({
             <MenuItemsList menuItems={menuItems} mobileBp={mobileBp} />
             <ProfileTab
               direction="row"
-              sx={{ display: { xs: "none", [mobileBp]: "flex" } }}
+              sx={{ display: matches ? "flex" : "none" }}
             />
             <ColorModeSwitch />
           </Stack>

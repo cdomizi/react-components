@@ -6,6 +6,7 @@ import { Link, MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import Todos from "@Todos/index";
 import RootLayout from "layouts/RootLayout";
 import { TopBar } from "layouts/TopBar";
+import { menuItems } from "layouts/menuItems";
 import Home from "pages/Home";
 
 vi.mock("layouts/TopBar", () => ({
@@ -17,10 +18,12 @@ vi.mock("layouts/TopBar", () => ({
   ),
 }));
 
+const mockToggleDrawer = vi.fn();
+
 vi.mock("layouts/RootLayout", () => ({
   default: () => (
     <div>
-      <TopBar />
+      <TopBar onToggle={mockToggleDrawer} menuItems={menuItems} />
       <Outlet />
     </div>
   ),
