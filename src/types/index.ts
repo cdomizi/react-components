@@ -13,7 +13,7 @@ export type AuthDataType = {
   accessToken: string;
 };
 
-export const authUserSchema = z
+export const LoginSchema = z
   .object({
     username: z
       .string({
@@ -37,7 +37,28 @@ export const authUserSchema = z
   })
   .strict();
 
-export type AuthUserType = z.infer<typeof authUserSchema>;
+export type LoginType = z.infer<typeof LoginSchema>;
+
+export const SignupSchema = LoginSchema.extend({
+  confirmPassword: z
+    .string({
+      required_error: "Password is required",
+    })
+    .trim()
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .regex(/^[a-z0-9-_]+$/i, {
+      message: "Only use letters, numbers, dashes and underscores",
+    }),
+}).superRefine(({ confirmPassword, password }, ctx) => {
+  if (confirmPassword !== password) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Passwords do not match",
+    });
+  }
+});
+
+export type SignupType = z.infer<typeof SignupSchema>;
 
 export type CustomError = Error & {
   data?: string;

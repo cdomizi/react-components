@@ -48,7 +48,7 @@ describe("Posts", () => {
           .getByText(/^#\d+$/i)
           .textContent?.slice(1);
         const postTitle = within(post).getByRole("heading");
-        const postBody = within(post).getByTestId(/^post-body-\d+/i);
+        const postBody = within(post).getByTestId(/^post-body-\d+$/i);
         const postEditButton = within(post).getByRole("button", {
           name: /^edit-button-\d+$/i,
         });

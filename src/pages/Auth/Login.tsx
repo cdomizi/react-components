@@ -3,7 +3,7 @@ import { useAppLocation } from "hooks/useAppLocation";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { AuthUserType, authUserSchema } from "types";
+import { LoginSchema, LoginType } from "types";
 
 // MUI components
 import {
@@ -30,16 +30,17 @@ const Login = () => {
     formState: { errors, isLoading, isSubmitSuccessful, isSubmitting },
     handleSubmit,
     reset,
-  } = useForm<AuthUserType>({
+  } = useForm<LoginType>({
     defaultValues: initialFormState,
-    resolver: zodResolver(authUserSchema),
+    resolver: zodResolver(LoginSchema),
   });
 
   const onSubmit = useCallback(
-    (formData: AuthUserType) => {
+    (formData: LoginType) => {
       try {
         // Log the user in
         console.log(formData);
+
         // Redirect user to previously requested route
         navigate(from, { replace: true });
         return;

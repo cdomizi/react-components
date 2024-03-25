@@ -234,26 +234,26 @@ describe("login page", () => {
       expect(heading).toHaveTextContent(headingText);
     });
   });
-});
 
-test("redirects to signup page on button click", async () => {
-  const user = userEvent.setup();
+  test("redirects to signup page on button click", async () => {
+    const user = userEvent.setup();
 
-  render(<MockRouter initialEntries={["/login"]} />);
+    render(<MockRouter initialEntries={["/login"]} />);
 
-  const signupButton = screen.getByRole("button", {
-    name: /create an account/i,
-  });
+    const signupButton = screen.getByRole("button", {
+      name: /create an account/i,
+    });
 
-  // Press "Create an account" button
-  await user.click(signupButton);
+    // Press "Create an account" button
+    await user.click(signupButton);
 
-  // Redirect to signup page
-  await waitFor(() => {
-    const headingText = /sign up/i;
-    const heading = screen.getByRole("heading");
+    // Redirect to signup page
+    await waitFor(() => {
+      const headingText = /sign up/i;
+      const heading = screen.getByRole("heading");
 
-    expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent(headingText);
+      expect(heading).toBeInTheDocument();
+      expect(heading).toHaveTextContent(headingText);
+    });
   });
 });
