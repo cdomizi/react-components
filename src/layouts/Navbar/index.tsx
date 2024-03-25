@@ -1,7 +1,7 @@
 // Project import
 import { ProfileTab } from "layouts/ProfileTab";
 import { MenuItemType } from "layouts/menuItems";
-import NavItem from "./NavItem";
+import { NavItem } from "./NavItem";
 
 // MUI components
 import { Box, Divider, Drawer, List } from "@mui/material";
@@ -17,7 +17,7 @@ type NavbarProps = {
 
 const drawerWidth = 240;
 
-const Navbar = ({ open, onToggle, menuItems, window }: NavbarProps) => {
+export const Navbar = ({ open, onToggle, menuItems, window }: NavbarProps) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   const items = menuItems.map((item) => (
@@ -56,5 +56,3 @@ const Navbar = ({ open, onToggle, menuItems, window }: NavbarProps) => {
     </Drawer>
   );
 };
-
-export default Navbar;

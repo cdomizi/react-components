@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { BreakpointType } from "types";
-import Navbar from "./NavBar";
+import { Navbar } from "./Navbar";
 import { TopBar } from "./TopBar";
 import { menuItems } from "./menuItems";
 

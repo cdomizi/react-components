@@ -1681,7 +1681,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/css-mediaquery@npm:^0":
+"@types/css-mediaquery@npm:^0.1.4":
   version: 0.1.4
   resolution: "@types/css-mediaquery@npm:0.1.4"
   checksum: 10/d5b23a093d5dde31729b392e19e98b1060273c2d4a36bfb8e5b679f1c3c7b62e45a99d1be0e57b7ed375e4f313e9acecbe51f875d742e3283cc876adb9f333c9
@@ -5675,7 +5675,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@testing-library/user-event": "npm:^14.5.2"
-    "@types/css-mediaquery": "npm:^0"
+    "@types/css-mediaquery": "npm:^0.1.4"
     "@types/loadable__component": "npm:^5.13.9"
     "@types/react": "npm:^18.2.69"
     "@types/react-dom": "npm:^18.2.22"

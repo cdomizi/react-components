@@ -11,7 +11,7 @@ import { ReactElement } from "react";
 
 type NavItemProps = { title: string; url: string; icon?: ReactElement };
 
-const NavItem = ({ title, url, icon }: NavItemProps) => {
+export const NavItem = ({ title, url, icon }: NavItemProps) => {
   return (
     <NavLink
       to={url}
@@ -30,5 +30,3 @@ const NavItem = ({ title, url, icon }: NavItemProps) => {
     </NavLink>
   );
 };
-
-export default NavItem;
