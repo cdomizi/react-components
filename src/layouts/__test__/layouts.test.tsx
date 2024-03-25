@@ -1,34 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mediaQuery from "css-mediaquery";
-import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 // Project import
 import Posts from "@Posts/index";
 import Todos from "@Todos/index";
-import { MenuButton } from "layouts/TopBar/MenuButton";
-import { menuItems } from "layouts/menuItems";
-import RootLayout from "../RootLayout";
-import { ThemeCustomization } from "../ThemeCustomization";
-import { TopBar } from "../TopBar";
-import { ColorModeSwitch } from "../TopBar/ColorModeSwitch";
-import { MenuItem } from "../TopBar/MenuItem";
+import RootLayout from "layouts/RootLayout";
+import { ThemeCustomization } from "layouts/ThemeCustomization";
+import { ColorModeSwitch } from "layouts/TopBar/ColorModeSwitch";
 
+// MUI components
 import { AppBar } from "@mui/material";
-
-vi.mock("../RootLayout", () => ({
-  default: () => (
-    <div>
-      <header>
-        <MenuItem title="todos" url="/todos" />
-        <MenuItem title="posts" url="/posts" />
-      </header>
-      <Outlet />
-    </div>
-  ),
-}));
 
 vi.mock("@Todos/index", () => ({
   default: () => (
@@ -55,22 +38,11 @@ const MockRoutes = () => (
   </Routes>
 );
 
-const toggleDrawer = vi.fn();
-
-vi.mock("../TopBar", () => ({
-  TopBar: () => (
-    <AppBar>
-      <MenuButton onToggle={toggleDrawer} />
-      <ColorModeSwitch />
-    </AppBar>
-  ),
-}));
-
-const mockToggleDrawer = vi.fn();
-
 const MockLayout = () => (
   <ThemeCustomization>
-    <TopBar onToggle={mockToggleDrawer} menuItems={menuItems} />
+    <AppBar>
+      <ColorModeSwitch />
+    </AppBar>
   </ThemeCustomization>
 );
 
@@ -106,7 +78,11 @@ describe("topbar", () => {
   test("does not display menu button on screen width >= 600px", () => {
     window.matchMedia = createMatchMedia(window.innerWidth);
 
-    render(<MockLayout />);
+    render(
+      <MemoryRouter>
+        <MockRoutes />
+      </MemoryRouter>,
+    );
 
     expect(() => screen.getByRole("button", { name: /menu/i })).toThrow();
   });
@@ -114,7 +90,11 @@ describe("topbar", () => {
   test("displays menu button on screen width < 600px", () => {
     window.matchMedia = createMatchMedia(599);
 
-    render(<MockLayout />);
+    render(
+      <MemoryRouter>
+        <MockRoutes />
+      </MemoryRouter>,
+    );
 
     const menuButton = screen.getByRole("button", { name: /menu/i });
 
@@ -137,11 +117,83 @@ describe("topbar", () => {
 });
 
 describe("navbar", () => {
-  test.todo("navbar is closed by default");
+  let originalMatchmedia: (query: string) => MediaQueryList;
 
-  test.todo("toggle navbar");
+  beforeEach(() => {
+    originalMatchmedia = window.matchMedia;
+    // delete window.matchMedia;
+  });
 
-  test.todo("navbar shows active link for current page");
+  afterEach(() => {
+    window.matchMedia = originalMatchmedia;
+  });
+
+  test("navbar is closed by default", () => {
+    window.matchMedia = createMatchMedia(599);
+
+    render(
+      <MemoryRouter>
+        <MockRoutes />
+      </MemoryRouter>,
+    );
+
+    expect(() => screen.getByRole("presentation")).toThrow();
+  });
+
+  test("toggle navbar", async () => {
+    window.matchMedia = createMatchMedia(599);
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter>
+        <MockRoutes />
+      </MemoryRouter>,
+    );
+
+    // Navbar is initially closed
+    expect(() => screen.getByRole("presentation")).toThrow();
+
+    const menuButton = screen.getByRole("button", { name: /menu/i });
+
+    // Open the navbar
+    await user.click(menuButton);
+
+    // Navbar is open
+    const navbar = screen.getByRole("presentation");
+
+    expect(navbar).toBeInTheDocument();
+    expect(navbar).toBeVisible();
+
+    // Close the navbar
+    await user.keyboard("{Escape}");
+
+    // Navbar is closed
+    expect(() => screen.getByRole("presentation")).toThrow();
+  });
+
+  test("navbar shows active link for current page", async () => {
+    window.matchMedia = createMatchMedia(599);
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={["/todos"]}>
+        <MockRoutes />
+      </MemoryRouter>,
+    );
+
+    const menuButton = screen.getByRole("button", { name: /menu/i });
+
+    // Open the navbar
+    await user.click(menuButton);
+
+    const todosNavLink = screen.getByRole("button", { name: /todos/i });
+    const postsNavLink = screen.getByRole("button", { name: /posts/i });
+
+    await waitFor(() =>
+      expect(todosNavLink.parentElement?.parentElement).toHaveClass("active"),
+    );
+    expect(postsNavLink.parentElement?.parentElement).not.toHaveClass("active");
+  });
 });
 
 describe("color mode", () => {
@@ -151,14 +203,14 @@ describe("color mode", () => {
     // Header background color and toggle button for default theme (light)
     const header = screen.getByRole("banner");
     const themeToggle = screen.getByRole("button", {
-      name: /light mode/i,
+      name: /dark mode/i,
     });
 
     expect(getComputedStyle(header).backgroundColor).toBe(
-      darkThemeBackgroundColor,
+      lightThemeBackgroundColor,
     );
     expect(themeToggle).toBeInTheDocument();
-    expect(screen.getByTestId("light-mode-icon")).toBeInTheDocument();
+    expect(screen.getByTestId("dark-mode-icon")).toBeInTheDocument();
   });
 
   test("toggle color mode", async () => {
@@ -167,31 +219,31 @@ describe("color mode", () => {
     render(<MockLayout />);
 
     const header = screen.getByRole("banner");
-    const themeToggle = screen.getByRole("button", { name: /light mode/i });
-    const lightThemeIcon = screen.getByTestId("light-mode-icon");
-
-    // Header has dark background color by default
-    expect(getComputedStyle(header).backgroundColor).toBe(
-      darkThemeBackgroundColor,
-    );
-    // Color switch has light mode icon
-    expect(lightThemeIcon).toBeInTheDocument();
-    expect(() => screen.getByTestId("dark-mode-icon")).toThrow();
-
-    // Toggle light theme
-    await user.click(themeToggle);
-
+    const themeToggle = screen.getByRole("button", { name: /dark mode/i });
     const darkThemeIcon = screen.getByTestId("dark-mode-icon");
 
-    // Header has light background color after toggling color mode
+    // Theme has light color mode by default
     expect(getComputedStyle(header).backgroundColor).toBe(
       lightThemeBackgroundColor,
     );
     // Color switch has dark mode icon
-    expect(
-      screen.getByRole("button", { name: /dark mode/i }),
-    ).toBeInTheDocument();
     expect(darkThemeIcon).toBeInTheDocument();
     expect(() => screen.getByTestId("light-mode-icon")).toThrow();
+
+    // Toggle theme mode
+    await user.click(themeToggle);
+
+    const lightThemeIcon = screen.getByTestId("light-mode-icon");
+
+    // Header has light background color after toggling color mode
+    expect(getComputedStyle(header).backgroundColor).toBe(
+      darkThemeBackgroundColor,
+    );
+    // Color switch has light mode icon
+    expect(
+      screen.getByRole("button", { name: /light mode/i }),
+    ).toBeInTheDocument();
+    expect(lightThemeIcon).toBeInTheDocument();
+    expect(() => screen.getByTestId("dark-mode-icon")).toThrow();
   });
 });
