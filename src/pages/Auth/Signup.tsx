@@ -1,80 +1,110 @@
-import { useCallback, useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { AuthData } from "types";
+import { SignupSchema, SignupType } from "types";
 
 // MUI components
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import { ZodError } from "zod";
 
 const Signup = () => {
   const navigate = useNavigate();
 
+  const initialFormState = useMemo(
+    () => ({ username: "", password: "", confirmPassword: "" }),
+    [],
+  );
+
   const {
     control,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isLoading, isSubmitSuccessful, isSubmitting },
     handleSubmit,
     reset,
-    watch,
-  } = useForm<AuthData>({
-    defaultValues: { username: "", password: "", confirmPassword: "" },
+    setError,
+  } = useForm<SignupType>({
+    defaultValues: initialFormState,
+    resolver: zodResolver(SignupSchema),
   });
 
   const onSubmit = useCallback(
-    (formData: AuthData) => {
+    (formData: SignupType) => {
       try {
+        // Validate form data
+        SignupSchema.parse(formData);
+
         console.log(formData);
 
+        // Redirect user to Home page
         navigate("/");
+
         return;
       } catch (err) {
-        console.error(err);
+        if (err instanceof ZodError) {
+          err.issues.forEach((error) => {
+            // Display error helper text in the appropriate fields
+            setError(error.path[0] as keyof typeof errors, {
+              message: error.message,
+            });
+
+            console.error(`Error ${error.path[0]}: ${error.message}`);
+          });
+        } else console.error(err);
       }
     },
-    [navigate],
+    [navigate, setError],
   );
 
+  // Reset form fields on successful signup
   useEffect(() => {
-    // Reset form on successful registration
-    if (isSubmitSuccessful) reset();
-  }, [isSubmitSuccessful, reset]);
+    if (isSubmitSuccessful) reset(initialFormState);
+  }, [initialFormState, isSubmitSuccessful, reset]);
 
   return (
     <Box sx={{ maxWidth: "24rem", mx: "auto", mt: 6 }}>
       <Stack
-        onSubmit={handleSubmit(onSubmit)}
-        component="form"
         id="register-form"
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
         spacing={3}
         autoComplete="off"
         textAlign="center"
       >
-        <Typography variant="h2">Sign up</Typography>
+        <Typography variant="h2">Sign Up</Typography>
         <Controller
           control={control}
           name="username"
-          rules={{
-            required: "Please enter your username",
-            minLength: {
-              value: 3,
-              message: "Username must be at least 3 characters",
-            },
-          }}
           render={({ field: { ref, ...fieldProps } }) => (
             <TextField
               {...fieldProps}
               id="username"
-              label="Username"
               inputRef={ref}
+              label="Username"
+              InputLabelProps={{ required: true }}
+              autoFocus={!!errors?.username}
               error={!!errors?.username}
               helperText={errors?.username?.message}
-              InputLabelProps={{ required: true }}
+              disabled={isLoading || isSubmitting}
+              InputProps={{
+                endAdornment: (
+                  <>
+                    {(isLoading || isSubmitting) && (
+                      <InputAdornment position="end">
+                        <CircularProgress color="inherit" size={20} />
+                      </InputAdornment>
+                    )}
+                  </>
+                ),
+              }}
               fullWidth
               margin="normal"
             />
@@ -83,23 +113,28 @@ const Signup = () => {
         <Controller
           control={control}
           name="password"
-          rules={{
-            required: "Please enter your password",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
-            },
-          }}
           render={({ field: { ref, ...fieldProps } }) => (
             <TextField
               {...fieldProps}
               id="password"
-              label="Password"
               inputRef={ref}
               type="password"
+              label="Password"
+              autoFocus={!!errors?.password}
               error={!!errors?.password}
               helperText={errors?.password?.message}
-              InputLabelProps={{ required: true }}
+              disabled={isLoading || isSubmitting}
+              InputProps={{
+                endAdornment: (
+                  <>
+                    {(isLoading || isSubmitting) && (
+                      <InputAdornment position="end">
+                        <CircularProgress color="inherit" size={20} />
+                      </InputAdornment>
+                    )}
+                  </>
+                ),
+              }}
               fullWidth
               margin="normal"
             />
@@ -108,34 +143,62 @@ const Signup = () => {
         <Controller
           control={control}
           name="confirmPassword"
-          rules={{
-            required: "Please confirm your password",
-            validate: (val) =>
-              val === watch("password") || "Passwords do not match",
-          }}
           render={({ field: { ref, ...fieldProps } }) => (
             <TextField
               {...fieldProps}
               id="confirmPassword"
-              label="Confirm Password"
               inputRef={ref}
               type="password"
+              label="Confirm Password"
+              autoFocus={!!errors?.confirmPassword}
               error={!!errors?.confirmPassword}
               helperText={errors?.confirmPassword?.message}
-              InputLabelProps={{ required: true }}
+              disabled={isLoading || isSubmitting}
+              InputProps={{
+                endAdornment: (
+                  <>
+                    {(isLoading || isSubmitting) && (
+                      <InputAdornment position="end">
+                        <CircularProgress color="inherit" size={20} />
+                      </InputAdornment>
+                    )}
+                  </>
+                ),
+              }}
               fullWidth
               margin="normal"
             />
           )}
         />
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          disabled={isLoading || isSubmitting}
+          endIcon={
+            (isLoading || isSubmitting) && (
+              <CircularProgress color="inherit" size={20} />
+            )
+          }
+          variant="contained"
+          fullWidth
+        >
           Create an account
         </Button>
       </Stack>
       <Divider sx={{ my: 3 }}>
         <Typography color="text.disabled">Already have an account?</Typography>
       </Divider>
-      <Button onClick={() => navigate("/login")} variant="outlined" fullWidth>
+      <Button
+        type="button"
+        onClick={() => navigate("/login")}
+        disabled={isLoading || isSubmitting}
+        endIcon={
+          (isLoading || isSubmitting) && (
+            <CircularProgress color="inherit" size={20} />
+          )
+        }
+        variant="outlined"
+        fullWidth
+      >
         Log in
       </Button>
     </Box>
