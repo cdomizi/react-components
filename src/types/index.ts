@@ -13,6 +13,32 @@ export type AuthDataType = {
   accessToken: string;
 };
 
+export const authUserSchema = z
+  .object({
+    username: z
+      .string({
+        required_error: "Username is required",
+      })
+      .trim()
+      .min(3, { message: "Username must be at least 3 characters long" })
+      .max(20, { message: "Username max. 20 characters" })
+      .regex(/^[a-z0-9-_]+$/i, {
+        message: "Only use letters, numbers, dashes and underscores",
+      }),
+    password: z
+      .string({
+        required_error: "Password is required",
+      })
+      .trim()
+      .min(6, { message: "Password must be at least 6 characters long" })
+      .regex(/^[a-z0-9-_]+$/i, {
+        message: "Only use letters, numbers, dashes and underscores",
+      }),
+  })
+  .strict();
+
+export type AuthUserType = z.infer<typeof authUserSchema>;
+
 export type CustomError = Error & {
   data?: string;
   status?: number;
