@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LoginSchema, LoginType } from "types";
+import { ZodError } from "zod";
 
 // MUI components
 import {
@@ -30,6 +31,7 @@ const Login = () => {
     formState: { errors, isLoading, isSubmitSuccessful, isSubmitting },
     handleSubmit,
     reset,
+    setError,
   } = useForm<LoginType>({
     defaultValues: initialFormState,
     resolver: zodResolver(LoginSchema),
@@ -38,17 +40,30 @@ const Login = () => {
   const onSubmit = useCallback(
     (formData: LoginType) => {
       try {
+        // Validate form data
+        LoginSchema.parse(formData);
+
         // Log the user in
         console.log(formData);
 
         // Redirect user to previously requested route
         navigate(from, { replace: true });
+
         return;
       } catch (err) {
-        console.error(err);
+        if (err instanceof ZodError) {
+          err.issues.forEach((error) => {
+            // Display error helper text in the appropriate fields
+            setError(error.path[0] as keyof typeof errors, {
+              message: error.message,
+            });
+
+            console.error(`Error ${error.path[0]}: ${error.message}`);
+          });
+        } else console.error(err);
       }
     },
-    [from, navigate],
+    [from, navigate, setError],
   );
 
   // Reset form fields on successful login

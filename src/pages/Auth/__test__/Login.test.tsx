@@ -57,7 +57,7 @@ describe("login page", () => {
     const usernameFieldLabel = usernameField.parentElement;
     const usernameErrorHelperTextContent =
       /username must be at least 3 characters long/i;
-    //Password field
+    // Password field
     const passwordField = screen.getByLabelText(/password/i);
     const passwordFieldLabel = passwordField.parentElement;
     const passwordErrorHelperTextContent =
