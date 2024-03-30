@@ -1,12 +1,6 @@
 import { z } from "zod";
 
 export type AuthData = {
-  username: string;
-  password: string;
-  confirmPassword?: string;
-};
-
-export type AuthDataType = {
   id: number;
   username: string;
   isAdmin: boolean;
