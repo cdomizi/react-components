@@ -13,6 +13,7 @@ export const useRefreshToken = () => {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
+
     const {
       id,
       username,
@@ -28,6 +29,7 @@ export const useRefreshToken = () => {
       isAdmin,
       accessToken: newAccessToken,
     }));
+
     return response.data.accessToken;
   };
 

@@ -12,6 +12,12 @@ const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
 const BASE_MOCK_API_URL = "https://dummyjson.com";
 
 export const handlers = [
+  /* === AUTH === */
+  // Refresh auth token
+  http.get(`${API_ENDPOINT}refresh`, () =>
+    HttpResponse.json({ accessToken: "newAccessToken" }),
+  ),
+
   /* === PRODUCTS === */
   // GET all products
   http.get(`${BASE_MOCK_API_URL}/products`, () =>
