@@ -36,6 +36,7 @@ describe("useRefreshToken", () => {
       "Forbidden: Authorization token not valid or expired",
       "403",
     );
+    // Mock error response
     const apiSpy = vi
       .spyOn(publicApi, "get")
       .mockImplementationOnce(() => Promise.reject(mockAxiosError));

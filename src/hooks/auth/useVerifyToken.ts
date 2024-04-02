@@ -1,27 +1,23 @@
 import { AuthContext } from "contexts/AuthContext";
 import { useRefreshToken } from "hooks/auth/useRefreshToken";
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
 type useVerifyTokenProps = {
   redirect: () => void;
-  setLoading: ((isLoading: boolean) => void) | null;
-  retry: boolean | null;
-  setRetry: ((retry: boolean) => void) | null;
+  setLoading?: (isLoading?: boolean) => void;
+  retry?: boolean;
+  setRetry?: (retry?: boolean) => void;
 };
 
-const useVerifyToken = ({
+export const useVerifyToken = ({
   redirect,
   setLoading,
   retry = false,
-  setRetry = null,
+  setRetry,
 }: useVerifyTokenProps) => {
   const [isTokenValid, setIsTokenValid] = useState(false);
   const refreshToken = useRefreshToken();
   const { auth, setAuth } = useContext(AuthContext);
-
-  const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Initialize variable for cleanup
@@ -30,7 +26,7 @@ const useVerifyToken = ({
     const verifyToken = async () => {
       try {
         // Sets a new access token if expired
-        // as long as the refreshToken is valid
+        // as long as the refresh token is valid
         const newAccessToken = await refreshToken();
         newAccessToken && setIsTokenValid(true);
       } catch (err) {
@@ -47,7 +43,7 @@ const useVerifyToken = ({
     };
 
     // Only verify the token if there is no access token in auth context
-    if (!auth?.accessToken && (!retry ?? true)) {
+    if (!auth?.accessToken && !retry) {
       void verifyToken();
     } else {
       setLoading && setLoading(false);
@@ -59,8 +55,7 @@ const useVerifyToken = ({
     };
   }, [
     auth?.accessToken,
-    location,
-    navigate,
+    isTokenValid,
     redirect,
     refreshToken,
     retry,
@@ -71,5 +66,3 @@ const useVerifyToken = ({
 
   return isTokenValid;
 };
-
-export default useVerifyToken;

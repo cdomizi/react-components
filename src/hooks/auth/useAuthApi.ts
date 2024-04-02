@@ -8,7 +8,7 @@ type CustomRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;
 };
 
-const useAuthApi = () => {
+export const useAuthApi = () => {
   const { auth } = useContext(AuthContext);
   const refreshToken = useRefreshToken();
 
@@ -59,5 +59,3 @@ const useAuthApi = () => {
 
   return authApi;
 };
-
-export default useAuthApi;
