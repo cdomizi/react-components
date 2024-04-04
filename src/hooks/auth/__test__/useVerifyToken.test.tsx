@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { AxiosError } from "axios";
 import { AuthContext, AuthProvider } from "contexts/AuthContext";
+import { PropsWithChildren } from "react";
 import { AuthData } from "types";
 import * as useRefreshToken from "../useRefreshToken";
 import { useVerifyToken } from "../useVerifyToken";
@@ -12,7 +13,7 @@ describe("useVerifyToken", () => {
       auth = null;
     });
 
-    const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const MockAuthProvider = ({ children }: PropsWithChildren) => {
       return (
         <AuthContext.Provider value={{ auth, setAuth }}>
           {children}
@@ -90,17 +91,17 @@ describe("useVerifyToken", () => {
     });
   });
 
-  test("verification process not triggered on available access token", async () => {
+  test("verification process not triggered if access token is not present", async () => {
     const mockAuthData: AuthData = {
       id: 1,
       username: "johnDoe",
       isAdmin: false,
-      accessToken: "testAccessToken", // acess token available
+      accessToken: "testAccessToken", // accessToken is set
     };
     const auth: AuthData | null = mockAuthData;
     const setAuth = vi.fn();
 
-    const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const MockAuthProvider = ({ children }: PropsWithChildren) => {
       return (
         <AuthContext.Provider value={{ auth, setAuth }}>
           {children}
@@ -137,7 +138,7 @@ describe("useVerifyToken", () => {
       expect(isTokenValid).toBe(false);
     });
 
-    // Token verification not triggered on available access token
+    // Token verification not triggered since access token is present
     expect(mockRefreshToken).not.toHaveBeenCalled();
     expect(setLoading).toHaveBeenCalledOnce();
     expect(setLoading).toHaveBeenCalledWith(false);
@@ -147,7 +148,7 @@ describe("useVerifyToken", () => {
     const auth = {} as AuthData | null;
     const setAuth = vi.fn();
 
-    const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const MockAuthProvider = ({ children }: PropsWithChildren) => {
       return (
         <AuthContext.Provider value={{ auth, setAuth }}>
           {children}

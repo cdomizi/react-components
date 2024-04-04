@@ -4,7 +4,7 @@ import { AuthContext } from "contexts/AuthContext";
 import { useContext, useEffect } from "react";
 import { useRefreshToken } from "./useRefreshToken";
 
-type CustomRequestConfig = InternalAxiosRequestConfig & {
+export type CustomRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;
 };
 
@@ -39,18 +39,21 @@ export const useAuthApi = () => {
         if (error?.response?.status === 403 && !originalRequest?._retry) {
           // Set the `_retry` property to `true` to prevent an endless loop of retries
           originalRequest._retry = true;
+
           const newAccessToken = await refreshToken();
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
           // On updating the request with the new access token, send it again
           return authApi(originalRequest);
         }
-        // On expired refresh token, reject the promise by returning an error
+
+        // On expired refresh token, return error
         return Promise.reject(error);
       },
     );
 
     // Cleanup fuction: remove attached interceptors
-    // to prevent them from accumulate over multiple requests
+    // to prevent them from accumulating over multiple requests
     return function cleanUp() {
       authApi.interceptors.request.eject(requestIntercept);
       authApi.interceptors.response.eject(responseIntercept);

@@ -1,7 +1,7 @@
 import { Card, CardContent, SxProps } from "@mui/material";
+import { PropsWithChildren } from "react";
 
-type ContentCardProps = {
-  children: React.ReactNode;
+type ContentCardProps = PropsWithChildren & {
   sx?: SxProps;
 };
 

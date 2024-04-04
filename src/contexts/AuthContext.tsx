@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { PropsWithChildren, createContext, useState } from "react";
 import { AuthData } from "types";
 
 type AuthContextType = {
@@ -10,7 +10,7 @@ export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType,
 );
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [auth, setAuth] = useState<AuthData | null>(null);
 
   return (

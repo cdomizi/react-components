@@ -11,11 +11,13 @@ import {
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_BASE_API_URL;
 const BASE_MOCK_API_URL = "https://dummyjson.com";
 
+export const expectedToken = "newAccessToken";
+
 export const handlers = [
   /* === AUTH === */
   // Refresh auth token
   http.get(`${API_ENDPOINT}refresh`, () =>
-    HttpResponse.json({ accessToken: "newAccessToken" }),
+    HttpResponse.json({ accessToken: expectedToken }),
   ),
 
   /* === PRODUCTS === */
@@ -53,7 +55,7 @@ export const handlers = [
   http.get(`${BASE_MOCK_API_URL}/posts`, () => HttpResponse.json(allPosts)),
   http.get(`${API_ENDPOINT}posts`, () => HttpResponse.json(allPosts)),
   // GET post by Id
-  http.get(`${API_ENDPOINT}:id`, ({ params }) => {
+  http.get(`${API_ENDPOINT}posts/:id`, ({ params }) => {
     const { id } = params;
 
     const post = allPosts.find((post) => id === post.id.toString());

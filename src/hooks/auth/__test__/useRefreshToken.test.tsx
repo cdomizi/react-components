@@ -2,13 +2,14 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { publicApi } from "api/axios";
 import { AxiosError } from "axios";
 import { AuthProvider } from "contexts/AuthContext";
+import { expectedToken } from "mocks/handlers";
 import { useRefreshToken } from "../useRefreshToken";
 
 describe("useRefreshToken", () => {
   test("calls refresh endpoint and updates auth context with new access token", async () => {
     const mockTokenResponse = {
       data: {
-        accessToken: "newAccessToken",
+        accessToken: expectedToken,
       },
     };
     const apiSpy = vi.spyOn(publicApi, "get");
