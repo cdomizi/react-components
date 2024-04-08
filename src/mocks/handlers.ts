@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { http, HttpResponse } from "msw";
 import {
   allPosts,
@@ -13,11 +14,21 @@ const BASE_MOCK_API_URL = "https://dummyjson.com";
 
 export const expectedToken = "newAccessToken";
 
+export const expectedForbiddenError = new AxiosError(
+  "Request failed with status code 403",
+  "403",
+);
+
 export const handlers = [
   /* === AUTH === */
   // Refresh auth token
   http.get(`${API_ENDPOINT}refresh`, () =>
     HttpResponse.json({ accessToken: expectedToken }),
+  ),
+  http.get(
+    `${API_ENDPOINT}403-error`,
+    () =>
+      new HttpResponse(null, { status: Number(expectedForbiddenError.code) }),
   ),
 
   /* === PRODUCTS === */

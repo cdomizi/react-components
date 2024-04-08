@@ -16,9 +16,12 @@ export const useAuthApi = () => {
     // Add access token to Authorization headers
     const requestIntercept = authApi.interceptors.request.use(
       (config) => {
+        // Only set the Authorization header if not present (i.e. on first try)
         if (!config.headers.Authorization) {
-          // Only set the Authorization header if not present (i.e. on first try)
-          config.headers.Authorization = `Bearer ${auth?.accessToken}`;
+          // Only set Authorization header if accessToken is present in the context
+          config.headers.Authorization = auth?.accessToken
+            ? `Bearer ${auth?.accessToken}`
+            : undefined;
         }
 
         return config;
@@ -36,7 +39,7 @@ export const useAuthApi = () => {
         };
 
         // On expired access token, try getting a new one and retry the request
-        if (error?.response?.status === 403 && !originalRequest?._retry) {
+        if (error.response?.status === 403 && !originalRequest?._retry) {
           // Set the `_retry` property to `true` to prevent an endless loop of retries
           originalRequest._retry = true;
 
